@@ -55,14 +55,16 @@ def validar(b):
     for clave in ("apertura", "cierre", "motor", "nombre"):
         if not voz.get(clave): errores.append(f"voz.{clave} vacío")
     if voz.get("motor") not in ("kokoro", "qwen3"): errores.append("voz.motor debe ser 'kokoro' o 'qwen3'")
+    colores_ok = True
     for clave in COLORES_OBLIGATORIOS:
-        if not re.fullmatch(r"#[0-9a-fA-F]{6}", pal.get(clave, "")): errores.append(f"paleta.{clave} debe ser un color #rrggbb")
-    if not errores:
+        if not re.fullmatch(r"#[0-9a-fA-F]{6}", pal.get(clave, "")):
+            errores.append(f"paleta.{clave} debe ser un color #rrggbb"); colores_ok = False
+    if colores_ok:                                       # el contraste se comprueba aunque haya otros errores: así se ven todos a la vez
         # contraste como en 'hyperframes check' (WCAG AA): texto 4.5:1, etiquetas y acento 3:1
         if contraste(pal["texto"], pal["fondo"]) < 4.5: errores.append(f"texto sobre fondo: contraste {contraste(pal['texto'], pal['fondo']):.2f}:1 (mínimo 4.5)")
         if contraste(pal["acento_etiqueta"], pal["fondo"]) < 3: errores.append(f"acento_etiqueta sobre fondo: contraste {contraste(pal['acento_etiqueta'], pal['fondo']):.2f}:1 (mínimo 3)")
         if contraste(pal["acento"], pal["fondo"]) < 3: avisos.append(f"acento sobre fondo: contraste {contraste(pal['acento'], pal['fondo']):.2f}:1 (bajo)")
-        if b.get("video", {}).get("duracion", 20) != 20: errores.append("la duración del vídeo está fija en 20 s en esta versión")
+    if b.get("video", {}).get("duracion", 20) != 20: errores.append("la duración del vídeo está fija en 20 s en esta versión")
     return errores, avisos
 
 
