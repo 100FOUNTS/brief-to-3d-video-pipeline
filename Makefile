@@ -15,7 +15,10 @@ video:
 promo2d:
 	node video/render.mjs video/promo.html out/promo-2d.mp4
 
-hyperframes viewer blender audio studio:
+hyperframes:
+	cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4
+
+viewer blender audio studio:
 	@echo "Pendiente: se implementa en su fase (ver PLAN-EJERCICIO.md)"
 
 clean:

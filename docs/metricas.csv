@@ -3,3 +3,4 @@ fecha,fase,modelo,minutos,intentos,resultado,notas
 2026-10-15,0,qwen3.6-64k (local),4.5,1,ok,aguja en pajar con 39578 tokens de entrada: acierta; 269 s de lectura; modelo 17 GB 100% GPU
 2026-10-15,1,Sonnet 5.5 (nube),25,2,ok,scene.html + render.mjs; 8 s 1080p30 en 8.2 s (JPEG) y 7.3 s (PNG); determinista (0 de 240 fotogramas distintos). 2 intentos: el 1º salio en yuvj420p
 2026-10-15,1b,Sonnet 5.5 (nube),20,2,ok,promo.html: lampara 2D animada (despliegue, luz, polvo, texto); 15 s 1080p30 en 8.3 s de render. 2o intento: "Articulada" se salia del encuadre a 168 px -> 140 px
+2026-10-15,2,Sonnet 5.5 (nube),50,3,ok,HyperFrames: promo 20 s 1080p30 (600 fotogramas) render 16.8 s (27 s con npx); 191 lineas vs 237 del script propio. Fallos: contraste 2.72:1 en etiqueta; arco cruzaba el texto

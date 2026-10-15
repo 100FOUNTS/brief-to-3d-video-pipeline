@@ -22,3 +22,13 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Técnicas: easing (smoothstep, outBack), hash determinista (`Math.sin`) en lugar de `Math.random` para el polvo y el parpadeo, composición `screen` para la luz, recorte (`clip`) al cono.
 - Fallo: a 168 px la palabra "Articulada" medía unos 950 px y se salía por el borde derecho (x=1010 + 950 > 1920). Se vio en la hoja de contactos; a 140 px cabe.
 - Render: 450 fotogramas en 8,3 s.
+
+## 2026-10-15 · Fase 2: HyperFrames (hecha con Sonnet 5.5)
+- Setup: las skills de HyperFrames ya estaban en `~/.claude/skills`; `npx hyperframes skills update general-video` instaló 11 skills y las enlazó en otros 4 directorios de agentes (efecto fuera del proyecto). No hizo falta instalar el plugin.
+- Proyecto: `hyperframes/promo/` (BRIEF.md + index.html). Concepto: la luz es la narradora; un arco se dibuja y la luz viaja por él mientras aparece cada beneficio. Montserrat 900 + IBM Plex Mono.
+- `check` pasó a la primera con 0 errores y 6 avisos de estructura (5 escenas en un solo archivo: HyperFrames recomienda sub-composiciones desde 3 cortes duros). Lo dejé así por alcance; queda como mejora.
+- Fallo 1 (contraste): etiqueta "03 / 03" en #ffb703 sobre el brillo dorado: 2,72:1 (pide 3:1). Cambié las etiquetas a #ffc532.
+- Fallo 2 (diseño, NO lo detecta `check`): el arco cruzaba las letras y la etiqueta caía sobre la línea. Solución: arco a 32% de opacidad tras dibujarse, bloque de texto 140 px más abajo, quitar la línea del suelo. Lección: `check` garantiza que funciona, no que se vea bien; hay que mirar la hoja de contactos.
+- Render: 600 fotogramas, 20 s, 16,8 s (captura 8,2 s, codificación 2,4 s), GPU por hardware (Metal). 4 workers.
+- Fuentes: el compilador descargó Montserrat e IBM Plex Mono de Google Fonts en el primer build y las guardó en caché, aunque la documentación dice que vienen incluidas.
+- Telemetría de HyperFrames: ACTIVADA por defecto (`~/.hyperframes/config.json`). Se desactiva con `npx hyperframes telemetry disable`.
