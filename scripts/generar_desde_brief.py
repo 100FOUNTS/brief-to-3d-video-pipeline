@@ -7,8 +7,9 @@ Lee el brief, lo valida (avisa si un texto no cabe o un color no tiene contraste
   - viewer/src/brief.generated.js  <- nombre, lema y paleta para el visor 3D
 Blender (blender/build_lamp.py --brief) y la música (audio/music.py --brief) leen el brief directamente.
 
-Uso:  python3 scripts/generar_desde_brief.py [--brief brief.json] [--check]
-      --check  no escribe nada: comprueba que los archivos generados ya están al día (sale con 1 si no).
+Uso:  python3 scripts/generar_desde_brief.py [--brief brief.json] [--check | --validar]
+      --check    no escribe nada: comprueba que los archivos generados ya están al día (sale con 1 si no).
+      --validar  solo valida el brief (no escribe nada): para briefs de variantes, que no deben tocar los archivos del proyecto principal.
 
 Límites (lo que el brief NO puede cambiar): la geometría de la lámpara, la estructura de 5 escenas y los 20 s de duración.
 """
@@ -101,6 +102,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--brief", default="brief.json")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--validar", action="store_true")
     a = ap.parse_args()
     ruta = (RAIZ / a.brief) if not pathlib.Path(a.brief).is_absolute() else pathlib.Path(a.brief)
     b = json.loads(ruta.read_text(encoding="utf-8"))
@@ -108,6 +110,8 @@ def main():
     for x in avisos: print("AVISO:", x)
     if errores:
         print("El brief no es válido:\n  - " + "\n  - ".join(errores)); sys.exit(2)
+    if a.validar:
+        print(f"OK {a.brief}: brief válido (producto '{b['producto']['nombre']}')"); sys.exit(0)
     salidas = {
         "hyperframes/promo/index.html": render_hyperframes(b),
         "docs/guion.json": json.dumps(guion(b), ensure_ascii=False, indent=2) + "\n",
