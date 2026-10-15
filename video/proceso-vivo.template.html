@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Blender en vivo · proceso</title>
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0f1115; }
+  #escena { position: relative; width: 1920px; height: 1080px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; color: #f4f1ea; }
+  .paso-img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; opacity: 0; }
+  .cinta { position: absolute; left: 0; right: 0; bottom: 0; height: 250px; background: linear-gradient(to top, rgba(15,17,21,0.96) 55%, rgba(15,17,21,0)); }
+  .cap { position: absolute; left: 90px; right: 90px; bottom: 56px; opacity: 0; }
+  .etq { font: 500 28px/1 ui-monospace, Menlo, monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #ffc532; }
+  .cambio { margin-top: 18px; font-weight: 800; font-size: 64px; letter-spacing: -0.01em; line-height: 1.05; }
+  .cambio small { font: 500 40px/1 ui-monospace, Menlo, monospace; color: #ffc532; margin-left: 18px; letter-spacing: 0; }
+  .obs { margin-top: 14px; font-size: 38px; line-height: 1.25; color: rgba(244,241,234,0.85); }
+  .marca { position: absolute; left: 90px; top: 60px; font: 500 24px/1 ui-monospace, Menlo, monospace; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,241,234,0.8); opacity: 0; text-shadow: 0 2px 12px rgba(0,0,0,0.7); }
+  .barra { position: absolute; left: 90px; top: 110px; display: flex; gap: 10px; opacity: 0; }
+  .barra i { display: block; width: 70px; height: 6px; border-radius: 3px; background: rgba(244,241,234,0.25); }
+  .tarjeta { position: absolute; inset: 0; background: #0f1115; display: flex; flex-direction: column; justify-content: center; padding: 0 160px; opacity: 0; }
+  .tarjeta h1 { margin: 0; font-size: 110px; line-height: 1.02; font-weight: 800; letter-spacing: -0.02em; max-width: 1500px; }
+  .tarjeta p { margin: 36px 0 0; font-size: 44px; line-height: 1.3; color: rgba(244,241,234,0.82); max-width: 1450px; }
+  .tarjeta .etq { margin-bottom: 30px; }
+</style>
+</head>
+<body>
+<div id="escena"></div>
+<script>
+  // Vídeo del proceso en vivo: cada paso es una imagen real renderizada por Blender durante la sesión; los rótulos vienen del informe de la sesión.
+  const DATOS = /*DATOS*/;
+  const TITULO = 2.6, POR_PASO = 4.0, CIERRE = 4.0, FUNDIDO = 0.5;
+  window.DURATION = TITULO + DATOS.pasos.length * POR_PASO + CIERRE;
+
+  const clamp01 = (x) => Math.min(1, Math.max(0, x));
+  const suave = (x) => x * x * (3 - 2 * x);
+  const tramo = (t, a, b) => suave(clamp01((t - a) / (b - a)));
+  const ventana = (t, a, b, f) => Math.min(tramo(t, a - f, a), 1 - tramo(t, b, b + f));
+  const el = (html, clase, padre) => { const d = document.createElement('div'); if (clase) d.className = clase; d.innerHTML = html; padre.appendChild(d); return d; };
+  const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+  const raiz = document.getElementById('escena');
+  const imgs = DATOS.pasos.map((p) => { const i = document.createElement('img'); i.className = 'paso-img'; i.src = p.imagen; raiz.appendChild(i); return i; });
+  el('', 'cinta', raiz);
+  const marca = el('Blender en vivo · MCP', 'marca', raiz);
+  const barra = el(DATOS.pasos.map(() => '<i></i>').join(''), 'barra', raiz);
+  const caps = DATOS.pasos.map((p, k) => {
+    const cambio = p.n === 0 ? 'Estado inicial' : `${esc(p.objeto)}<small>${esc(p.valor)}</small>`;
+    return el(`<div class="etq">Paso ${p.n} de ${DATOS.pasos.length - 1}</div><div class="cambio">${cambio}</div><div class="obs">${esc(p.obs)}</div>`, 'cap', raiz);
+  });
+  const tIni = el(`<div class="etq">Fase 4b · segunda forma</div><h1>${esc(DATOS.titulo)}</h1><p>${esc(DATOS.subtitulo)}</p>`, 'tarjeta', raiz);
+  const tFin = el(`<div class="etq">Conclusión de la sesión</div><h1>${esc(DATOS.cierre_titulo)}</h1><p>${esc(DATOS.cierre_texto)}</p>`, 'tarjeta', raiz);
+
+  window.seek = function (t) {
+    const ini = TITULO, fin = TITULO + DATOS.pasos.length * POR_PASO;
+    tIni.style.opacity = (1 - tramo(t, TITULO - FUNDIDO, TITULO)).toFixed(3);
+    tFin.style.opacity = tramo(t, fin, fin + FUNDIDO).toFixed(3);
+    const enPasos = tramo(t, ini - FUNDIDO, ini) * (1 - tramo(t, fin, fin + FUNDIDO));
+    DATOS.pasos.forEach((p, k) => {
+      const a = ini + k * POR_PASO, b = a + POR_PASO;
+      // la imagen de cada paso se mantiene hasta que entra la siguiente (fundido cruzado)
+      const entra = k === 0 ? 1 : tramo(t, a - FUNDIDO / 2, a + FUNDIDO / 2);
+      imgs[k].style.opacity = (enPasos * (k === DATOS.pasos.length - 1 || t < b - FUNDIDO / 2 ? entra : 1)).toFixed(3);
+      const v = ventana(t, a + 0.15, b - 0.1, 0.3);
+      caps[k].style.opacity = v.toFixed(3);
+      caps[k].style.transform = `translateY(${((1 - v) * 24).toFixed(1)}px)`;
+    });
+    marca.style.opacity = enPasos.toFixed(3);
+    barra.style.opacity = enPasos.toFixed(3);
+    const actual = clamp01(Math.floor((t - ini) / POR_PASO) / 1);
+    barra.querySelectorAll('i').forEach((i, k) => { i.style.background = (t >= ini + k * POR_PASO) ? '#ffb703' : 'rgba(244,241,234,0.25)'; });
+  };
+  window.seek(0);
+</script>
+</body>
+</html>

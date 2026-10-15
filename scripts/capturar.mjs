@@ -32,7 +32,7 @@ const entradas = archivos.flatMap((f) => ['-i', f]);
 const rellenos = Array.from({ length: filas * c - n }, () => ['-f', 'lavfi', '-i', 'color=c=0x0f1115:s=1920x1080:d=1']).flat();
 const total = n + rellenos.length / 4;
 const escalas = Array.from({ length: total }, (_, i) => `[${i}]scale=640:360[s${i}]`).join(';');
-const filasF = Array.from({ length: filas }, (_, r) => `${Array.from({ length: c }, (_, k) => `[s${r * c + k}]`).join('')}hstack=inputs=${c}[r${r}]`).join(';');
+const filasF = Array.from({ length: filas }, (_, r) => { const e = Array.from({ length: c }, (_, k) => `[s${r * c + k}]`).join(''); return c > 1 ? `${e}hstack=inputs=${c}[r${r}]` : `${e}copy[r${r}]`; }).join(';');   // hstack exige >= 2 entradas
 const apilado = filas > 1 ? `${Array.from({ length: filas }, (_, r) => `[r${r}]`).join('')}vstack=inputs=${filas}` : '[r0]copy';
 const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-y', ...entradas, ...rellenos, '-filter_complex', `${escalas};${filasF};${apilado}`, '-frames:v', '1', resolve(salida)], { stdio: 'inherit' });
 process.exit(r.status ?? 1);
