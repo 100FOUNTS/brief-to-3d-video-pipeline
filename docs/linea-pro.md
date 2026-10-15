@@ -1,59 +1,94 @@
-# La línea del proyecto a nivel profesional: etapa por etapa
+# La línea del proyecto a nivel profesional (v2): herramienta concreta por etapa
 
-Proyecto de referencia: un vídeo promocional de un producto, con modelo 3D, visor web interactivo, voz y música.
-**Hecha** = la hicimos completa para este tamaño · **Parcial** = la hicimos a medias · **Faltó** = no la hicimos.
-**[P]** fuente oficial · **[S]** blog o comparativa (se contradicen) · **[mío]** conocimiento general mío, no verificado hoy · **no investigado** = no lo busqué, no invento la cifra.
-Detalle y enlaces de cada dato: `docs/nivel-profesional.md`.
+La v1 usaba palabras genéricas («editor humano», «compositor», «alojamiento y analítica», «varios formatos»). Esta versión nombra, en cada etapa, **el producto o modelo concreto que lidera hoy (15 de octubre de 2026)**, las alternativas, **cómo se automatiza** y qué hicimos nosotros.
+
+**Hecha** = completa para este tamaño · **Parcial** · **Faltó**.
+**[P]** fuente oficial o ranking medido (Artificial Analysis, Adobe, ACM) · **[S]** blog o comparativa (se contradicen entre sí) · **[mío]** conocimiento general mío, no verificado hoy · **no investigado** = no lo busqué y no invento la cifra.
+
+**Aviso de método:** «líder hoy» significa *primero en un ranking medido* o *el más citado*, no «lo que usan todos los estudios». No encontré datos fiables de qué usa cada estudio; lo que sí hay son rankings y precios publicados.
 
 ```
-PREPARAR                 3D + WEB                          VÍDEO Y SONIDO                    CERRAR
-1 Brief ─ 2 Guion ─ 3 Arte ─► 4 Modelado ─ 5 Materiales ─ 6 Optimizar ─ 7 Visor ─┐
-                              │                                                   │
-                              └► 8 Render 3D ─► 9 Vídeo ─ 10 Voz ─ 11 Música ─ 12 Mezcla ─ 13 Montaje
-                                                                                         │
-                  14 Calidad ─ 15 Derechos ─ 16 Entrega ─ 17 Publicar        ◄───────────┘
-18 AUTOMATIZACIÓN Y OPERACIÓN (recorre todo)
+PREPARAR            3D + WEB                                   VÍDEO Y SONIDO                    CERRAR
+1 Brief ─ 2 Guion ─ 3 Arte ─► 4 Modelado ─ 5 Materiales ─ 6 Optimizar ─ 7 Visor ─ 17 Publicar ─ 18 Analítica
+                              └► 8 Render ─► 9 Vídeo ─ 10 Voz ─ 11 Música ─ 12 Mezcla ─ 13 Montaje
+                                              14 Formatos y subtítulos ─ 15 Revisión y QC ─ 16 Derechos y procedencia
+19 ORQUESTACIÓN (recorre todo)
 ```
 
-## La tabla
+## Tabla resumen
 
-| # | Etapa | ¿La hicimos? | Qué usamos | Qué usa lo pro | Coste de lo pro |
+| # | Etapa | Líder hoy (herramienta / IA) | Cómo se automatiza | Lo que usamos | Estado |
 | --- | --- | --- | --- | --- | --- |
-| 1 | **Brief y estrategia** | **Parcial** | `brief.md` y `brief.json` (producto, textos, paleta). Sin cliente ni objetivos medibles | Reuniones con el cliente, guía de marca, objetivos y público [mío] | Horas de personas; **no encontré tarifas fiables** |
-| 2 | **Guion y storyboard** | **Parcial** | Guion de 41 palabras, una frase por escena. **Sin storyboard** dibujado | Guionista y storyboard o animática, aprobados antes de producir [mío] | No investigado |
-| 3 | **Dirección de arte** (paleta, tipografía, estilo) | **Hecha** (básica) | Paleta de 10 colores y Montserrat + IBM Plex Mono, definidas en el brief | Diseñador/a, sistema de diseño (Figma o similar) [mío] | No investigado |
-| 4 | **Modelado 3D** del producto | **Hecha** (básica) | Blender 5.2.2 por código: 7 piezas con bisel | Artista 3D a partir de planos CAD o escaneo; o **3D generado por IA** ([S]: Tripo, Meshy, Rodin) | IA: **0,05–0,80 USD por modelo**. Artista: no investigado |
-| 5 | **Materiales y texturas** | **Parcial** | Materiales PBR de color plano (metal negro, latón). **Sin texturas** | Texturas PBR pintadas (p. ej. Substance 3D) [mío] | No investigado |
-| 6 | **Optimizar el 3D para la web** | **Faltó** | Nuestro `.glb` pesa 250 KB porque no lleva texturas | `gltf-transform optimize`, compresión **meshopt o Draco** (no las dos), **KTX2**. Un producto real baja de 8–15 MB a 1–2 MB [S] | Herramientas gratuitas; el coste es tiempo |
-| 7 | **Visor o configurador web** | **Hecha** (básica) | Three.js 0.186: girar, vista explosionada, color, clic en piezas, 18 pruebas | Three.js/Babylon.js/PlayCanvas a medida, o una **plataforma** con precios, variantes y pedidos | Código: gratis (más tiempo). **Threekit: 999 USD/mes hasta 30.000–100.000+ USD/año**; Vectary 25–79 USD/usuario/mes (no es configurador) [S] |
-| 8 | **Render y animación 3D** | **Hecha** (básica) | Eevee en tu Mac: 5 imágenes y una animación de 120 fotogramas en 61 s | **Cycles** para calidad final, gestión de color (ACES), escenas en **USD**, **granjas de render** | **0,65–9 USD por hora de GPU** [S]. Nuestra animación: ≈ 0,01–0,15 USD |
-| 9 | **Vídeo y gráficos en movimiento** | **Hecha** | HyperFrames (HTML + GSAP), 20 s a 1080p30 | After Effects con plantillas, o **Remotion / Shotstack / Creatomate**. Para personas y tomas realistas: **vídeo generado por IA** (Veo, Kling, Runway, Seedance) | Remotion Lambda ≈ 0,02 USD/min; Shotstack 0,20–0,30 USD/min [S]. **IA: 0,05–0,60 USD por segundo** (1–12 USD por 20 s, por intento) [S] |
-| 10 | **Voz** | **Hecha** | Kokoro-82M (`em_alex`), local, verificada con Whisper large-v3 | **ElevenLabs** o actores de voz con dirección [mío] | ElevenLabs **0,04–0,08 USD por 1.000 caracteres** [S]; nuestro guion ≈ 0,01 USD. Actores: no investigado |
-| 11 | **Música y sonido** | **Parcial** | Música sintetizada por código (sin derechos que pagar). **Sin efectos de sonido** | Compositor, biblioteca con licencia o **música con IA** (Suno, Udio) y diseño de sonido [mío] | Suno **10–30 USD/mes** (con derechos, pero los acuerdos con discográficas están a medias) [S]. Biblioteca/compositor: no investigado |
-| 12 | **Mezcla y masterización** | **Hecha** (automática) | FFmpeg: la música baja con la voz, −16 LUFS, pico ≤ −1,5 dB, voz 12–19 LU sobre la música | Estación de audio (Pro Tools, Reaper...) y normas por plataforma [mío] | No investigado |
-| 13 | **Montaje final y corrección de color** | **Parcial** | Ensamblado automático (`mux`); sin retoque humano | Editor humano en Premiere/DaVinci/Final Cut, corrección de color [mío] | No investigado |
-| 14 | **Control de calidad y revisión** | **Parcial** | Muy buena en lo automático: 21 comprobaciones, evaluador validado con mutantes, hojas de contactos miradas a mano. **Sin revisión del cliente** | Rondas de revisión humana y aprobación del cliente; pruebas visuales automáticas [mío] | Horas de personas; no investigado |
-| 15 | **Derechos y licencias** | **Parcial** | Voz Kokoro (Apache 2.0, comprobada), música propia, fuentes abiertas. **No verificadas**: Whisper y Qwen | Contratos y licencias de cada voz, música, modelo y fuente | ElevenLabs: la capa gratuita **no permite uso comercial**; Business 990 USD/mes [S]. Abogados: no investigado |
-| 16 | **Entrega en todos los formatos** | **Parcial** | Un MP4 de 1920x1080, 30 fps, H.264. **Sin subtítulos ni versiones verticales/cuadradas** | Varias relaciones de aspecto, subtítulos, copias maestras [mío] | Sobre todo tiempo |
-| 17 | **Publicación y medición** | **Faltó** | El visor solo corre en `localhost` | Alojamiento con CDN, analítica de uso [mío] | No investigado |
-| 18 | **Automatización y operación** | **Hecha** (muy bien) | `make studio` desde `brief.json`, variantes en `git worktree`, verificador, hooks, subagentes, Claude Code (Sonnet 5.5) | Lo mismo con integración continua, colas de render y gestión de activos. **Ubisoft** lo hace con agentes sobre USD (n8n + ComfyUI) [P: ACM] | **Claude: Pro 20 USD/mes, Max 100–200, Team 25–125 USD por asiento** [S/P]. Opus 5.5 por API: 4 / 20 USD por millón de tokens [P] |
+| 1 | Brief | **Claude Opus 5.5** (1.º en el índice de inteligencia de Artificial Analysis, 58; Sonnet 5.5 va 56) [P] | API de Claude / Claude Code → `brief.json` | `brief.json` escrito por Sonnet 5.5; sin cliente | Parcial |
+| 2 | Guion y storyboard | Claude Opus 5.5 para el guion; **LTX Studio, Boords, Katalist** para el storyboard [S] | Guion por API; storyboard generado a partir del guion [S] | Guion de 41 palabras, sin storyboard | Parcial |
+| 3 | Dirección de arte | **GPT Image 2.5 Sunburst** (1.º en imagen, 1217) [P]; **Figma Make, Google Stitch, Midjourney, Recraft** [S] | Skill `/figma` de HyperFrames importa activos, tokens y componentes de Figma [P: skill instalada] | Paleta de 10 colores + 2 fuentes en el brief | Hecha (básica) |
+| 4 | Modelado 3D | **Blender 5.2** (a partir de CAD) o 3D generado: **Tripo, Meshy, Rodin** [S] | Scripts `bpy`; servidor **Blender MCP** | Blender por script y por MCP (7 piezas) | Hecha (básica) |
+| 5 | Materiales y texturas | **Adobe Substance 3D** (Painter 12, Sampler con Firefly: texto→textura e imagen→material) [P: Adobe] | Poco: las funciones generativas son de la aplicación y gastan créditos Firefly | Colores planos PBR | Parcial |
+| 6 | Optimizar 3D para web | **gltf-transform** (CLI), meshopt o Draco, KTX2 [S] | Línea de comandos, encaja en CI | Nada (250 KB sin texturas) | Faltó |
+| 7 | Visor web | **Three.js** (el nuestro), Babylon.js, PlayCanvas; plataforma **Threekit** [S] | Código en repositorio + despliegue | Three.js 0.186, 18 pruebas | Hecha (básica) |
+| 8 | Render 3D | **Blender Cycles** + gestión de color; granjas de render [S] | `blender -b` por línea de comandos | Eevee local, 120 fotogramas en 61 s | Hecha (básica) |
+| 9 | Vídeo | Motor por código: **HyperFrames, Remotion, Shotstack, Creatomate**. Vídeo con IA: **Wan 3.0** (1.º, 1174, 12 USD/min), **Seedance 2.5** (1160), **MiniMax H3** (1159, pesos abiertos) [P] | CLI y APIs; HyperFrames trae 11 skills para Claude Code | HyperFrames, 20 s a 1080p30 | Hecha |
+| 10 | Voz | **ElevenLabs v4 Turbo** (1.º en síntesis de voz, 1328) [P] | API REST | Kokoro-82M local, verificada con Whisper large-v3 | Hecha |
+| 11 | Música | **ElevenLabs Music v2.5** (0,15 USD/min; licencias comerciales), **Suno v6** (el mejor en voces), **Google Lyria 3.5** (0,08 USD/canción por API), **Mureka V9** (instrumental), **Stable Audio 3** [S] | APIs de ElevenLabs y Google | Música sintetizada con numpy | Parcial |
+| 12 | Mezcla y masterización | Voz: **Auphonic** (EBU R128, ATSC A/85). Música: **iZotope Ozone 12**, **LANDR**, **RoEx Automix** [S] | Auphonic y LANDR tienen servicio en la nube; **Ozone**: no lo comprobé | FFmpeg: sidechain + `loudnorm` −16 LUFS | Hecha (automática) |
+| 13 | Montaje y color | **Adobe Premiere + Firefly**, **DaVinci Resolve**, **Descript** (edición por texto) [S] | Conector de Adobe por MCP [S]; no lo probé | `mux` automático con FFmpeg | Parcial |
+| 14 | Formatos, subtítulos y doblaje | Subtítulos: skill `/embedded-captions` de HyperFrames (36 estilos, transcripción local) [P: skill]. Recortes verticales: **OpusClip, Reap** [S]. Doblaje: **ElevenLabs Dubbing v2**, **HeyGen** (con sincronía labial), **Rask AI** [S] | HyperFrames deriva la relación de aspecto del destino: 16:9, 9:16 (TikTok/Reels/Shorts), 1:1 (feed) [P: skill]; doblaje por API | Un solo MP4 de 1920×1080, sin subtítulos | Faltó |
+| 15 | Revisión y control de calidad | Revisión: **Frame.io**, **Wipster**, **Ziflow** [S]. QC técnico: **Telestream Baton** (no investigado) | Frame.io se integra con Premiere y Resolve [S] | 21 comprobaciones propias + mutantes + hojas de contactos | Parcial |
+| 16 | Derechos y procedencia | **C2PA Content Credentials** + marca invisible (**SynthID** de Google). Art. 50 de la Ley de IA de la UE [S] | Firmar al exportar; comprobar que la plataforma no borre los metadatos [S] | Nada de procedencia; licencias de modelos sin verificar del todo | Parcial |
+| 17 | Publicación | Visor: **Cloudflare Pages, Vercel, Netlify**. Vídeo: **Cloudflare Stream, Mux, Vimeo** [S] | Despliegue por CLI desde CI [mío] | `localhost:5173` | Faltó |
+| 18 | Analítica | **PostHog, Mixpanel, Amplitude, GA4, Plausible** [S] | SDK en el visor + eventos (p. ej. «cambió el color») [mío] | Nada (solo un dashboard de nuestras métricas) | Faltó |
+| 19 | Orquestación | **Claude Code con Opus 5.5**, skills y servidores MCP; **n8n + ComfyUI** (ComfyUI se llama por REST con `--listen` y se consulta `/history/{id}`) [S]. Caso real: **Ubisoft**, con agentes sobre USD [P: ACM] | Todo lo anterior encadenado | `make studio`, worktrees, hooks, subagentes | Hecha (muy bien) |
 
-## Resultado
+## Detalle por etapa: qué hace, dónde se rompe, cuánto cuesta
+
+**1–2. Brief y guion.** El modelo de lenguaje más potente en la medición independiente es Claude Opus 5.5 (58 puntos; Sonnet 5.5, 56) [P]. Precio de la API de Opus 5.5: 4 / 20 USD por millón de tokens (entrada / salida) [P]. Para el storyboard no medí calidad: solo encontré que LTX Studio, Boords y Katalist existen y generan storyboards desde un guion [S]. **Precios de los tres: no investigado.**
+
+**3. Arte.** El primero en el ranking de generación de imagen es GPT Image 2.5 Sunburst [P]. Para diseño de interfaces, Figma Make y Google Stitch son los citados [S]. Lo comprobable en tu máquina: la skill `/figma` de HyperFrames, que ya está instalada, importa lo que haya en Figma (activos, tokens, componentes). **Precios: no investigado.**
+
+**4–5. Modelado y materiales.** Blender es gratuito. La generación 3D con IA cuesta 0,05–0,80 USD por modelo [S]. Substance 3D: la función «imagen → material» **exige la suscripción Substance 3D Collection** y todo lo generativo gasta créditos de Firefly; la licencia barata de Steam (Indie) **no los incluye** [P: Adobe y Meshy]. **Precio de la Collection: no lo encontré.**
+
+**6. Optimizar.** Un producto real baja de 8–15 MB a 1–2 MB con meshopt o Draco (una de las dos) y KTX2 [S]. Herramientas gratuitas; el coste es tiempo.
+
+**7. Visor.** A medida es gratis más tiempo. Threekit: desde 999 USD/mes hasta 30.000–100.000+ USD/año; Vectary, 25–79 USD por usuario/mes (no es configurador) [S]. WebGPU ya es estándar en todos los navegadores desde enero de 2026 [P].
+
+**8. Render.** Granja de render: 0,65–9 USD por hora de GPU [S]. Nuestra animación: ≈ 0,01–0,15 USD. **Motor en tiempo real (Unreal Engine 5.8) frente a Cycles para producto: no lo pude comparar, no investigado.**
+
+**9. Vídeo.** Por código: Remotion Lambda ≈ 0,02 USD/min; Shotstack 0,20–0,30 USD/min [S]. Con IA, el primero (Wan 3.0) cuesta 12 USD por minuto generado [P]; un clip de 20 s ≈ 4 USD por intento. MiniMax H3 tiene **pesos abiertos**, así que en teoría se podría correr en local; **no comprobé si cabe en tu Mac**.
+
+**10. Voz.** ElevenLabs: 0,04–0,08 USD por 1.000 caracteres [S]; nuestro guion cuesta ≈ 0,01 USD. La capa gratuita **no permite uso comercial**; Business, 990 USD/mes [S].
+
+**11. Música.** Las fuentes se contradicen y son blogs [S]. Lo que coincide: Udio quedó limitado (descargas apagadas tras el acuerdo con discográficas), ElevenLabs es la opción con licencia comercial más recomendada, Google Lyria es la elección práctica por API. Una sola fuente afirma que Suno cambió a v6 (9 de septiembre) y que ElevenLabs lanzó Music v2.5 (11 de septiembre): trátalo como no confirmado. **No hay ranking medido de música: no conseguí la página de Artificial Analysis.**
+
+**12. Mezcla.** Ozone 12: 249–499 USD pago único [S]. LANDR: desde ≈ 9 USD/mes (las fuentes varían) [S]. Auphonic nivela con las normas EBU R128, ATSC A/85 y la de Apple [S]; **no verifiqué sus valores exactos ni su precio**. **Adobe Podcast Enhance: sin resultados útiles.**
+
+**13. Montaje.** Premiere con Firefly, DaVinci Resolve, Descript. **Precios: no investigado.** Nuestro montaje fue automático; sin retoque de color.
+
+**14. Formatos, subtítulos y doblaje.** Precios por API (agosto de 2026, una sola comparativa [S]): ElevenLabs Dubbing v2 2,20 USD/min **sin** sincronía labial; HeyGen 2,00 USD/min (rápido) o 4,00 (preciso) **con** sincronía labial; Rask 0,78–2,40 USD/min. Suscripciones: ElevenLabs Starter 6 y Creator 22 USD/mes; HeyGen Creator 24–29 USD/mes; Rask lo bloquea tras el plan de 150 USD/mes (otra fuente da 60 USD) [S]. Para este proyecto, doblar los 20 s a 2 idiomas costaría ≈ 1,5 USD con ElevenLabs o ≈ 2,7 USD con HeyGen precisión [mío, cuenta sobre precios [S]].
+
+**15. Revisión.** Frame.io: 15 USD por miembro/mes; Team, 25 USD por miembro; capa gratuita con 2 miembros y 2 GB [S]. Wipster: desde ≈ 10–12 USD/mes para una persona (otra fuente da 25 USD/mes fijos hasta 3 asientos; **no concuerdan**) [S]. **VMAF y QC de entrega automáticos (Telestream Baton): no investigado.**
+
+**16. Derechos y procedencia.** El Art. 50 de la Ley de IA de la UE obliga a marcar de forma legible por máquina el contenido generado por IA; **no nombra C2PA**, pero el Código de Prácticas lo usa como ejemplo junto a una marca de agua invisible como SynthID [S]. Las fuentes discrepan sobre la fecha de aplicación (2 de agosto de 2026 para todo, o hasta el 2 de diciembre para sistemas ya en el mercado): **hay que mirar el texto oficial**. Multas máximas citadas: 15 millones de euros o el 3 % de la facturación [S]. Adobe Firefly y otros ya incrustan C2PA; algunas plataformas lo borran al subir [S]. **Mi proyecto actual no emite vídeo generado por IA, pero sí voz sintética: no sé si eso entra, requiere abogado.**
+
+**17–18. Publicación y analítica.** Los nombres salen de la investigación anterior; **no anoto precios porque no los tengo contrastados hoy.**
+
+**19. Orquestación.** Claude: Pro 20 USD/mes (17 anual), Max 100–200, Team 25–125 USD por asiento [S/P]. La lección de n8n: los agentes sin una persona que apruebe los pasos con efectos externos fallan (una fuente cuenta un agente que mandó 47 correos de más); es una anécdota de un blog, no un dato medido [S].
+
+## Qué hicimos y qué faltó
+
 | | Etapas |
 | --- | --- |
-| **Hechas** (8) | 3 Arte · 4 Modelado · 7 Visor · 8 Render · 9 Vídeo · 10 Voz · 12 Mezcla · 18 Automatización |
-| **Parciales** (8) | 1 Brief · 2 Guion · 5 Materiales · 11 Música · 13 Montaje · 14 Calidad · 15 Derechos · 16 Entrega |
-| **Faltaron** (2) | 6 Optimizar el 3D · 17 Publicación |
+| **Hechas** (8) | 3 Arte (básica) · 4 Modelado · 7 Visor · 8 Render · 9 Vídeo · 10 Voz · 12 Mezcla · 19 Orquestación |
+| **Parciales** (7) | 1 Brief · 2 Guion · 5 Materiales · 11 Música · 13 Montaje · 15 Revisión · 16 Derechos |
+| **Faltaron** (4) | 6 Optimizar 3D · 14 Formatos, subtítulos y doblaje · 17 Publicación · 18 Analítica |
 
-**Lo que mejor salió** fue la automatización (18) y la verificación automática (14). **Lo que más falta** no es técnico: es lo **humano y legal** (brief con cliente, storyboard, revisión, derechos) y la **entrega** (formatos, publicación).
-
-## Costes, juntos
-| Concepto | Lo que hicimos | Con servicios de pago |
+## Costes juntos
+| Concepto | Lo que hicimos | Con lo más potente de la lista |
 | --- | --- | --- |
-| Herramientas para este volumen [mío, suma de las cifras de arriba] | **0 USD** fuera del plan Pro (20 USD/mes) | **Menos de ≈ 30 USD al mes**, sin vídeo generado por IA |
-| Si se añade una toma realista generada por IA [mío] | No aplica | + **1–12 USD por intento** de 20 s |
-| Trabajo humano (brief, guion, arte, edición, revisión, derechos) | Lo hicimos tú y yo | **No investigado: no tengo cifras fiables y no las invento.** Es, con diferencia, el coste real |
-| Tiempo | ≈ 12 horas estimadas, repartidas en 8 fases | No investigado |
+| Herramientas del ejercicio | **0 USD** fuera del plan Pro (20 USD/mes) | Voz 0,01 USD + música (0,08–0,15 USD) + render (≈ 0,15 USD) ≈ **< 1 USD** por pieza [mío, suma] |
+| Si el vídeo fuera generado por IA | No aplica | Wan 3.0: ≈ 4 USD por intento de 20 s |
+| Doblaje de los 20 s a 2 idiomas | No aplica | ElevenLabs (sin labios): 2,20 × 0,33 min × 2 ≈ **1,5 USD**. HeyGen precisión (con labios): 4,00 × 0,33 × 2 ≈ **2,7 USD** [mío, cuenta sobre precios [S]] |
+| Suscripciones fijas si se quisiera todo | Plan Pro 20 USD/mes | Claude Max 100–200 + Frame.io 15–25/miembro + ElevenLabs Creator 22 + HeyGen 24–29 ≈ **160–280 USD/mes** [mío, suma de rangos [S]] |
+| Personas (brief, guion, arte, edición, revisión, legal) | Tú y yo | **No investigado; no invento cifras** |
 
-## Cómo se interpreta
-Las herramientas cuestan **céntimos o unas decenas de dólares al mes** para este tamaño; lo caro a nivel profesional son las **personas**, los **derechos** y la **revisión**. Nuestro ejercicio demuestra que la parte técnica y repetible se puede automatizar; no sustituye las etapas 1, 2, 14 y 15 hechas bien.
+## Qué sigue sin investigar
+Precios de storyboard, Premiere, Resolve, Descript, Substance Collection, alojamiento y analítica; ranking de música; Unreal Engine 5.8 frente a Cycles; QC automático de entrega (VMAF, Baton); Claude Agent SDK o Temporal en producción creativa; qué usa cada estudio de verdad.
