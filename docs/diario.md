@@ -139,3 +139,11 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Opus 5.5 NO se ha probado (consume cuota; falta decisión del usuario).
 - Dashboard 7b opción B: `dashboard/construir.py` (SQLite + Chart.js local, consulta SQL visible bajo cada gráfico), `dashboard/index.html`; verificado en Chrome: 6 lienzos con contenido, consola limpia. La opción A (Claude Dashboards, que el usuario tiene con Pro) requiere hacerla en claude.ai con una fuente de datos conectada; no se hizo.
 - Retrospectiva completa en `docs/retrospectiva.md`.
+
+## 2026-10-15 · Fase 7b, opción A: Claude Dashboards en claude.ai
+- La extensión de Claude en Chrome no estaba conectada. Diagnóstico (sin leer datos de navegación): el Chrome con ventana lo había arrancado mi propio `open dashboard/index.html`; el puente nativo activo era el de la app de escritorio de Claude y no el de Claude Code (hay dos manifiestos, de fechas distintas, ambos con la misma extensión permitida). Un reintento mío siguió fallando; el usuario la conectó y entonces funcionó.
+- Con la extensión: abrí claude.ai (cuenta jc · Pro), plantilla Dashboard (Beta) desde Artefactos, vi los conectores (Calendar, Drive, Notion, Chrome; sin almacén de datos), subí `docs/metricas.csv` con `file_upload` y pedí el dashboard. Resultado: «Métricas del ejercicio», privado, 748,2 min · 47 intentos · 13 fases, 4 gráficos con su SQL, coincidente con la opción B.
+- CORRECCIÓN de mi suposición: dije que el CSV "no se podía usar directamente" por lo que dice la ayuda (solo almacenes y apps conectadas). Era falso en la práctica: el adjunto funciona. Matiz que declaró el propio Claude: no ejecuta SQL sobre el adjunto, agrega en el navegador y enseña el SQL equivalente.
+- Detalle: "fases por resultado" cuenta fases distintas (12 ok + 1 parcial) y mi dashboard local cuenta filas.
+- Acciones en la cuenta del usuario (todas dentro de lo pedido): crear un dashboard privado y su chat, subir el CSV (solo métricas del ejercicio, sin datos personales), enviar un mensaje. No se pulsó Notificar ni Compartir; no se tocaron conectores. La pestaña queda abierta para que el usuario lo vea.
+- Guía actualizada: `dashboard/para-claude-dashboards.md`.

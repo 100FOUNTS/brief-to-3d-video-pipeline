@@ -1,19 +1,31 @@
 # Opción A: Claude Dashboards (claude.ai) con las métricas del estudio
 
-## Estado (comprobado el 15 de oct de 2026)
-- **Disponible en tu plan Pro** (beta). Fuente: página de precios y ayuda de Anthropic.
-- **Fuentes de datos documentadas:** almacenes (Amazon Redshift, BigQuery, ClickHouse, Databricks, Snowflake) y aplicaciones conectadas a Claude (el ejemplo de la ayuda es Salesforce).
-- **No documentados como fuente:** CSV o archivos subidos, Google Drive, Notion, Supabase. Por eso `docs/metricas.csv` **no se puede usar directamente**. Si tu cuenta ofrece alguna de esas fuentes al crear el dashboard, vale; lo dice la propia pantalla.
-- **No lo hice yo:** la extensión de Claude en Chrome no estaba conectada, y además necesitaría tus credenciales de un almacén.
+## Resultado (probado el 15 de oct de 2026, con la extensión de Claude en Chrome)
+- **Se hizo.** En la cuenta del usuario (plan Pro) se creó el dashboard **«Métricas del ejercicio»** adjuntando `docs/metricas.csv` al chat de la plantilla Dashboard (Beta):
+  `https://claude.ai/artifact/MJD16dCyr5seGJ1ncojsJW` (privado: no se pulsó «Compartir»). Chat: «Dashboard de métricas CSV».
+- **Tiene** 3 indicadores (748,2 min · 47 intentos · 13 fases) y 4 gráficos (minutos por fase, intentos por fase, fases por resultado, minutos acumulados), cada uno con su «SQL equivalente».
+- **Coincide con la opción B** (`dashboard/index.html`): mismas cifras.
 
-## Pasos
-1. En claude.ai, abre **Ajustes → Conectores** y mira qué fuentes de datos puedes conectar. Si ves un almacén o app de la lista, conéctalo.
-2. Carga `dashboard/metricas.sql` en ese almacén (crea la tabla `metricas_estudio` con las 15 filas).
-3. En un chat nuevo, elige **Output → Dashboards** (o pestaña **Artifacts** → plantilla Dashboards) y pega:
+## Lo que había supuesto mal
+Escribí antes que un CSV «no se podía usar directamente» como fuente, porque la página de ayuda solo cita almacenes de datos y apps conectadas (Salesforce...).
+**Era falso en la práctica:** adjuntar el CSV al chat funciona. Pero hay un matiz que Claude declaró (se lo pedí en el mensaje):
+> «Este dashboard no ejecuta SQL sobre el archivo adjunto. Lee el CSV y agrega en el navegador. El SQL de cada gráfico es la consulta equivalente.» (y comprobó que da las mismas cifras en SQLite)
 
-> Hazme un dashboard con la tabla `metricas_estudio`: (1) minutos por fase, (2) intentos por fase, (3) cuántas fases acabaron en cada resultado, (4) minutos acumulados a lo largo del ejercicio. Pon el SQL de cada gráfico visible. Avisa de que los minutos son estimaciones.
+Es decir: es un dashboard **estático sobre el CSV subido** (no se refresca desde una fuente viva), y su «SQL» es explicativo, no el que se ejecuta.
 
-4. Cada gráfico muestra su consulta y cuándo se refrescó; para compartirlo, botón **Share** (empieza privado).
+## Diferencias que vale la pena saber
+- «Fases por resultado»: Claude cuenta **fases distintas** (12 ok, 1 parcial); `dashboard/index.html` cuenta **filas** (cada intento registrado), por eso sus cifras difieren.
+- Los minutos son estimaciones (el dashboard lo avisa); con 15 filas no es estadística.
+- Para **actualizarlo** hay que volver a adjuntar el CSV nuevo en el chat (no se refresca solo).
+- Gasta cuota de uso del plan (una respuesta de unos 2-3 minutos con Sonnet 5.5).
 
-## Comparación con la opción B (local, ya hecha: `dashboard/index.html`)
-La B funciona sin cuentas ni conectores, con Chart.js y SQLite; la A refresca desde una fuente viva y usa tu cuota de uso. Las consultas SQL son las mismas (`metricas.sql`, parte final).
+## Cómo repetirlo
+1. claude.ai → Artefactos → **+** → **Dashboard (Beta)**.
+2. Adjunta `docs/metricas.csv` y pide: *Hazme un dashboard con el CSV adjunto: (1) minutos por fase, (2) intentos por fase, (3) cuántas fases acabaron en cada resultado, (4) minutos acumulados. Pon el SQL de cada gráfico visible y avisa de que los minutos son estimaciones. Si el dashboard no puede usar un archivo adjunto como fuente de datos, dímelo claramente en vez de inventar datos.*
+3. Con un almacén de datos (BigQuery, Snowflake, Redshift...) conectado sí ejecutaría SQL real: `dashboard/metricas.sql` trae la tabla y las consultas.
+
+## Conectores de la cuenta (vistos en la pantalla, sin tocarlos)
+Google Calendar, Google Drive, Notion y Claude in Chrome activos; Stripe pide atención. Ningún almacén de datos.
+
+## Para borrarlo
+Chat «Dashboard de métricas CSV» en la barra lateral → menú → Eliminar.
