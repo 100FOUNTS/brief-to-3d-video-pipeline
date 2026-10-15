@@ -19,6 +19,9 @@ print(f"Voz {voz}: nivel de la voz y de la música dentro de cada ventana de hab
 peor = 99
 for s in seg:
     a, b = s["inicio"] + 0.1, s["fin"] - 0.05
+    if b - a < 0.4:                                       # ebur128 necesita >= 0,4 s: con menos devuelve -65 LUFS (basura)
+        print(f"  {s['id']:<14} ventana de {b - a:.2f} s: demasiado corta para medir el volumen (se omite)")
+        continue
     v, m = lufs(tmp / "voz.wav", a, b), lufs(tmp / "musica_duck.wav", a, b)
     dif = v + GANANCIA_VOZ_DB - m                       # diferencia real en la mezcla, con el peso de la voz
     peor = min(peor, dif)

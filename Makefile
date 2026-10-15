@@ -26,6 +26,13 @@ audio:
 	audio/mux.sh ef_dora
 	audio/mux.sh em_alex
 
+audio-qwen3:
+	audio/.venv/bin/python audio/narration.py --motor qwen3 --extra-ventana 0.6
+	audio/mix.sh qwen3-ryan
+	audio/mix.sh qwen3-aiden
+	audio/mux.sh qwen3-ryan
+	audio/mux.sh qwen3-aiden
+
 audio-verificar:
 	audio/.venv/bin/python audio/verificar_voz.py out/audio/mezcla_ef_dora.wav out/audio/mezcla_em_alex.wav
 	audio/.venv/bin/python audio/medir_mezcla.py ef_dora
