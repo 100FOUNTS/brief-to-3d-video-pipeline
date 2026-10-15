@@ -1,0 +1,10 @@
+{
+  "nota": "Una frase por escena del vídeo de HyperFrames. 'inicio' = segundo en que empieza a hablar; 'ventana' = segundos disponibles hasta la siguiente escena.",
+  "segmentos": [
+    { "id": "s1-titulo",     "texto": "Arco. Una lámpara que se pliega a tu escritorio.",            "inicio": 2.5,  "ventana": 4.2 },
+    { "id": "s2-ligera",     "texto": "Es ligera, así que la mueves con un dedo.",                   "inicio": 5.5,  "ventana": 3.2 },
+    { "id": "s3-articulada", "texto": "Es articulada, así que la luz va justo donde la necesitas.", "inicio": 9.5,  "ventana": 3.2 },
+    { "id": "s4-calida",     "texto": "Y su luz es cálida, para trabajar sin cansar los ojos.",      "inicio": 13.5, "ventana": 3.2 },
+    { "id": "s5-cierre",     "texto": "Arco.",                                                       "inicio": 17.4, "ventana": 2.0 }
+  ]
+}
