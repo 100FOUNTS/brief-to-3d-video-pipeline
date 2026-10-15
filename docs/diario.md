@@ -105,3 +105,9 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - El usuario comparó a oído Kokoro (em_alex) con Qwen3-TTS (ryan, aiden) y dijo: "se siente más natural la de Kokoro". Se mantiene Kokoro `em_alex`; `out/promo-final.mp4` sigue siendo el vídeo de referencia.
 - Lección: la métrica objetiva (WER 0 % en ambos) no distinguía las voces; la naturalidad solo la midió el oído. Un modelo mejor en clasificaciones (o más grande: 3,08 GB frente a 0,39 GB) no tiene por qué sonar mejor en tu caso concreto: español + este guion. Coincide con la sospecha previa (los hablantes de Qwen3 no son nativos de español).
 - No se probó Qwen3 VoiceDesign (describir la voz con palabras); queda como idea si algún día se quiere insistir.
+
+## 2026-10-15 · Limpieza de modelos descartados
+- Borrados (con permiso) Qwen3-TTS 1,7B (CustomVoice 8 bits) y Whisper pequeño (`whisper-small-asr-fp16` y el antiguo `whisper-small-mlx`). Liberado: 4,04 GB.
+- Trampa: borrar los directorios `models--*` NO libera espacio, porque el caché de Hugging Face guarda los archivos grandes en un almacén compartido `hub/blobs/<xx>/<hash>` (el directorio del modelo solo tiene enlaces). Hay que borrar los blobs huérfanos: los no referenciados por ningún enlace de los modelos que quedan. Se filtraron además por fecha (solo los creados hoy) para no tocar restos anteriores del usuario (9 archivos minúsculos, intactos). Comprobado: 157 enlaces válidos, 0 rotos.
+- Errores míos: cifras de tamaño. Dije 3,1 GB para Qwen3-TTS (ficha del repo) y luego 5,8 GB (`du -L` contando de más); lo real eran 4,04 GB entre los tres modelos.
+- Se mantienen Kokoro (voz) y Whisper large-v3 (verificación). La voz de Kokoro se regenera idéntica byte a byte.
