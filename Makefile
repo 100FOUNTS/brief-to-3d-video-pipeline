@@ -38,10 +38,10 @@ pieza-blender:
 	@mkdir -p out/logs out/blender; SECONDS=0; { $(BLENDER) -b --factory-startup -P blender/build_lamp.py -- --out out/blender --frames 5 --glb out/lampara.glb --blend out/blender/lampara.blend --brief $(BRIEF); } > out/logs/blender.log 2>&1 && echo "   OK pieza-blender ($$SECONDS s)" || { echo "   FALLA pieza-blender:"; tail -15 out/logs/blender.log; exit 1; }
 
 pieza-visor:
-	@mkdir -p out/logs; SECONDS=0; { cd viewer && npm test --silent && npm run build --silent; } > out/logs/visor.log 2>&1 && echo "   OK pieza-visor ($$SECONDS s)" || { echo "   FALLA pieza-visor:"; tail -15 out/logs/visor.log; exit 1; }
+	@mkdir -p out/logs; SECONDS=0; ( cd viewer && npm test --silent && npm run build --silent ) > out/logs/visor.log 2>&1 && echo "   OK pieza-visor ($$SECONDS s)" || { echo "   FALLA pieza-visor:"; tail -15 out/logs/visor.log; exit 1; }
 
 pieza-video:
-	@mkdir -p out/logs; SECONDS=0; { cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4; } > out/logs/video.log 2>&1 && echo "   OK pieza-video ($$SECONDS s)" || { echo "   FALLA pieza-video:"; tail -15 out/logs/video.log; exit 1; }
+	@mkdir -p out/logs; SECONDS=0; ( cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4 ) > out/logs/video.log 2>&1 && echo "   OK pieza-video ($$SECONDS s)" || { echo "   FALLA pieza-video:"; tail -15 out/logs/video.log; exit 1; }
 
 pieza-audio:
 	@mkdir -p out/logs; SECONDS=0; { $(PY) audio/narration.py --brief $(BRIEF) && $(PY) audio/music.py --brief $(BRIEF) && audio/mix.sh $(ETQ); } > out/logs/audio.log 2>&1 && echo "   OK pieza-audio ($$SECONDS s)" || { echo "   FALLA pieza-audio:"; tail -15 out/logs/audio.log; exit 1; }

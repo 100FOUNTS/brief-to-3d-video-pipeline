@@ -2,7 +2,7 @@
 """Genera TODO lo que depende del producto a partir de UN solo archivo: brief.json (Fase 6).
 
 Lee el brief, lo valida (avisa si un texto no cabe o un color no tiene contraste) y escribe:
-  - hyperframes/promo/index.html   <- hyperframes/promo/index.template.html
+  - hyperframes/promo/index.html   <- plantillas/hyperframes-promo.template.html (FUERA del proyecto de HyperFrames: dos index con data-composition-id en la misma carpeta hacen fallar `hyperframes check`)
   - docs/guion.json                <- guion de la voz, una frase por escena, con su segundo de inicio y su ventana
   - viewer/src/brief.generated.js  <- nombre, lema y paleta para el visor 3D
 Blender (blender/build_lamp.py --brief) y la música (audio/music.py --brief) leen el brief directamente.
@@ -70,7 +70,7 @@ def e(t):
 
 
 def render_hyperframes(b):
-    plantilla = (RAIZ / "hyperframes/promo/index.template.html").read_text(encoding="utf-8")
+    plantilla = (RAIZ / "plantillas/hyperframes-promo.template.html").read_text(encoding="utf-8")
     p, pal = b["producto"], b["paleta"]
     v = {"NOMBRE": e(p["nombre"]), "LEMA": e(p["lema"]), "TEXTO": pal["texto"], "FONDO": pal["fondo"], "FONDO2": pal["fondo2"], "ACENTO": pal["acento"],
          "ACENTO_ETIQUETA": pal["acento_etiqueta"], "LATON": pal["laton"], "LUZ_NEUTRA": pal["luz_neutra"],
