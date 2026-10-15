@@ -1,7 +1,17 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { BRIEF } from './brief.generated.js';
 import { crearMateriales, crearLampara, aplicarExplosion, suavizar, piezas, limites, INFO, NOMBRES, COLORES_PANTALLA } from './lampara.js';
+
+// El producto y su paleta salen de brief.json (vía brief.generated.js).
+document.title = `${BRIEF.nombre} · visor 3D`;
+document.querySelector('.cabecera h1').textContent = BRIEF.nombre;
+document.querySelector('.cabecera p').textContent = BRIEF.descripcion;
+document.getElementById('escena').setAttribute('aria-label', `${BRIEF.descripcion} ${BRIEF.nombre} en 3D. Arrastra para girar, rueda para acercar.`);
+for (const [variable, clave] of [['--fondo', 'fondo'], ['--superficie', 'fondo2'], ['--texto', 'texto'], ['--acento', 'acento']]) {
+  document.documentElement.style.setProperty(variable, BRIEF.paleta[clave]);
+}
 
 const params = new URLSearchParams(location.search);
 const quieto = params.has('quieto'); // sin giro automático ni animación: para capturas reproducibles
@@ -22,8 +32,8 @@ renderer.toneMappingExposure = 1.0;
 
 // ---------- escena ----------
 const escena = new THREE.Scene();
-escena.background = new THREE.Color('#0f1115');
-escena.fog = new THREE.Fog('#0f1115', 10, 30); // el borde del suelo se difumina en el fondo (se ajusta en encuadrar)
+escena.background = new THREE.Color(BRIEF.paleta.fondo);
+escena.fog = new THREE.Fog(BRIEF.paleta.fondo, 10, 30); // el borde del suelo se difumina en el fondo (se ajusta en encuadrar)
 const pmrem = new THREE.PMREMGenerator(renderer);
 escena.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; // reflejos suaves en el metal
 escena.environmentIntensity = 0.42;
@@ -39,7 +49,7 @@ escena.add(luzPrincipal);
 
 const suelo = new THREE.Mesh(
   new THREE.CircleGeometry(18, 96),
-  new THREE.MeshStandardMaterial({ color: '#191c23', roughness: 0.92, metalness: 0 }),
+  new THREE.MeshStandardMaterial({ color: BRIEF.paleta.suelo, roughness: 0.92, metalness: 0 }),
 );
 suelo.rotation.x = -Math.PI / 2;
 suelo.receiveShadow = true;
@@ -173,7 +183,7 @@ function resaltar(nombre, activo) {
     if (activo) {
       if (!o.userData.matOriginal) { o.userData.matOriginal = o.material; o.material = o.material.clone(); }
       if (nombre === 'bombilla') { o.material.emissiveIntensity = 4; }
-      else { o.material.emissive.set('#ffb703'); o.material.emissiveIntensity = 0.3; }
+      else { o.material.emissive.set(BRIEF.paleta.acento); o.material.emissiveIntensity = 0.3; }
     } else if (o.userData.matOriginal) {
       o.material.dispose();
       o.material = o.userData.matOriginal;

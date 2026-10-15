@@ -139,7 +139,14 @@ def main():
     ap.add_argument("--duracion", type=float, default=20.0)
     ap.add_argument("--out", default="out/audio/musica.wav")
     ap.add_argument("--semilla", type=int, default=7)
+    ap.add_argument("--brief", default="", help="brief.json: musica.bpm y musica.semilla")
     a = ap.parse_args()
+    global BPM, BEAT, COMPAS
+    if a.brief:
+        import json
+        m = json.load(open(RAIZ / a.brief if not pathlib.Path(a.brief).is_absolute() else a.brief, encoding="utf-8"))["musica"]
+        BPM, a.semilla = float(m["bpm"]), int(m["semilla"])
+        BEAT, COMPAS = 60.0 / BPM, 4 * (60.0 / BPM)
     destino = RAIZ / a.out
     destino.parent.mkdir(parents=True, exist_ok=True)
     x = componer(a.duracion, a.semilla)

@@ -1,7 +1,8 @@
-// Lámpara "Arco" construida con primitivas de Three.js. Sin modelos externos.
+// Lámpara de escritorio articulada construida con primitivas de Three.js. Sin modelos externos. Los colores salen del brief.
 // Convención: ejes de Three.js, Y hacia arriba. 1 unidad ≈ 10 cm.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { BRIEF } from './brief.generated.js';   // nombre y paleta del producto (generado desde brief.json)
 
 export const NOMBRES = [
   'base',
@@ -24,7 +25,7 @@ export const INFO = {
 };
 
 export const COLORES_PANTALLA = {
-  'Latón': '#b8893a',
+  'Latón': BRIEF.paleta.laton,
   'Cobre': '#a8532f',
   'Verde bosque': '#2f5d4a',
   'Azul noche': '#27426b',
@@ -51,12 +52,12 @@ const alinear = (objeto, direccion) => objeto.quaternion.setFromUnitVectors(EJE_
 
 export function crearMateriales() {
   return {
-    negro: new THREE.MeshStandardMaterial({ color: '#242933', metalness: 0.85, roughness: 0.42 }),
+    negro: new THREE.MeshStandardMaterial({ color: BRIEF.paleta.metal, metalness: 0.85, roughness: 0.42 }),
     laton: new THREE.MeshStandardMaterial({ color: COLORES_PANTALLA['Latón'], metalness: 1, roughness: 0.3, side: THREE.DoubleSide }),
     // Material propio de la pantalla: así el botón de color no cambia también los anillos de latón de las articulaciones
     pantalla: new THREE.MeshStandardMaterial({ color: COLORES_PANTALLA['Latón'], metalness: 1, roughness: 0.3, side: THREE.DoubleSide }),
-    bombilla: new THREE.MeshStandardMaterial({ color: '#fff3d6', emissive: '#ffb703', emissiveIntensity: 2.2, roughness: 0.4 }),
-    interior: new THREE.MeshStandardMaterial({ color: '#f4e3b8', emissive: '#ffb703', emissiveIntensity: 0.45, roughness: 0.8, side: THREE.BackSide }),
+    bombilla: new THREE.MeshStandardMaterial({ color: BRIEF.paleta.luz_neutra, emissive: BRIEF.paleta.acento, emissiveIntensity: 2.2, roughness: 0.4 }),
+    interior: new THREE.MeshStandardMaterial({ color: '#f4e3b8', emissive: BRIEF.paleta.acento, emissiveIntensity: 0.45, roughness: 0.8, side: THREE.BackSide }),
   };
 }
 

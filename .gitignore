@@ -1,7 +1,7 @@
 out/
-node_modules/
+node_modules
 .DS_Store
 __pycache__/
-.venv/
+.venv
 *.blend1
 hyperframes/promo/.hyperframes/

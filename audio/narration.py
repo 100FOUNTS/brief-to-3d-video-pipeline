@@ -112,7 +112,8 @@ def mejor_candidata(modelo, stt, texto, voz, cfg, instruct, extra_ventana_ok):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--motor", default="kokoro", choices=list(MOTORES))
+    ap.add_argument("--motor", default=None, choices=list(MOTORES))
+    ap.add_argument("--brief", default="", help="brief.json: voz.motor y voz.nombre (si no se pasan --motor/--voces)")
     ap.add_argument("--voces", default=None)
     ap.add_argument("--instruct", default=None, help="instrucción de estilo (solo motores que la admiten, p. ej. qwen3)")
     ap.add_argument("--extra-ventana", type=float, default=0.0, help="segundos que se amplía cada ventana (para voces más lentas que el guion)")
@@ -121,6 +122,11 @@ def main():
     a = ap.parse_args()
     from mlx_audio.tts.utils import load_model
     global SR
+    if a.brief:
+        bv = json.loads((RAIZ / a.brief if not pathlib.Path(a.brief).is_absolute() else pathlib.Path(a.brief)).read_text(encoding="utf-8"))["voz"]
+        a.motor = a.motor or bv["motor"]
+        a.voces = a.voces or bv["nombre"]
+    a.motor = a.motor or "kokoro"
     cfg = MOTORES[a.motor]
     modelo = load_model(cfg["modelo"])
     SR = int(getattr(modelo, "sample_rate", SR))

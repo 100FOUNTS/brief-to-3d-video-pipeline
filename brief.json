@@ -1,0 +1,32 @@
+{
+  "producto": {
+    "nombre": "Arco",
+    "lema": "Luz que se pliega a tu escritorio",
+    "descripcion": "Lámpara de escritorio articulada"
+  },
+  "beneficios": [
+    { "id": "ligera",     "palabra": "Ligera",     "detalle": "Se mueve con un dedo",                 "voz": "Es ligera, así que la mueves con un dedo." },
+    { "id": "articulada", "palabra": "Articulada", "detalle": "La luz va justo donde la necesitas",   "voz": "Es articulada, así que la luz va justo donde la necesitas." },
+    { "id": "calida",     "palabra": "Luz cálida", "detalle": "Para trabajar sin cansar los ojos",    "voz": "Y su luz es cálida, para trabajar sin cansar los ojos." }
+  ],
+  "voz": {
+    "apertura": "Arco. Una lámpara que se pliega a tu escritorio.",
+    "cierre": "Arco.",
+    "motor": "kokoro",
+    "nombre": "em_alex"
+  },
+  "paleta": {
+    "fondo": "#0f1115",
+    "fondo2": "#1a1d24",
+    "texto": "#f4f1ea",
+    "acento": "#ffb703",
+    "acento_etiqueta": "#ffc532",
+    "laton": "#b8893a",
+    "metal": "#242933",
+    "suelo": "#1d2129",
+    "luz_neutra": "#fff3d6",
+    "halo_bombilla": "#ffd678"
+  },
+  "musica": { "bpm": 70, "semilla": 7 },
+  "video": { "duracion": 20 }
+}

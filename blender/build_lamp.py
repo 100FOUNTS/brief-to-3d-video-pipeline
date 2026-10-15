@@ -41,6 +41,7 @@ def argumentos():
     p.add_argument("--res", default="1280x720")
     p.add_argument("--samples", type=int, default=64)
     p.add_argument("--sin-render", action="store_true")
+    p.add_argument("--brief", default="", help="brief.json: la paleta (fondo, metal, latón, suelo, acento) sale de ahí")
     return p.parse_args(argv)
 
 
@@ -207,7 +208,16 @@ def luz_area(nombre, loc, energia, tam, color="#ffffff", objetivo=Vector((0.2, 0
     return o
 
 
+def aplicar_brief(ruta):
+    """Sustituye los colores por los de brief.json (paleta.fondo/metal/laton/suelo/acento)."""
+    import json
+    pal = json.load(open(ruta, encoding="utf-8"))["paleta"]
+    COLORES.update(fondo=pal["fondo"], negro=pal["metal"], laton=pal["laton"], suelo=pal["suelo"], luz_calida=pal["acento"])
+
+
 def preparar_escena(args):
+    if args.brief:
+        aplicar_brief(args.brief)
     bpy.ops.wm.read_factory_settings(use_empty=True)
     sc = bpy.context.scene
     ancho, alto = (int(v) for v in args.res.lower().split("x"))
