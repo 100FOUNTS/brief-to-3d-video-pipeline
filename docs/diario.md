@@ -86,3 +86,6 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Intentos fallidos: `whisper-small-mlx` (formato antiguo, mlx-audio no lo carga: falta el procesador; hay que usar las variantes `-asr-fp16`); la medición de nivel olvidaba el peso de la voz en amix (+4,6 dB) y subestimaba la diferencia; un `asplit` con una salida sin conectar; mi script ocultaba el error del subproceso.
 - Límite honesto: nada de esto mide si la voz suena NATURAL o agradable, ni si la música es buena. Eso solo se juzga escuchando. Dejé dos versiones para elegir: `out/promo-hyperframes-sonido-ef_dora.mp4` y `-em_alex.mp4`.
 - `make audio` regenera todo; `make audio-verificar` repite las comprobaciones.
+
+## 2026-10-15 · Voz elegida
+- El usuario eligió la voz masculina (em_alex) tras escuchar las dos. Es la voz por defecto de `audio/mix.sh` y `audio/mux.sh`; el vídeo de referencia es `out/promo-final.mp4` (= promo HyperFrames de 20 s + voz em_alex + música).

@@ -3,7 +3,7 @@
 # Uso: audio/mix.sh [voz]   (por defecto ef_dora)   ->   out/audio/mezcla_<voz>.wav
 set -euo pipefail
 cd "$(dirname "$0")/.."
-VOZ="${1:-ef_dora}"
+VOZ="${1:-em_alex}"
 ffmpeg -hide_banner -loglevel error -y -i out/audio/musica.wav -i "out/audio/voz_${VOZ}.wav" -filter_complex "
 [1:a]aresample=48000,pan=stereo|c0=c0|c1=c0,asplit=2[v][vsc];
 [0:a]volume=-2dB[m];
