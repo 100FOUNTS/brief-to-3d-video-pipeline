@@ -16,3 +16,9 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Verificación visual: 0 s = solo fondo, 1 s = título a medio fundido y la línea sin empezar, 4 s = todo completo.
 - Determinismo: dos renders -> mismos hashes de los 240 fotogramas La prueba no es vacía: dentro de un mismo render hay 96 hashes distintos de 240, que es lo esperable (los fotogramas de reposo antes de 0,5 s y después de 3 s son idénticos).
 - Sorpresa: PNG (7.3 s) resultó MÁS rápido que JPEG (8.2 s), al revés que en el documento (26 s vs 11,5 s). La escena es casi plana y el PNG la comprime muy bien; con escenas complejas (3D, shaders) probablemente se invierta. Re-medir en la Fase 3b.
+
+## 2026-10-15 · Fase 1b: escena con contenido (`video/promo.html`)
+- Motivo: la escena de la Fase 1 (palabra + línea) probaba el método pero no enseñaba su potencial. Hice una de 15 s con la misma `seek(t)`: lámpara dibujada en Canvas 2D que se despliega con rebote, se enciende con parpadeo, cono de luz con partículas de polvo, giro de pose ("articulada"), cambio de color a dorado ("luz cálida") y textos por escenas.
+- Técnicas: easing (smoothstep, outBack), hash determinista (`Math.sin`) en lugar de `Math.random` para el polvo y el parpadeo, composición `screen` para la luz, recorte (`clip`) al cono.
+- Fallo: a 168 px la palabra "Articulada" medía unos 950 px y se salía por el borde derecho (x=1010 + 950 > 1920). Se vio en la hoja de contactos; a 140 px cabe.
+- Render: 450 fotogramas en 8,3 s.

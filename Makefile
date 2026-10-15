@@ -1,4 +1,4 @@
-.PHONY: help check video hyperframes viewer blender audio studio clean
+.PHONY: help check video promo2d hyperframes viewer blender audio studio clean
 
 help:
 	@echo "make check   - comprueba herramientas y modelo local"
@@ -12,6 +12,9 @@ video:
 	node video/render.mjs video/scene.html out/titulo.mp4
 
 # Se rellenan en las fases siguientes
+promo2d:
+	node video/render.mjs video/promo.html out/promo-2d.mp4
+
 hyperframes viewer blender audio studio:
 	@echo "Pendiente: se implementa en su fase (ver PLAN-EJERCICIO.md)"
 
