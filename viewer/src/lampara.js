@@ -137,17 +137,65 @@ export function crearLampara(materiales = crearMateriales()) {
   const esfBombilla = new THREE.Mesh(new THREE.SphereGeometry(0.24, 32, 24), materiales.bombilla);
   const bombilla = pieza('bombilla', posBombilla, [esfBombilla]);
   esfBombilla.castShadow = false;
+  anadirFoco(bombilla, d3);
+
+  raiz.add(base, brazoInf, art1, brazoSup, art2, pantalla, bombilla);
+  return raiz;
+}
+
+// Foco de luz de la bombilla (viaja con ella). Lo comparten el modelo de primitivas y el del .glb: las luces del archivo no se usan.
+export function anadirFoco(bombilla, direccion) {
+  // `direccion` está en coordenadas del MUNDO; el objetivo del foco se coloca en coordenadas LOCALES de la bombilla, que en el .glb hereda
+  // el giro de los pivotes (en las primitivas no gira y coincide). Sin esta conversión, la luz apuntaba hacia otro lado.
+  const giro = bombilla.getWorldQuaternion(new THREE.Quaternion()).invert();
   const foco = new THREE.SpotLight('#ffcf70', 120, 14, 0.95, 0.7, 1.4);
   foco.name = 'foco';
   foco.castShadow = true;
   foco.shadow.mapSize.set(1024, 1024);
   foco.shadow.bias = -0.0005;
   const objetivo = new THREE.Object3D();
-  objetivo.position.copy(d3.clone().multiplyScalar(6));
+  objetivo.position.copy(direccion.clone().normalize().applyQuaternion(giro).multiplyScalar(6));
   bombilla.add(objetivo, foco);
   foco.target = objetivo;
+  return foco;
+}
 
-  raiz.add(base, brazoInf, art1, brazoSup, art2, pantalla, bombilla);
+/**
+ * Construye la lámpara a partir del .glb exportado de Blender (`gltf.scene`, ya cargado).
+ * En el archivo las piezas cuelgan de una jerarquía de pivotes (cada brazo se mueve con el anterior, para poder animar el despliegue).
+ * La vista explosionada necesita piezas INDEPENDIENTES: se sacan a la raíz con `attach`, que conserva su posición y giro en el mundo.
+ */
+export function lamparaDesdeGLTF(escenaGLTF) {
+  escenaGLTF.updateMatrixWorld(true);
+  const nodos = {};
+  for (const nombre of NOMBRES) {
+    nodos[nombre] = escenaGLTF.getObjectByName(nombre);
+    if (!nodos[nombre]) throw new Error(`El .glb no trae la pieza '${nombre}'`);
+  }
+  const raiz = new THREE.Group();
+  raiz.name = 'lampara';
+  for (const nombre of NOMBRES) {
+    const nodo = nodos[nombre];
+    raiz.attach(nodo);                                   // mantiene la transformación del mundo
+    nodo.userData = { ...nodo.userData, esPieza: true, nombre, reposo: nodo.position.clone(), explosion: EXPLOSION[nombre].clone(), info: INFO[nombre] };
+    nodo.traverse((o) => {
+      if (o.isLight) o.userData.quitar = true;           // las luces del archivo (candelas de Blender) se descartan
+      if (o.isMesh) { o.castShadow = nombre !== 'pantalla' && nombre !== 'bombilla'; o.receiveShadow = true; }
+    });
+  }
+  const luces = [];
+  raiz.traverse((o) => { if (o.userData.quitar) luces.push(o); });
+  luces.forEach((l) => l.removeFromParent());
+
+  // La pantalla comparte material con los anillos de latón en Blender: se clona para que el color de la pantalla no cambie los anillos.
+  const exterior = nodos['pantalla'].getObjectByName('pantalla-exterior');
+  if (exterior) {
+    exterior.material = exterior.material.clone();
+    nodos['pantalla'].userData.materialColor = exterior.material;
+  }
+  // La luz sale por el extremo abierto de la pantalla: dirección articulación superior -> bombilla.
+  const direccion = nodos['bombilla'].position.clone().sub(nodos['articulacion-superior'].position).normalize();
+  anadirFoco(nodos['bombilla'], direccion);
   return raiz;
 }
 

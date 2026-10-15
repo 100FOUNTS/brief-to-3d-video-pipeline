@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { BRIEF } from './brief.generated.js';
-import { crearMateriales, crearLampara, aplicarExplosion, suavizar, piezas, limites, INFO, NOMBRES, COLORES_PANTALLA } from './lampara.js';
+import { crearMateriales, crearLampara, lamparaDesdeGLTF, aplicarExplosion, suavizar, piezas, limites, INFO, NOMBRES, COLORES_PANTALLA } from './lampara.js';
 
 // El producto y su paleta salen de brief.json (vía brief.generated.js).
 document.title = `${BRIEF.nombre} · visor 3D`;
@@ -55,8 +56,9 @@ suelo.rotation.x = -Math.PI / 2;
 suelo.receiveShadow = true;
 escena.add(suelo);
 
-const materiales = crearMateriales();
-const lampara = crearLampara(materiales);
+// Se arranca con las primitivas (síncrono) para que todo lo demás se inicialice; después se carga el .glb de Blender y se sustituye.
+let lampara = crearLampara(crearMateriales());
+let modeloActual = 'primitivas';
 escena.add(lampara);
 const porNombre = (n) => lampara.getObjectByName(n);
 
@@ -170,9 +172,11 @@ function colorear(nombre) {
   if (!COLORES_PANTALLA[nombre]) return;
   colorActual = nombre;
   const hex = COLORES_PANTALLA[nombre];
-  materiales.pantalla.color.set(hex);
+  const pantalla = porNombre('pantalla');
+  const material = pantalla.userData.materialColor;      // material propio de la pantalla (en las primitivas y en el .glb)
+  material.color.set(hex);
   // si la pantalla está resaltada, su material es una copia: se actualiza también
-  porNombre('pantalla').traverse((o) => { if (o.isMesh && o.userData.matOriginal === materiales.pantalla) o.material.color.set(hex); });
+  pantalla.traverse((o) => { if (o.isMesh && o.userData.matOriginal === material) o.material.color.set(hex); });
   contenedorColores.querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.color === nombre)));
 }
 
@@ -240,7 +244,8 @@ canvas.addEventListener('wheel', () => { interactuado = true; controles.autoRota
 let ultimo = performance.now();
 function dibujar() {
   seguirExplosion();
-  suelo.position.y = porNombre('base').position.y - 0.08; // el suelo acompaña a la base cuando se separa
+  const base = porNombre('base');
+  suelo.position.y = base.position.y - base.userData.reposo.y; // el suelo acompaña a la base cuando se separa (0 en reposo, sea cual sea el origen de la pieza)
   controles.update();
   renderer.render(escena, camara);
 }
@@ -255,9 +260,42 @@ function bucle(ahora) {
 }
 requestAnimationFrame(bucle);
 
+// ---------- modelo: .glb de Blender o primitivas ----------
+const botonesModelo = document.querySelectorAll('#modelos button');
+function liberar(grupo) {
+  grupo.traverse((o) => { if (o.isMesh) { o.geometry?.dispose(); (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose()); } });
+}
+async function cambiarModelo(tipo) {
+  let nueva;
+  if (tipo === 'glb') {
+    const gltf = await new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}lampara.glb`);
+    nueva = lamparaDesdeGLTF(gltf.scene);
+  } else {
+    nueva = crearLampara(crearMateriales());
+  }
+  if (seleccionada) seleccionar(null);               // quita el resaltado del modelo viejo antes de retirarlo
+  escena.remove(lampara);
+  liberar(lampara);
+  lampara = nueva;
+  escena.add(lampara);
+  modeloActual = tipo;
+  colorear(colorActual);                             // conserva el color elegido para la pantalla
+  aplicarExplosion(lampara, explosionActual);
+  encuadrar(interactuado);
+  botonesModelo.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.modelo === tipo)));
+  dibujar();
+}
+botonesModelo.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.modelo === modeloActual)));
+botonesModelo.forEach((b) => b.addEventListener('click', () => { cambiarModelo(b.dataset.modelo).catch(avisoCarga); }));
+function avisoCarga(e) {
+  console.warn('No se pudo cargar el modelo .glb; se queda el de primitivas:', e?.message || e);
+  panelInfo.innerHTML = '<p class="etiqueta">Modelo</p><p class="info-detalle">No se pudo cargar el modelo de Blender (lampara.glb). Se muestra el modelo hecho con primitivas.</p>';
+}
+
 // ---------- API para pruebas y capturas ----------
 window.__arco = {
-  listo: true,
+  listo: false,                                      // pasa a true cuando ya se decidió qué modelo se muestra
+  setModelo: (tipo) => cambiarModelo(tipo),
   setExplosion(s) {                                  // salta directamente a s, sin animación
     explosionObjetivo = explosionActual = Math.min(1, Math.max(0, s));
     slider.value = String(explosionObjetivo);
@@ -266,10 +304,14 @@ window.__arco = {
   },
   seleccionar,
   colorear,
-  estado: () => ({ explosion: explosionActual, seleccionada, color: colorActual }),
+  colorPantallaHex: () => '#' + porNombre('pantalla').userData.materialColor.color.getHexString(),
+  estado: () => ({ explosion: explosionActual, seleccionada, color: colorActual, modelo: modeloActual }),
   pixelDe(nombre) {                                  // centro de una pieza en píxeles de la ventana
     const v = new THREE.Box3().setFromObject(porNombre(nombre)).getCenter(new THREE.Vector3()).project(camara);
     const r = canvas.getBoundingClientRect();
     return { x: r.left + ((v.x + 1) / 2) * r.width, y: r.top + ((1 - v.y) / 2) * r.height };
   },
 };
+
+// Modelo por defecto: el .glb de Blender (con ?modelo=primitivas se fuerza el de código). Si no carga, se queda el de primitivas.
+(params.get('modelo') === 'primitivas' ? Promise.resolve() : cambiarModelo('glb')).catch(avisoCarga).finally(() => { window.__arco.listo = true; });

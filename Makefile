@@ -35,9 +35,10 @@ piezas: pieza-blender pieza-visor pieza-video pieza-audio
 
 # Cada pieza escribe su registro en out/logs/ (el make de macOS no agrupa la salida en paralelo) y avisa si falla.
 pieza-blender:
-	@mkdir -p out/logs out/blender; SECONDS=0; { $(BLENDER) -b --factory-startup -P blender/build_lamp.py -- --out out/blender --frames 5 --glb out/lampara.glb --blend out/blender/lampara.blend --brief $(BRIEF); } > out/logs/blender.log 2>&1 && echo "   OK pieza-blender ($$SECONDS s)" || { echo "   FALLA pieza-blender:"; tail -15 out/logs/blender.log; exit 1; }
+	@mkdir -p out/logs out/blender; SECONDS=0; { $(BLENDER) -b --factory-startup -P blender/build_lamp.py -- --out out/blender --frames 5 --glb out/lampara.glb --blend out/blender/lampara.blend --brief $(BRIEF) && cp out/lampara.glb viewer/public/lampara.glb; } > out/logs/blender.log 2>&1 && echo "   OK pieza-blender ($$SECONDS s)" || { echo "   FALLA pieza-blender:"; tail -15 out/logs/blender.log; exit 1; }
 
-pieza-visor:
+# El visor carga el .glb que exporta Blender: se construye DESPUÉS de la pieza de Blender (que lo copia a viewer/public/).
+pieza-visor: pieza-blender
 	@mkdir -p out/logs; SECONDS=0; ( cd viewer && npm test --silent && npm run build --silent ) > out/logs/visor.log 2>&1 && echo "   OK pieza-visor ($$SECONDS s)" || { echo "   FALLA pieza-visor:"; tail -15 out/logs/visor.log; exit 1; }
 
 pieza-video:
@@ -56,6 +57,7 @@ verificar:
 # ---------------------------------------------------------------- piezas sueltas (como antes)
 blender:
 	$(BLENDER) -b --factory-startup -P blender/build_lamp.py -- --out out/blender --frames 5 --glb out/lampara.glb --blend out/blender/lampara.blend --brief $(BRIEF)
+	cp out/lampara.glb viewer/public/lampara.glb
 
 viewer:
 	cd viewer && npm test && npm run build && npm run capturas

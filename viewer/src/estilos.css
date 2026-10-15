@@ -48,6 +48,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--fond
 .control { display: grid; gap: 12px; }
 input[type="range"] { width: 260px; accent-color: var(--acento); }
 .colores { display: flex; gap: 10px; }
+.modelos { display: flex; gap: 6px; }
+.modelos button { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--borde); background: transparent; color: var(--texto); font: 400 13px/1.2 var(--sans); cursor: pointer; white-space: nowrap; }
+.modelos button:hover { background: color-mix(in srgb, var(--texto) 6%, transparent); }
+.modelos button[aria-checked="true"] { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 10%, transparent); }
+.modelos button:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 .colores button {
   width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);

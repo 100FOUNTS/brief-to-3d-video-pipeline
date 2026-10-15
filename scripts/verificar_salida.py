@@ -84,6 +84,11 @@ def main():
     objetivo = np.array([int(brief["paleta"]["fondo"][i:i + 2], 16) for i in (1, 3, 5)])
     chk("el color de fondo del vídeo es el del brief (±14 por canal)", np.all(np.abs(esquina - objetivo) <= 14), f"vídeo {tuple(int(c) for c in esquina)} · brief {tuple(int(c) for c in objetivo)} ({brief['paleta']['fondo']})")
 
+    print("\nVisor")
+    glb_visor = RAIZ / "viewer/dist/lampara.glb"
+    chk("el visor lleva el .glb de Blender (el mismo archivo que out/lampara.glb)", glb_visor.exists() and glb_visor.read_bytes() == (RAIZ / "out/lampara.glb").read_bytes(),
+        "idéntico" if glb_visor.exists() and glb_visor.read_bytes() == (RAIZ / "out/lampara.glb").read_bytes() else "no existe o difiere: ¿se construyó el visor después de Blender?")
+
     print("\nModelo 3D (.glb)")
     d = (RAIZ / "out/lampara.glb").read_bytes()
     n = struct.unpack("<I", d[12:16])[0]

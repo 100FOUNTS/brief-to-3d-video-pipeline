@@ -30,6 +30,13 @@
         <input id="explosion" type="range" min="0" max="1" step="0.01" value="0" />
       </label>
       <div class="control">
+        <span class="etiqueta">Modelo 3D</span>
+        <div id="modelos" class="modelos" role="radiogroup" aria-label="Modelo 3D">
+          <button type="button" role="radio" data-modelo="glb" aria-checked="false">Blender (.glb)</button>
+          <button type="button" role="radio" data-modelo="primitivas" aria-checked="false">Primitivas (código)</button>
+        </div>
+      </div>
+      <div class="control">
         <span class="etiqueta">Color de la pantalla</span>
         <div id="colores" class="colores" role="radiogroup" aria-label="Color de la pantalla"></div>
       </div>
