@@ -18,7 +18,10 @@ promo2d:
 hyperframes:
 	cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4
 
-viewer blender audio studio:
+viewer:
+	cd viewer && npm test && npm run build && npm run capturas
+
+blender audio studio:
 	@echo "Pendiente: se implementa en su fase (ver PLAN-EJERCICIO.md)"
 
 clean:

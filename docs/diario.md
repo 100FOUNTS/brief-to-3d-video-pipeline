@@ -32,3 +32,11 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Render: 600 fotogramas, 20 s, 16,8 s (captura 8,2 s, codificación 2,4 s), GPU por hardware (Metal). 4 workers.
 - Fuentes: el compilador descargó Montserrat e IBM Plex Mono de Google Fonts en el primer build y las guardó en caché, aunque la documentación dice que vienen incluidas.
 - Telemetría de HyperFrames: ACTIVADA por defecto (`~/.hyperframes/config.json`). Se desactiva con `npx hyperframes telemetry disable`.
+
+## 2026-10-15 · Fase 3: visor 3D con Three.js (hecha con Sonnet 5.5)
+- Proyecto `viewer/` (Vite 8.3.4, Three.js r186, Vitest 5.0.4). Lámpara con 7 piezas con nombre, armada con primitivas (RoundedBoxGeometry, esferas, toros, cono abierto), materiales PBR + entorno RoomEnvironment, foco SpotLight dentro de la bombilla con sombras.
+- Pruebas: 9 de Vitest (siete piezas y nombres, reposo/explosión exactos, monotonía, brazos que encajan con articulaciones, encuadre). Comprobé que detectan fallos con 2 mutaciones (quitar la bombilla; mover una articulación 0,5): ambas hacen fallar pruebas.
+- Verificación en navegador real (`npm run capturas`, Chrome con WebGL2 sobre Metal en el M4 Max): deslizador, clics reales en 3 piezas, clic en vacío, color, y que arrastrar para girar NO cuenta como clic. Capturas en `out/viewer/`. Sin pantallas negras: la GPU en modo sin ventana funcionó con `--use-angle=metal`.
+- Fallos encontrados: (1) en Three.js r186 `PCFSoftShadowMap` ya no existe (aviso en consola; ahora PCFShadowMap); favicon 404. (2) Con la cámara ajustada a la vista explosionada, la lámpara armada se veía pequeña. Solución: la cámara se ajusta a la armada y se aleja/recentra sola con el deslizador. (3) El borde del suelo parecía una colina: niebla del color del fondo. (4) En móvil la lámpara salía recortada porque no se reencuadraba tras interactuar y el panel era enorme: reencuadre siempre y lista de piezas en una fila deslizable.
+- Lección: las pruebas unitarias no habrían detectado ninguno de los problemas visuales; las capturas sí. Y mirar la imagen mostró cosas que ninguna comprobación automática cubría.
+- Pendiente: el visor aún no carga el .glb de Blender (reto de la Fase 4).
