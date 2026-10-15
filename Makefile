@@ -1,4 +1,4 @@
-.PHONY: help check video promo2d hyperframes viewer blender audio studio clean
+.PHONY: help check video promo2d agua hyperframes viewer blender audio studio clean
 
 help:
 	@echo "make check   - comprueba herramientas y modelo local"
@@ -12,6 +12,9 @@ video:
 	node video/render.mjs video/scene.html out/titulo.mp4
 
 # Se rellenan en las fases siguientes
+agua:
+	node video/render.mjs webgl/agua.html out/agua.mp4
+
 promo2d:
 	node video/render.mjs video/promo.html out/promo-2d.mp4
 

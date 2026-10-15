@@ -22,7 +22,7 @@ const errores = [];
 page.on('pageerror', (e) => errores.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errores.push(m.text()));
 
-await page.goto(pathToFileURL(resolve(escena)).href);
+await page.goto(pathToFileURL(resolve(escena)).href + '#render');   // '#render' avisa a la escena de que no se anime sola
 await page.evaluate(() => document.fonts.ready);
 
 const duracion = await page.evaluate(() => window.DURATION);
