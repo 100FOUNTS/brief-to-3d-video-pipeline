@@ -1,4 +1,4 @@
-.PHONY: help check video promo2d agua hyperframes viewer blender audio studio clean
+.PHONY: help check video promo2d agua blender hyperframes viewer blender audio studio clean
 
 help:
 	@echo "make check   - comprueba herramientas y modelo local"
@@ -12,6 +12,9 @@ video:
 	node video/render.mjs video/scene.html out/titulo.mp4
 
 # Se rellenan en las fases siguientes
+blender:
+	/Applications/Blender.app/Contents/MacOS/Blender -b --factory-startup -P blender/build_lamp.py -- --out out/blender --frames 5 --glb out/lampara.glb --blend out/blender/lampara.blend
+
 agua:
 	node video/render.mjs webgl/agua.html out/agua.mp4
 
@@ -24,7 +27,7 @@ hyperframes:
 viewer:
 	cd viewer && npm test && npm run build && npm run capturas
 
-blender audio studio:
+audio studio:
 	@echo "Pendiente: se implementa en su fase (ver PLAN-EJERCICIO.md)"
 
 clean:
