@@ -293,6 +293,7 @@ def main():
     import os
     os.makedirs(args.out, exist_ok=True)
     sc, cam, centro, lamp = preparar_escena(args)
+    poner_camara(cam, centro, -25.0, 12.0)      # postura por defecto: así el .blend guardado abre con una cámara útil (antes quedaba en el origen)
 
     if args.blend:
         os.makedirs(os.path.dirname(os.path.abspath(args.blend)), exist_ok=True)
