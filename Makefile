@@ -8,8 +8,11 @@ help:
 check:
 	@./scripts/check-env.sh
 
+video:
+	node video/render.mjs video/scene.html out/titulo.mp4
+
 # Se rellenan en las fases siguientes
-video hyperframes viewer blender audio studio:
+hyperframes viewer blender audio studio:
 	@echo "Pendiente: se implementa en su fase (ver PLAN-EJERCICIO.md)"
 
 clean:
