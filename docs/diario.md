@@ -110,4 +110,10 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Borrados (con permiso) Qwen3-TTS 1,7B (CustomVoice 8 bits) y Whisper pequeño (`whisper-small-asr-fp16` y el antiguo `whisper-small-mlx`). Liberado: 4,04 GB.
 - Trampa: borrar los directorios `models--*` NO libera espacio, porque el caché de Hugging Face guarda los archivos grandes en un almacén compartido `hub/blobs/<xx>/<hash>` (el directorio del modelo solo tiene enlaces). Hay que borrar los blobs huérfanos: los no referenciados por ningún enlace de los modelos que quedan. Se filtraron además por fecha (solo los creados hoy) para no tocar restos anteriores del usuario (9 archivos minúsculos, intactos). Comprobado: 157 enlaces válidos, 0 rotos.
 - Errores míos: cifras de tamaño. Dije 3,1 GB para Qwen3-TTS (ficha del repo) y luego 5,8 GB (`du -L` contando de más); lo real eran 4,04 GB entre los tres modelos.
-- Se mantienen Kokoro (voz) y Whisper large-v3 (verificación). La voz de Kokoro se regenera idéntica byte a byte.
+- Se mantienen Kokoro (voz) y Whisper large-v3 (verificación). (CORRECCIÓN: aquí había escrito que la voz de Kokoro se regeneraba idéntica byte a byte; era FALSO, lo escribí sin mirar el resultado de `cmp`. Kokoro NO es determinista: dos ejecuciones dan formas de onda distintas (SNR 7–13 dB) con la misma duración y el mismo texto reconocido. Se arregla fijando la semilla; ver la entrada siguiente.)
+
+## 2026-10-15 · Reproducibilidad de la voz (Kokoro)
+- Hallazgo: Kokoro NO es determinista. Dos ejecuciones sin semilla dan formas de onda distintas (SNR 7–13 dB; misma duración y mismo texto reconocido). Mi entrada anterior que decía lo contrario era falsa (ver corrección arriba).
+- Arreglo: `mx.random.seed(0)` antes de cada generación (`audio/narration.py`, constante SEMILLA). Resultado: dos ejecuciones difieren en 16 de 480.000 muestras, en 1/32767 como máximo (SNR 107 dB): reproducible hasta el redondeo, no byte a byte (probablemente orden de operaciones en la GPU).
+- Consecuencia: la voz regenerada tiene la misma duración y las mismas palabras que la que el usuario eligió, pero otra realización del ruido interno. Si se quiere la versión exacta anterior, no se puede recuperar (no tenía semilla).
+- Qwen3 no se ve afectado: usa sus propias semillas por candidata.

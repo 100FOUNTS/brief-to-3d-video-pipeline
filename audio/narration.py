@@ -25,6 +25,7 @@ MOTORES = {
 STT_MODELO = "mlx-community/whisper-large-v3-asr-fp16"
 ATEMPO_MAX = 1.25      # máxima aceleración posterior con ffmpeg (sin cambiar el tono)
 SR = 24000             # se sobrescribe con la frecuencia real del modelo
+SEMILLA = 0            # semilla fija: la voz se regenera idéntica (qwen3 usa sus propias semillas por candidata)
 MARGEN = 0.15          # segundos que se dejan libres al final de cada ventana
 VEL_MAX = 1.30         # no se acelera más: la voz se vuelve poco natural
 
@@ -46,6 +47,9 @@ def recortar_silencio(a, umbral=0.004, cola=0.05):
 
 
 def generar(modelo, texto, voz, velocidad, lang, instruct=None, sin_velocidad=False):
+    import mlx.core as mx
+    if not sin_velocidad:
+        mx.random.seed(SEMILLA)                       # Kokoro usa ruido aleatorio interno: sin semilla fija cada ejecución da una forma de onda distinta
     kw = dict(text=texto, voice=voz, lang_code=lang)
     if not sin_velocidad:
         kw["speed"] = velocidad
