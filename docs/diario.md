@@ -100,3 +100,8 @@ Una entrada por sesión: qué pediste, qué salió mal, cuánto tardó, qué apr
 - Costes: ~34 s por voz con Qwen3 (5 candidatas x 5 frases + verificación Whisper) frente a 3,8 s con Kokoro; 3,08 GB frente a 0,39 GB.
 - Lo que NO sé: cuál suena más natural ni si el acento de los hablantes no nativos molesta. Eso lo decide el oído del usuario. Vídeos: `out/promo-hyperframes-sonido-qwen3-ryan.mp4` y `-qwen3-aiden.mp4`; referencia: `out/promo-final.mp4` (Kokoro em_alex).
 - `make audio-qwen3` lo regenera.
+
+## 2026-10-15 · Decisión final de voz
+- El usuario comparó a oído Kokoro (em_alex) con Qwen3-TTS (ryan, aiden) y dijo: "se siente más natural la de Kokoro". Se mantiene Kokoro `em_alex`; `out/promo-final.mp4` sigue siendo el vídeo de referencia.
+- Lección: la métrica objetiva (WER 0 % en ambos) no distinguía las voces; la naturalidad solo la midió el oído. Un modelo mejor en clasificaciones (o más grande: 3,08 GB frente a 0,39 GB) no tiene por qué sonar mejor en tu caso concreto: español + este guion. Coincide con la sospecha previa (los hablantes de Qwen3 no son nativos de español).
+- No se probó Qwen3 VoiceDesign (describir la voz con palabras); queda como idea si algún día se quiere insistir.
