@@ -1,0 +1,44 @@
+{
+  "carpeta": "vacio",
+  "aprobadas": 1,
+  "total": 16,
+  "checks": [
+    {
+      "nombre": "existe video/scene.html",
+      "ok": false,
+      "detalle": ""
+    },
+    {
+      "nombre": "existe video/render.mjs",
+      "ok": false,
+      "detalle": ""
+    },
+    {
+      "nombre": "define window.DURATION = 8",
+      "ok": false,
+      "detalle": ""
+    },
+    {
+      "nombre": "define window.seek como función",
+      "ok": false,
+      "detalle": ""
+    },
+    {
+      "nombre": "contiene el texto «Lámpara Arco»",
+      "ok": false,
+      "detalle": ""
+    },
+    {
+      "nombre": "no usa reloj, aleatoriedad ni animaciones CSS",
+      "ok": true,
+      "detalle": ""
+    },
+    {
+      "nombre": "`node video/render.mjs` termina bien y crea out/titulo.mp4",
+      "ok": false,
+      "detalle": "/modules/cjs/loader:1216:25)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49 {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: []\n}\n\nNode.js v22.23.1\n"
+    }
+  ],
+  "render_segundos": null,
+  "nota": "el render no funciona: se omiten las demás medidas"
+}

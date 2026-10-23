@@ -1,11 +1,12 @@
 # Estudio creativo de la lámpara
 
 Mini-estudio local: desde UN archivo (`brief.json`) produce un modelo 3D de lámpara, un visor web, un vídeo promocional de 20 s con voz y música, y comprueba el resultado.
-El plan y la investigación están en `../proyectos-avanzados-ia-2026/`. El historial de lo que salió bien y mal, en `docs/diario.md` y `docs/metricas.csv`.
+El plan y la investigación están en `docs/` (`plan-ejercicio.md`, `nivel-profesional.md`, `linea-pro.md`). El historial de lo que salió bien y mal, en `docs/diario.md` y `docs/metricas.csv`.
 
 ## Cómo se usa
 
-- `make studio` (o `make -j4 studio`): TODO desde `brief.json`; termina con `make verificar` (20 comprobaciones). `BRIEF=otro.json` usa otro brief.
+- `make setup` (una vez): entorno de Python y dependencias de Node. La ruta del proyecto debe ser corta (< ~90 caracteres): espeak-ng falla con rutas largas.
+- `make studio` (o `make -j4 studio`): TODO desde `brief.json`; termina con `make verificar` (21 comprobaciones). `BRIEF=otro.json` usa otro brief.
 - `make variante N=frio B=brief.frio.json`: lo mismo en un `git worktree` aparte (`../estudio-lampara-frio`), sin pisar este.
 - Piezas sueltas: `make blender | viewer | hyperframes | audio`. Ayuda: `make help`.
 

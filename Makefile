@@ -3,14 +3,16 @@ SHELL := /bin/bash
 BRIEF ?= brief.json
 BLENDER := /Applications/Blender.app/Contents/MacOS/Blender
 PY := audio/.venv/bin/python
+HF := npx --yes hyperframes@0.8.161   # versión fijada (la misma que hyperframes/promo/package.json)
 MOTOR := $(shell python3 scripts/brief_get.py voz.motor --brief $(BRIEF) 2>/dev/null)
 VOZ := $(shell python3 scripts/brief_get.py voz.nombre --brief $(BRIEF) 2>/dev/null)
 ETQ := $(if $(filter kokoro,$(MOTOR)),$(VOZ),$(MOTOR)-$(VOZ))
 
-.PHONY: help check studio generar piezas pieza-blender pieza-visor pieza-video pieza-audio final verificar \
+.PHONY: help setup check studio generar piezas pieza-blender pieza-visor pieza-video pieza-audio final verificar \
         blender viewer hyperframes audio audio-ambas audio-qwen3 audio-verificar video promo2d agua video-vivo variante clean
 
 help:
+	@echo "make setup                     - crea el entorno de Python (audio/.venv) e instala las dependencias de Node"
 	@echo "make studio [BRIEF=otro.json]  - TODO desde el brief: lámpara 3D, visor, vídeo con voz y música, y comprobaciones"
 	@echo "make -j4 studio                - igual, pero las 4 piezas independientes en paralelo"
 	@echo "make verificar                 - comprueba la salida final (vídeo, audio, glb, visor)"
@@ -20,6 +22,19 @@ help:
 
 check:
 	@./scripts/check-env.sh
+
+# espeak-ng (dentro de la voz Kokoro) deja de encontrar sus datos si la ruta supera ~160 caracteres (medido: 159 va, 161 falla;
+# el error sale como "phontab: No such file" apuntando a la máquina donde se compiló). Por eso se avisa antes de crear el entorno.
+setup:
+	@len=$$(( $${#PWD} + 70 )); \
+	  if [ $$len -gt 155 ]; then echo "ERROR: la ruta del proyecto es demasiado larga ($$len caracteres hasta espeak-ng-data; el límite es ~160)."; \
+	  echo "Mueve o clona el proyecto a una carpeta menos profunda (p. ej. ~/estudio-lampara) y repite."; exit 1; fi
+	@command -v uv >/dev/null || { echo "Falta uv: brew install uv"; exit 1; }
+	uv venv --python 3.12 audio/.venv
+	uv pip install --python $(PY) -r audio/requirements.txt
+	npm ci
+	cd viewer && npm ci
+	@echo "Listo. Faltan, si no los tienes: FFmpeg, Blender 5.2 (brew install ffmpeg; brew install --cask blender) y Google Chrome. Comprueba con: make check"
 
 # ---------------------------------------------------------------- el estudio
 studio: generar
@@ -42,7 +57,7 @@ pieza-visor: pieza-blender
 	@mkdir -p out/logs; SECONDS=0; ( cd viewer && npm test --silent && npm run build --silent ) > out/logs/visor.log 2>&1 && echo "   OK pieza-visor ($$SECONDS s)" || { echo "   FALLA pieza-visor:"; tail -15 out/logs/visor.log; exit 1; }
 
 pieza-video:
-	@mkdir -p out/logs; SECONDS=0; ( cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4 ) > out/logs/video.log 2>&1 && echo "   OK pieza-video ($$SECONDS s)" || { echo "   FALLA pieza-video:"; tail -15 out/logs/video.log; exit 1; }
+	@mkdir -p out/logs; SECONDS=0; ( cd hyperframes/promo && $(HF) check && $(HF) render -o ../../out/promo-hyperframes.mp4 ) > out/logs/video.log 2>&1 && echo "   OK pieza-video ($$SECONDS s)" || { echo "   FALLA pieza-video:"; tail -15 out/logs/video.log; exit 1; }
 
 pieza-audio:
 	@mkdir -p out/logs; SECONDS=0; { $(PY) audio/narration.py --brief $(BRIEF) && $(PY) audio/music.py --brief $(BRIEF) && audio/mix.sh $(ETQ); } > out/logs/audio.log 2>&1 && echo "   OK pieza-audio ($$SECONDS s)" || { echo "   FALLA pieza-audio:"; tail -15 out/logs/audio.log; exit 1; }
@@ -63,7 +78,7 @@ viewer:
 	cd viewer && npm test && npm run build && npm run capturas
 
 hyperframes: generar
-	cd hyperframes/promo && npx hyperframes check && npx hyperframes render -o ../../out/promo-hyperframes.mp4
+	cd hyperframes/promo && $(HF) check && $(HF) render -o ../../out/promo-hyperframes.mp4
 
 audio: generar
 	$(PY) audio/narration.py --brief $(BRIEF)

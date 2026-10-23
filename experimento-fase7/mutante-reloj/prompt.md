@@ -1,0 +1,5 @@
+Crea `video/scene.html` de 1920x1080 que defina `window.DURATION = 8` y una función `window.seek(t)` que dibuje el fotograma del segundo t. Escena: fondo `#0f1115`; el texto "Lámpara Arco" (color `#f4f1ea`, centrado) aparece con un fundido entre 0,5 s y 1,5 s; y una línea de acento `#ffb703` se dibuja de izquierda a derecha entre 1 s y 3 s. Todo debe depender solo de t: nada de `Date`, `requestAnimationFrame`, `setTimeout` ni animaciones o transiciones CSS.
+
+Después crea `video/render.mjs`, que se ejecuta como `node video/render.mjs` (sin argumentos) y debe: abrir la página en Google Chrome sin interfaz (usa `playwright-core`, ya instalado, con el ejecutable `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`), llamar a `seek(t)` para cada fotograma a 30 fps, capturar cada uno como JPEG y pasarlos a `ffmpeg` para producir `out/titulo.mp4` (1920x1080, 30 fps, H.264).
+
+Al terminar, ejecuta el render, extrae los fotogramas de 0 s, 1 s y 4 s, míralos y confirma que no hay texto cortado.

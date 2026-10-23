@@ -58,9 +58,9 @@ Opus 5.5 y GPT-6 Astra **no** se usaron.
 - **Protocolo/IA:** MCP (Model Context Protocol), uso de herramientas, instancias anidadas de Claude Code (`claude -p`), experimento controlado con evaluador automático.
 
 ## 6. Servicios y cuentas
-- **claude.ai, plan Pro (`jc`)**: modelos de Claude, Claude Code, y Claude Dashboards (beta, plantilla Dashboard).
+- **claude.ai, plan Pro**: modelos de Claude, Claude Code, y Claude Dashboards (beta, plantilla Dashboard).
 - **Hugging Face Hub** (descargas sin token), **npm**, **PyPI**, **Homebrew**, registro de Ollama, **Google Fonts** (el primer build de HyperFrames bajó Montserrat e IBM Plex Mono) y **jsDelivr** (carga GSAP).
-- Extensión **Claude in Chrome** (la conectaste tú).
+- Extensión **Claude in Chrome** (conectada por el autor).
 - **No se usó**: GitHub (el conector falló y no se subió nada), ninguna API de pago, ningún servicio de render ni de voz en la nube.
 
 ## 7. Piezas de Claude Code del proyecto (`.claude/`)
@@ -84,17 +84,16 @@ Opus 5.5 y GPT-6 Astra **no** se usaron.
 **Cifras:** 24 commits, 83 archivos versionados, ≈4.600 líneas (Python 1.365, HTML 1.198, JS 745 + 232 de `.mjs`, Markdown 662, JSON 225, shell 130, CSS 77), 22 objetivos de `make`.
 
 ## 9. Dinero gastado
-**Nada fuera del plan Pro de claude.ai** (20 USD al mes, 17 si es anual, según la [página de precios de Anthropic](https://claude.com/pricing)). Todo lo demás es gratuito o corrió en tu Mac. El uso de Claude consumió cuota del plan, no se facturó por separado. (Claude Code informa un coste «equivalente en API» por sesión, que es teórico con Pro y sin sentido para el modelo local.)
+**Nada fuera del plan Pro de claude.ai** (20 USD al mes, 17 si es anual, según la [página de precios de Anthropic](https://claude.com/pricing)). Todo lo demás es gratuito o corrió en el Mac del autor. El uso de Claude consumió cuota del plan, no se facturó por separado. (Claude Code informa un coste «equivalente en API» por sesión, que es teórico con Pro y sin sentido para el modelo local.)
 
 ## 10. Cambios hechos FUERA de la carpeta del proyecto
-Para que no te sorprendan:
+Para poder reproducir el entorno, esto es lo que se tocó:
 - Instalados con Homebrew: `uv` y Blender (versión de cask).
 - `~/.claude/skills/` y otros 4 directorios de agentes: 11 skills de HyperFrames.
 - `~/.hyperframes/`: configuración de HyperFrames, con la **telemetría activada** (se apaga con `npx hyperframes telemetry disable`).
 - `~/Library/Application Support/Blender/5.2/scripts/addons/blender_mcp.py`: el complemento MCP, **sin activar**.
 - `~/.cache/huggingface/`: Kokoro y Whisper large-v3 (los de Qwen3-TTS y Whisper pequeño se borraron).
 - `~/.ollama`: el modelo `qwen3.6:27b` y su variante de 64K.
-- `~/Documents/ejercicios/experimento-fase7/`: carpetas del experimento.
-- `~/Documents/ejercicios/proyectos-avanzados-ia-2026/`: el documento actualizado y el plan.
-- En tu cuenta de claude.ai: un chat y un dashboard privados («Dashboard de métricas CSV»).
-- Procesos que quedan abiertos: el servidor del visor en `localhost:5173` (PID 99933). El Chrome «fantasma» sin ventana de hace semanas (PID 94027) **ya no existe**: nunca lo cerré yo, desapareció solo.
+- `experimento-fase7/`: carpetas del experimento (incluidas en este repositorio, sin `node_modules` ni `out/`).
+- En la cuenta de claude.ai del autor: un chat y un dashboard privados («Dashboard de métricas CSV»).
+- Procesos que quedan abiertos: el servidor del visor en `localhost:5173` (se detiene con Ctrl+C).

@@ -2,7 +2,7 @@
 
 ## Resultado (probado el 15 de oct de 2026, con la extensión de Claude en Chrome)
 - **Se hizo.** En la cuenta del usuario (plan Pro) se creó el dashboard **«Métricas del ejercicio»** adjuntando `docs/metricas.csv` al chat de la plantilla Dashboard (Beta):
-  `https://claude.ai/artifact/MJD16dCyr5seGJ1ncojsJW` (privado: no se pulsó «Compartir»). Chat: «Dashboard de métricas CSV».
+  (privado: no se pulsó «Compartir»). Chat: «Dashboard de métricas CSV».
 - **Tiene** 3 indicadores (748,2 min · 47 intentos · 13 fases) y 4 gráficos (minutos por fase, intentos por fase, fases por resultado, minutos acumulados), cada uno con su «SQL equivalente».
 - **Coincide con la opción B** (`dashboard/index.html`): mismas cifras.
 

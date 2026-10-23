@@ -17,14 +17,14 @@ Investigado el 15 de octubre de 2026. **Cómo leerlo:** cada dato lleva su fuent
 | --- | --- | --- |
 | **HyperFrames** (la que usamos) | HTML + GSAP → MP4, Apache 2.0, plugin para Claude Code | 0 USD, sin pago por render. Fuente: [repositorio](https://github.com/heygen-com/hyperframes) **[P]** |
 | **Remotion** | Vídeo desde componentes React | Gratis para particulares y organizaciones de hasta 3 personas. Creators 25 USD por asiento al mes; **Automators 0,01 USD por render con mínimo de 100 USD al mes**; Enterprise desde 500 USD al mes. Fuente: [precios](https://www.remotion.dev/docs/license/pricing) **[P/S]** |
-| **Remotion Lambda** | Render distribuido en tu AWS | Ejemplos de su documentación: un vídeo de 1 minuto en HD ≈ 0,017–0,021 USD y uno de 10 minutos ≈ 0,10 USD (de una versión antigua; volver a medir). [Docs](https://www.remotion.dev/docs/lambda/cost-example) **[P]** |
+| **Remotion Lambda** | Render distribuido en una cuenta propia de AWS | Ejemplos de su documentación: un vídeo de 1 minuto en HD ≈ 0,017–0,021 USD y uno de 10 minutos ≈ 0,10 USD (de una versión antigua; volver a medir). [Docs](https://www.remotion.dev/docs/lambda/cost-example) **[P]** |
 | **Shotstack** | API de vídeo con plantillas JSON | Desde ≈ 39 USD al mes (200 créditos a 0,20 USD el minuto renderizado) o 0,30 USD el minuto sin suscripción. [Comparativa](https://www.wireflow.ai/blog/creatomate-vs-shotstack) **[S]** |
 | **Creatomate** | API de vídeo con plantillas | Desde ≈ 41–54 USD al mes (2.000 créditos); el coste por minuto a 1080p va de 0,10 a 0,84 USD según la fuente. [Comparativa](https://www.plainlyvideos.com/blog/best-video-editing-api) **[S]** |
 
 **Cómo lo hace un equipo profesional [mío, conocimiento general, no verificado hoy]:** plantillas de After Effects o Remotion alimentadas por datos, render en granja, control de versiones de los guiones y revisión humana antes de entregar.
 
 ### Vídeo generado por IA (frontera)
-Cuesta por segundo de vídeo y sirve para **personas y tomas realistas**, justo lo que nuestro método no puede hacer (tu documento original lo avisaba).
+Cuesta por segundo de vídeo y sirve para **personas y tomas realistas**, justo lo que nuestro método no puede hacer (el documento de partida ya lo avisaba).
 | Modelo | Precio aproximado por segundo | Nota |
 | --- | --- | --- |
 | Veo (Google) | 0,05 – 0,60 USD (típico 0,40 con audio) | Cada pasada llega a 8 s |
@@ -47,7 +47,7 @@ Fuentes **[S]**: [fluxnote](https://fluxnote.io/guides/ai-video-model-pricing-co
 
 ### Tecnología
 - **Three.js** es lo que usamos (r186). Hoy el renderizador recomendado en las guías es **WebGPURenderer** (desde r171, con alternativa automática a WebGL2). WebGPU alcanzó «Baseline» en enero de 2026 en Chrome/Edge 113+, Safari 26+ y Firefox 141+ en Windows; Firefox en Mac con Apple Silicon y Linux/Android van por detrás. Soporte global ≈ 87 % (caniuse, agosto de 2026) según una fuente y ≈ 70 % según otra. Fuentes **[S]**: [vr.org](https://vr.org/articles/webgpu-baseline-2026-three-js-webxr-default), [utsubo](https://www.utsubo.com/blog/frontier-web-apis-2026-production-ready). **Esto responde la duda que dejé abierta: sí, WebGPU ya se usa en producción** (Three.js, Babylon.js, Figma, según las fuentes).
-- **Nota para tu código:** la guía de migración avisa de que en r186 se eliminó `PCFSoftShadowMap` para WebGPURenderer, justo el aviso que nos salió en la Fase 3.
+- **Nota para este código:** la guía de migración avisa de que en r186 se eliminó `PCFSoftShadowMap` para WebGPURenderer, justo el aviso que nos salió en la Fase 3.
 
 ### Optimizar un modelo 3D para la web (lo que NO hicimos)
 Nuestro `.glb` pesa 250 KB porque no lleva texturas. Un producto real sí, y el flujo profesional es:
@@ -91,7 +91,7 @@ Fuentes **[S]**: [3D AI Studio](https://www.3daistudio.com/3d-generator-ai-compa
 
 Fuentes **[S]**: [Blender.farm](https://www.blender.farm/pricing), [RenderJuice](https://www.renderjuice.com/pricing), [Sky Render Farm](https://www.skyrenderfarm.com/blog/render-farm-pricing-in-2026-how-much-does-cloud-rendering-cost), [RenderStreet](https://render.st/plans-pricing/). Cada una factura en unidades distintas y una comparativa dice que una granja cobraba un 42 % más que otra por la misma hora de RTX 5090: **prueba siempre con tu propia escena**.
 
-**Nuestro caso [mío, aritmética con esas tarifas]:** la animación de 120 fotogramas tardó 61,5 s en tu Mac (≈ 0,017 horas de GPU). En una granja a 3 USD la hora serían ≈ 0,05 USD; entre 0,01 y 0,15 USD según la granja. Para este tamaño de trabajo, **el render no es un coste relevante**.
+**Nuestro caso [mío, aritmética con esas tarifas]:** la animación de 120 fotogramas tardó 61,5 s en el Mac del autor (≈ 0,017 horas de GPU). En una granja a 3 USD la hora serían ≈ 0,05 USD; entre 0,01 y 0,15 USD según la granja. Para este tamaño de trabajo, **el render no es un coste relevante**.
 
 **Lo que hace un estudio y nosotros no [mío, conocimiento general, no verificado hoy]:** Cycles en lugar de Eevee para calidad final, gestión de color (ACES/OCIO), escenas en **USD** entre programas (Houdini/Solaris, Maya, Omniverse), seguimiento de activos y revisión por planos. No encontré fuentes fiables sobre Omniverse ni sobre Firefly en pipelines de estudio.
 
@@ -119,7 +119,7 @@ Fuentes **[S]**: [Blender.farm](https://www.blender.farm/pricing), [RenderJuice]
 | Precio por millón de tokens (entrada / salida) | Opus 5.5 4 / 20 USD [P, Anthropic] · Sonnet 5.5 2 / 10 [S] · Haiku 5.5 0,10 / 0,50 [S] · GPT-6.1 Sol 2 / 10 [P, OpenAI] · GPT-6 Astra 10 / 50 (sin confirmar) |
 | Rendimiento en tareas de código (frontera) | Opus 5.5: 66,4 % en Terminal-Bench 4.0 frente al 57,9 % de Astra, según [Anthropic](https://www.anthropic.com/claude-opus-5-5) **[P]**, que advierte de que a este nivel los márgenes engañan |
 | Coste por tarea (un solo dato) | Benchmark de Rails: Opus 5.5 acertó el 65,3 % a 10,53 USD por tarea; GPT-6.1 Sol el 60,8 % a 0,80 **[S, publicación en X]** |
-| Casos «de frontera» | De tu documento original (fuentes secundarias): migración de HAProxy de C a Rust en 9,5 h, 40 PR encadenados en Stripe, auditoría de 200.000 líneas en menos de 3 h |
+| Casos «de frontera» | Del documento de partida (fuentes secundarias): migración de HAProxy de C a Rust en 9,5 h, 40 PR encadenados en Stripe, auditoría de 200.000 líneas en menos de 3 h |
 | Nuestro experimento | El modelo local hizo la tarea bien pero ~7 veces más lento que Sonnet; **un solo intento por modelo**, no es estadística |
 
 **Cómo lo hacen los equipos [mío, con la excepción de Ubisoft arriba]:** orquestan con una herramienta de flujos (n8n, ComfyUI o código), versionan todo, miden con evaluadores automáticos y dejan a una persona la aprobación. Es la misma forma que montamos en pequeño.
@@ -134,7 +134,7 @@ Aritmética sobre las tarifas de arriba. **No es un presupuesto**: no incluye el
 | Vídeo de 20 s | HyperFrames, gratis | Remotion Lambda ≈ 0,007 USD; Shotstack 0,07–0,10 USD |
 | Vídeo generado por IA (si se quisiera una toma realista de 20 s) | No aplica | 1,00–12,00 USD **por intento** (0,05–0,60 USD/s); con 10 intentos, 10–120 USD |
 | 3D | Blender por código, gratis | Un modelo generado por IA: 0,05–0,80 USD |
-| Render | 61,5 s en tu Mac | 0,01–0,15 USD en granja |
+| Render | 61,5 s en un Mac M4 Max | 0,01–0,15 USD en granja |
 | Voz | Kokoro, gratis | 0,008–0,017 USD |
 | Música | Código, gratis | Suno Pro 10 USD/mes, o licencia de librería |
 | Modelo de IA | Plan Pro (20 USD/mes) | Opus 5.5 por API: depende de los tokens |

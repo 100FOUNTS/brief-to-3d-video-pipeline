@@ -43,7 +43,7 @@ PREPARAR            3D + WEB                                   VÍDEO Y SONIDO  
 
 **1–2. Brief y guion.** El modelo de lenguaje más potente en la medición independiente es Claude Opus 5.5 (58 puntos; Sonnet 5.5, 56) [P]. Precio de la API de Opus 5.5: 4 / 20 USD por millón de tokens (entrada / salida) [P]. Para el storyboard no medí calidad: solo encontré que LTX Studio, Boords y Katalist existen y generan storyboards desde un guion [S]. **Precios de los tres: no investigado.**
 
-**3. Arte.** El primero en el ranking de generación de imagen es GPT Image 2.5 Sunburst [P]. Para diseño de interfaces, Figma Make y Google Stitch son los citados [S]. Lo comprobable en tu máquina: la skill `/figma` de HyperFrames, que ya está instalada, importa lo que haya en Figma (activos, tokens, componentes). **Precios: no investigado.**
+**3. Arte.** El primero en el ranking de generación de imagen es GPT Image 2.5 Sunburst [P]. Para diseño de interfaces, Figma Make y Google Stitch son los citados [S]. Lo comprobable en local: la skill `/figma` de HyperFrames, que ya está instalada, importa lo que haya en Figma (activos, tokens, componentes). **Precios: no investigado.**
 
 **4–5. Modelado y materiales.** Blender es gratuito. La generación 3D con IA cuesta 0,05–0,80 USD por modelo [S]. Substance 3D: la función «imagen → material» **exige la suscripción Substance 3D Collection** y todo lo generativo gasta créditos de Firefly; la licencia barata de Steam (Indie) **no los incluye** [P: Adobe y Meshy]. **Precio de la Collection: no lo encontré.**
 
@@ -53,7 +53,7 @@ PREPARAR            3D + WEB                                   VÍDEO Y SONIDO  
 
 **8. Render.** Granja de render: 0,65–9 USD por hora de GPU [S]. Nuestra animación: ≈ 0,01–0,15 USD. **Motor en tiempo real (Unreal Engine 5.8) frente a Cycles para producto: no lo pude comparar, no investigado.**
 
-**9. Vídeo.** Por código: Remotion Lambda ≈ 0,02 USD/min; Shotstack 0,20–0,30 USD/min [S]. Con IA, el primero (Wan 3.0) cuesta 12 USD por minuto generado [P]; un clip de 20 s ≈ 4 USD por intento. MiniMax H3 tiene **pesos abiertos**, así que en teoría se podría correr en local; **no comprobé si cabe en tu Mac**.
+**9. Vídeo.** Por código: Remotion Lambda ≈ 0,02 USD/min; Shotstack 0,20–0,30 USD/min [S]. Con IA, el primero (Wan 3.0) cuesta 12 USD por minuto generado [P]; un clip de 20 s ≈ 4 USD por intento. MiniMax H3 tiene **pesos abiertos**, así que en teoría se podría correr en local; **no comprobé si cabe en un Mac con 36 GB**.
 
 **10. Voz.** ElevenLabs: 0,04–0,08 USD por 1.000 caracteres [S]; nuestro guion cuesta ≈ 0,01 USD. La capa gratuita **no permite uso comercial**; Business, 990 USD/mes [S].
 
@@ -88,7 +88,7 @@ PREPARAR            3D + WEB                                   VÍDEO Y SONIDO  
 | Si el vídeo fuera generado por IA | No aplica | Wan 3.0: ≈ 4 USD por intento de 20 s |
 | Doblaje de los 20 s a 2 idiomas | No aplica | ElevenLabs (sin labios): 2,20 × 0,33 min × 2 ≈ **1,5 USD**. HeyGen precisión (con labios): 4,00 × 0,33 × 2 ≈ **2,7 USD** [mío, cuenta sobre precios [S]] |
 | Suscripciones fijas si se quisiera todo | Plan Pro 20 USD/mes | Claude Max 100–200 + Frame.io 15–25/miembro + ElevenLabs Creator 22 + HeyGen 24–29 ≈ **160–280 USD/mes** [mío, suma de rangos [S]] |
-| Personas (brief, guion, arte, edición, revisión, legal) | Tú y yo | **No investigado; no invento cifras** |
+| Personas (brief, guion, arte, edición, revisión, legal) | El autor y Claude | **No investigado; no invento cifras** |
 
 ## Qué sigue sin investigar
 Precios de storyboard, Premiere, Resolve, Descript, Substance Collection, alojamiento y analítica; ranking de música; Unreal Engine 5.8 frente a Cycles; QC automático de entrega (VMAF, Baton); Claude Agent SDK o Temporal en producción creativa; qué usa cada estudio de verdad.

@@ -5,3 +5,8 @@ __pycache__/
 .venv
 *.blend1
 hyperframes/promo/.hyperframes/
+.venv*
+.lentest/
+# Salidas de las sesiones de Claude Code del experimento: llevan identificadores de sesión y avisos de cuenta; los resultados están en experimento/fase7/resultados.json
+experimento-fase7/*/sesion.json
+experimento-fase7/*/errores.txt

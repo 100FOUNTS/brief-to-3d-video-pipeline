@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0f1115;
+  }
+  #title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 120px;
+    font-weight: 700;
+    color: #f4f1ea;
+    opacity: 0;
+    user-select: none;
+  }
+  #line {
+    position: absolute;
+    top: 540px;
+    left: 50%;
+    height: 3px;
+    width: 0;
+    background: #ffb703;
+    transform-origin: left center;
+  }
+</style>
+</head>
+<body>
+  <div id="title">Lámpara Arco</div>
+  <div id="line"></div>
+  <script>
+    window.DURATION = 8;
+
+    window.seek = function (t) {
+      var title = document.getElementById('title');
+      var line = document.getElementById('line');
+
+      // Title fade-in: opacity goes from 0 at 0.5s to 1 at 1.5s
+      if (t < 0.5) {
+        title.style.opacity = '0';
+      } else if (t > 1.5) {
+        title.style.opacity = '1';
+      } else {
+        title.style.opacity = String((t - 0.5) / 1.0);
+      }
+
+      // Accent line: draws left-to-right from 1s to 3s
+      var lineWidth = 600; // total width in px
+      if (t < 1) {
+        line.style.width = '0px';
+        line.style.left = '50%';
+        line.style.transform = 'translateX(0)';
+      } else if (t >= 3) {
+        line.style.width = lineWidth + 'px';
+        line.style.left = '50%';
+        line.style.transform = 'translateX(' + (-lineWidth / 2) + 'px)';
+      } else {
+        var progress = (t - 1) / 2; // 0..1 over 1s..3s
+        var currentWidth = lineWidth * progress;
+        line.style.width = currentWidth + 'px';
+        line.style.left = '50%';
+        line.style.transform = 'translateX(0)';
+      }
+    };
+  </script>
+</body>
+</html>
