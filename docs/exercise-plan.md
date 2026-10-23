@@ -291,3 +291,22 @@ About 18-30 hours in total, at your own pace.
 - **QA agent** that opens the viewer with `playwright-core` and tests flows like a user (the open equivalent of Claire Vo's case).
 - **Second product** (a watch with an exploded view, a sneaker configurator) to turn the workflow into a service: "3D configurator plus video" is one of the source document's business ideas.
 - **If later you want Astra and Codex:** repeat Phase 4 with Computer Use on Blender and compare with the script method.
+
+## Compare with the reference solution
+
+When you finish a phase, compare your result with this repository's. The file names in the plan's prompts are suggestions; the reference solution uses these (some differ slightly, for example `out/title.mp4` or `out/lamp.glb`):
+
+| Phase | Where to look in this repository |
+| --- | --- |
+| 0 | `CLAUDE.md`, `scripts/claude-local.sh`, `ollama/Modelfile.qwen3.6-64k`, `scripts/count-words.mjs`, `scripts/check-env.sh` |
+| 1 | `video/render.mjs`, `video/scene.html`, `video/promo.html` |
+| 2 | `hyperframes/promo/`, `templates/hyperframes-promo.template.html` |
+| 3 | `viewer/src/lamp.js`, `viewer/src/main.js`, `viewer/src/lamp.test.js`, `viewer/scripts/captures.mjs` |
+| 3b | `webgl/gradient.html`, `webgl/water.html` |
+| 4, 4b | `blender/build_lamp.py`, `blender/mcp-blender.json`, `scripts/blender-live.sh` |
+| 5 | `audio/narration.py`, `audio/music.py`, `audio/mix.sh`, `audio/mux.sh`, `audio/verify_voice.py` |
+| 6 | `Makefile`, `scripts/generate_from_brief.py`, `scripts/verify_output.py`, `scripts/variant.sh`, `.claude/` |
+| 7, 7b | `experiment/phase7/`, `dashboard/build.py`, `docs/retrospective.md` |
+
+Tip: look at the reference only **after** you have your own result or have been stuck for a while; the point of the exercise is the "render, look, correct" loop, and reading the answer first skips it. To adapt the result to your own product afterwards, see [`adapt-to-your-project.md`](adapt-to-your-project.md).
+

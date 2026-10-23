@@ -15,7 +15,7 @@ A learning project and portfolio piece, written to be used as a **worked example
 | **See what it does** | The live viewer and the video above | 1 minute |
 | **Run it on my machine** | [Getting started](#getting-started) | ~10 minutes, plus ~3.5 GB of model downloads the first time |
 | **Do the exercise** (build it myself, step by step) | [`docs/exercise-plan.md`](docs/exercise-plan.md) — it gives the prompts, the reason for each phase and a success criterion. To avoid spoilers, follow it in an empty folder and use this repository only to compare your result | 18–30 hours |
-| **Adapt it to my own project** | [Use it as a template](#use-it-as-a-template) | an afternoon |
+| **Adapt it to my own project** | [`docs/adapt-to-your-project.md`](docs/adapt-to-your-project.md) (and [Use it as a template](#use-it-as-a-template)) | minutes for new text and colors; days for a new product |
 | **Learn from the mistakes** | [`docs/journal.md`](docs/journal.md) (what failed, in order) and [`docs/retrospective.md`](docs/retrospective.md) | 30 minutes |
 | **See which pro tool replaces each stage** | [`docs/pro-pipeline.md`](docs/pro-pipeline.md) | 15 minutes |
 
@@ -63,7 +63,7 @@ The lamp is just the example. The pattern is what is reusable:
 4. **A verifier that you have tried to fool.** Check the final output, then break the system on purpose and confirm the checks fail (`scripts/verify_output.py`, `docs/journal.md`).
 5. **Look at the result.** The `render-check` skill forces contact sheets and measurements instead of "it ran without errors".
 
-To adapt it: copy the repo, replace the values in `brief.json`, and change the product-specific parts: the model in `blender/build_lamp.py`, the parts in `viewer/src/lamp.js`, the scenes in `templates/hyperframes-promo.template.html`. [`docs/exercise-plan.md`](docs/exercise-plan.md) rebuilds it step by step, with the reason for each phase, and [`docs/pro-pipeline.md`](docs/pro-pipeline.md) shows which paid or frontier tool replaces each stage at a professional level.
+To adapt it: copy the repo, replace the values in `brief.json`, and change the product-specific parts: the model in `blender/build_lamp.py`, the parts in `viewer/src/lamp.js`, the scenes in `templates/hyperframes-promo.template.html`. [`docs/exercise-plan.md`](docs/exercise-plan.md) rebuilds it step by step, with the reason for each phase, and [`docs/pro-pipeline.md`](docs/pro-pipeline.md) shows which paid or frontier tool replaces each stage at a professional level. The step-by-step guide to changing the product is [`docs/adapt-to-your-project.md`](docs/adapt-to-your-project.md).
 
 ## Technologies
 

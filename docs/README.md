@@ -7,6 +7,7 @@ The documents fall into two groups: **guides** (read them to learn or to decide)
 | Document | Read it when you want to… |
 | --- | --- |
 | [`exercise-plan.md`](exercise-plan.md) | **Do the exercise yourself.** Phases 0–7 with the prompts, why each phase exists, a success criterion and a schedule. |
+| [`adapt-to-your-project.md`](adapt-to-your-project.md) | **Use the repository for your own product.** What is generic, what is hard-coded, and where to change each thing, by increasing effort. |
 | [`pro-pipeline.md`](pro-pipeline.md) | See, stage by stage (19 stages), which professional or frontier tool replaces what we did, how it is automated and what it costs. |
 | [`professional-level.md`](professional-level.md) | Understand how this kind of work is done professionally, with prices and the reliability label of every source. |
 | [`inventory.md`](inventory.md) | Know exactly what was used: models, programs, libraries, versions, licenses, and what was changed outside the project folder. |
