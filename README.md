@@ -51,7 +51,7 @@ Versiones y licencias exactas: [`docs/inventario.md`](docs/inventario.md) y [`TH
 
 ## Puesta en marcha
 
-**Requisitos:** macOS con Apple Silicon (los modelos de voz usan MLX), [Homebrew](https://brew.sh), Node.js 22, Google Chrome, y:
+**Requisitos:** macOS con Apple Silicon (los modelos de voz usan MLX), [Homebrew](https://brew.sh), Node.js 22 o superior, Google Chrome, y:
 
 ```bash
 brew install ffmpeg uv
@@ -62,7 +62,7 @@ brew install --cask blender   # Blender 5.2
 git clone https://github.com/100FOUNTS/estudio-lampara.git
 cd estudio-lampara
 make setup      # entorno de Python (audio/.venv) y dependencias de Node
-make check      # comprueba que todo está instalado
+make check      # comprueba lo necesario (Ollama es opcional)
 make studio     # TODO desde brief.json (con -j4 en paralelo) y termina verificando
 ```
 
@@ -108,7 +108,7 @@ El plan completo, con el porqué de cada paso, está en [`docs/plan-ejercicio.md
 ## Resultados medidos
 
 - `make verificar`: **21/21 comprobaciones**; pruebas del visor (Vitest): **18/18**.
-- `make studio` desde cero tarda del orden de **25 s** (medido en un Mac M4 Max con 36 GB).
+- `make studio` en un clon limpio tarda **≈ 30 s** de principio a fin (medido en un Mac M4 Max con 36 GB, con los modelos ya descargados).
 - Animación de Blender de 120 fotogramas: 61,5 s en Eevee local.
 - Dos productos distintos (Arco y Brasa) salieron del mismo código.
 - Coste de herramientas: **0 USD** fuera de la suscripción a Claude.
