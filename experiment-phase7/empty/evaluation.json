@@ -1,0 +1,51 @@
+{
+  "folder": "empty",
+  "passed": 1,
+  "total": 16,
+  "checks": [
+    {
+      "name": "video/scene.html exists",
+      "ok": false,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "video/render.mjs exists",
+      "ok": false,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "defines window.DURATION = 8",
+      "ok": false,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "defines window.seek as a function",
+      "ok": false,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "contains the text «Lámpara Arco»",
+      "ok": false,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "does not use a clock, randomness or CSS animations",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "`node video/render.mjs` finishes fine and creates out/titulo.mp4",
+      "ok": false,
+      "detail": "/modules/cjs/loader:1216:25)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49 {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: []\n}\n\nNode.js v22.23.1\n",
+      "category": "requirement"
+    }
+  ],
+  "render_seconds": null,
+  "note": "the render does not work: the other measurements are skipped"
+}

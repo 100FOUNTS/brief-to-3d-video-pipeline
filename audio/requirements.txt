@@ -1,7 +1,7 @@
-# Dependencias de Python para audio: voz (Kokoro), transcripción (Whisper large-v3), música y mezcla.
-# Versiones fijadas; verificado en un entorno nuevo (Python 3.12, macOS, Apple Silicon/MLX): sintetiza una frase y la transcribe.
-# Crear el entorno:  make setup
-# Para reproducir EXACTAMENTE el entorno original (incluye torch, spacy, etc., que no hacen falta): audio/requirements.lock.txt
+# Python dependencies for audio: voice (Kokoro), transcription (Whisper large-v3), music and mixing.
+# Pinned versions; verified in a fresh environment (Python 3.12, macOS, Apple Silicon/MLX): it synthesizes a sentence and transcribes it.
+# Create the environment:  make setup
+# To reproduce the original environment EXACTLY (includes torch, spacy, etc., which are not needed): audio/requirements.lock.txt
 mlx==0.32.4
 mlx-audio==0.5.9
 misaki==0.9.4

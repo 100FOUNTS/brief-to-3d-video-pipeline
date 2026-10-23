@@ -2,86 +2,86 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { crearLampara, lamparaDesdeGLTF, aplicarExplosion, piezas, limites, NOMBRES } from './lampara.js';
+import { createLamp, lampFromGLTF, applyExplosion, parts, bounds, PART_NAMES } from './lamp.js';
 
-// El .glb lo exporta Blender (blender/build_lamp.py) y se copia a viewer/public/lampara.glb.
-describe('lámpara cargada desde el .glb de Blender', () => {
-  let glb, primitivas;
+// The .glb is exported by Blender (blender/build_lamp.py) and copied to viewer/public/lamp.glb.
+describe('lamp loaded from the Blender .glb', () => {
+  let glb, primitives;
   beforeAll(async () => {
-    const bytes = readFileSync(new URL('../public/lampara.glb', import.meta.url));
+    const bytes = readFileSync(new URL('../public/lamp.glb', import.meta.url));
     const gltf = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
-    glb = lamparaDesdeGLTF(gltf.scene);
-    primitivas = crearLampara();
+    glb = lampFromGLTF(gltf.scene);
+    primitives = createLamp();
   });
-  const pos = (raiz, n) => raiz.getObjectByName(n).position;
+  const pos = (root, n) => root.getObjectByName(n).position;
 
-  it('trae las 7 piezas con su nombre, como hijos directos de la raíz', () => {
-    expect(piezas(glb).map((p) => p.name)).toEqual(NOMBRES);
-    expect(glb.children.filter((h) => h.userData.esPieza)).toHaveLength(7);
+  it('has the 7 parts with their names, as direct children of the root', () => {
+    expect(parts(glb).map((p) => p.name)).toEqual(PART_NAMES);
+    expect(glb.children.filter((h) => h.userData.isPart)).toHaveLength(7);
   });
 
-  it('las articulaciones y la bombilla están donde las pone el modelo de primitivas (misma postura, otro programa)', () => {
-    for (const n of ['articulacion-inferior', 'articulacion-superior', 'bombilla']) {
-      expect(pos(glb, n).distanceTo(pos(primitivas, n)), n).toBeLessThan(0.02);
+  it('the joints and the bulb are where the primitives model puts them (same pose, different program)', () => {
+    for (const n of ['lower-joint', 'upper-joint', 'bulb']) {
+      expect(pos(glb, n).distanceTo(pos(primitives, n)), n).toBeLessThan(0.02);
     }
   });
 
-  it('la pantalla apunta igual: dirección articulación superior → bombilla', () => {
-    const d = (r) => pos(r, 'bombilla').clone().sub(pos(r, 'articulacion-superior')).normalize();
-    expect(d(glb).distanceTo(d(primitivas))).toBeLessThan(0.02);
-    expect(d(glb).y).toBeLessThan(-0.8);                      // hacia abajo
+  it('the shade points the same way: direction upper joint → bulb', () => {
+    const d = (r) => pos(r, 'bulb').clone().sub(pos(r, 'upper-joint')).normalize();
+    expect(d(glb).distanceTo(d(primitives))).toBeLessThan(0.02);
+    expect(d(glb).y).toBeLessThan(-0.8);                      // downwards
   });
 
-  it('el tamaño total es parecido al de las primitivas (±0,35 unidades por eje)', () => {
-    aplicarExplosion(glb, 0); aplicarExplosion(primitivas, 0);
-    const a = limites(glb).getSize(new THREE.Vector3()), b = limites(primitivas).getSize(new THREE.Vector3());
-    for (const eje of ['x', 'y', 'z']) expect(Math.abs(a[eje] - b[eje]), eje).toBeLessThan(0.35);
+  it('the overall size is similar to the primitives one (±0.35 units per axis)', () => {
+    applyExplosion(glb, 0); applyExplosion(primitives, 0);
+    const a = bounds(glb).getSize(new THREE.Vector3()), b = bounds(primitives).getSize(new THREE.Vector3());
+    for (const axis of ['x', 'y', 'z']) expect(Math.abs(a[axis] - b[axis]), axis).toBeLessThan(0.35);
   });
 
-  it('la vista explosionada mueve cada pieza su vector completo, y s = 0 la deja en reposo', () => {
-    aplicarExplosion(glb, 1);
-    for (const p of piezas(glb)) expect(p.position.distanceTo(p.userData.reposo.clone().add(p.userData.explosion)), p.name).toBeLessThan(1e-9);
-    aplicarExplosion(glb, 0);
-    for (const p of piezas(glb)) expect(p.position.distanceTo(p.userData.reposo), p.name).toBe(0);
+  it('the exploded view moves each part by its full vector, and s = 0 leaves it at rest', () => {
+    applyExplosion(glb, 1);
+    for (const p of parts(glb)) expect(p.position.distanceTo(p.userData.rest.clone().add(p.userData.explosion)), p.name).toBeLessThan(1e-9);
+    applyExplosion(glb, 0);
+    for (const p of parts(glb)) expect(p.position.distanceTo(p.userData.rest), p.name).toBe(0);
   });
 
-  it('cada pieza se mueve sola: mover una no arrastra a las demás (se rompió la jerarquía de pivotes)', () => {
-    aplicarExplosion(glb, 0);
-    const antes = piezas(glb).map((p) => p.getWorldPosition(new THREE.Vector3()));
-    const brazo = glb.getObjectByName('brazo-inferior');
-    brazo.position.add(new THREE.Vector3(3, 0, 0));
+  it('each part moves on its own: moving one does not drag the others (the pivot hierarchy was broken)', () => {
+    applyExplosion(glb, 0);
+    const before = parts(glb).map((p) => p.getWorldPosition(new THREE.Vector3()));
+    const arm = glb.getObjectByName('lower-arm');
+    arm.position.add(new THREE.Vector3(3, 0, 0));
     glb.updateMatrixWorld(true);
-    piezas(glb).forEach((p, i) => {
-      const d = p.getWorldPosition(new THREE.Vector3()).distanceTo(antes[i]);
-      if (p === brazo) expect(d).toBeCloseTo(3, 6); else expect(d, p.name).toBeLessThan(1e-9);
+    parts(glb).forEach((p, i) => {
+      const d = p.getWorldPosition(new THREE.Vector3()).distanceTo(before[i]);
+      if (p === arm) expect(d).toBeCloseTo(3, 6); else expect(d, p.name).toBeLessThan(1e-9);
     });
-    aplicarExplosion(glb, 0);
+    applyExplosion(glb, 0);
   });
 
-  it('las luces del archivo se descartan y la bombilla lleva el foco del visor apuntando hacia abajo', () => {
-    let luces = 0; glb.traverse((o) => { if (o.isLight) luces++; });
-    expect(luces).toBe(1);                                     // solo el SpotLight que añade el visor
-    const foco = glb.getObjectByName('bombilla').getObjectByName('foco');
-    expect(foco?.isSpotLight).toBe(true);
-    // la dirección de la luz se mide en el MUNDO (la posición local engaña: la bombilla del .glb hereda el giro de los pivotes)
+  it('the lights in the file are discarded and the bulb carries the viewer spotlight pointing downwards', () => {
+    let lights = 0; glb.traverse((o) => { if (o.isLight) lights++; });
+    expect(lights).toBe(1);                                     // only the SpotLight added by the viewer
+    const spot = glb.getObjectByName('bulb').getObjectByName('spot');
+    expect(spot?.isSpotLight).toBe(true);
+    // the light direction is measured in the WORLD (the local position is misleading: the .glb bulb inherits the pivots' rotation)
     glb.updateMatrixWorld(true);
-    const haciaDonde = foco.target.getWorldPosition(new THREE.Vector3()).sub(foco.getWorldPosition(new THREE.Vector3())).normalize();
-    const eje = pos(glb, 'bombilla').clone().sub(pos(glb, 'articulacion-superior')).normalize();
-    expect(haciaDonde.y).toBeLessThan(-0.8);
-    expect(haciaDonde.distanceTo(eje)).toBeLessThan(0.02);           // sale por el extremo abierto de la pantalla
+    const toward = spot.target.getWorldPosition(new THREE.Vector3()).sub(spot.getWorldPosition(new THREE.Vector3())).normalize();
+    const axis = pos(glb, 'bulb').clone().sub(pos(glb, 'upper-joint')).normalize();
+    expect(toward.y).toBeLessThan(-0.8);
+    expect(toward.distanceTo(axis)).toBeLessThan(0.02);           // it leaves through the open end of the shade
   });
 
-  it('la pantalla tiene su propio material: cambiarle el color no cambia los anillos de las articulaciones', () => {
-    const mat = glb.getObjectByName('pantalla').userData.materialColor;
+  it('the shade has its own material: changing its color does not change the joint rings', () => {
+    const mat = glb.getObjectByName('shade').userData.colorMaterial;
     expect(mat).toBeTruthy();
-    const anillos = [];
-    glb.traverse((o) => { if (o.isMesh && o.name.endsWith('-anillo')) anillos.push(o.material); });
-    expect(anillos.length).toBeGreaterThan(0);
-    for (const m of anillos) expect(m).not.toBe(mat);
+    const rings = [];
+    glb.traverse((o) => { if (o.isMesh && o.name.endsWith('-ring')) rings.push(o.material); });
+    expect(rings.length).toBeGreaterThan(0);
+    for (const m of rings) expect(m).not.toBe(mat);
   });
 
-  it('un .glb al que le falta una pieza da un error claro', () => {
-    const vacio = new THREE.Group();
-    expect(() => lamparaDesdeGLTF(vacio)).toThrow(/no trae la pieza 'base'/);
+  it('a .glb that is missing a part gives a clear error', () => {
+    const empty = new THREE.Group();
+    expect(() => lampFromGLTF(empty)).toThrow(/does not contain the part 'base'/);
   });
 });

@@ -1,32 +1,32 @@
 {
-  "producto": {
-    "nombre": "Brasa",
-    "lema": "Calor para tus noches de trabajo",
-    "descripcion": "Lámpara de mesa de luz cálida"
+  "product": {
+    "name": "Brasa",
+    "tagline": "Calor para tus noches de trabajo",
+    "description": "Lámpara de mesa de luz cálida"
   },
-  "beneficios": [
-    { "id": "silenciosa", "palabra": "Silenciosa", "detalle": "Sin zumbidos ni parpadeos",      "voz": "Es silenciosa, sin zumbidos ni parpadeos." },
-    { "id": "estable",    "palabra": "Estable",    "detalle": "No se mueve aunque teclees",     "voz": "Es estable, no se mueve aunque teclees." },
-    { "id": "duradera",   "palabra": "Duradera",   "detalle": "Hecha para durar muchos años",   "voz": "Y es duradera, hecha para durar muchos años." }
+  "benefits": [
+    { "id": "quiet",   "word": "Silenciosa", "detail": "Sin zumbidos ni parpadeos",      "voice": "Es silenciosa, sin zumbidos ni parpadeos." },
+    { "id": "stable",  "word": "Estable",    "detail": "No se mueve aunque teclees",     "voice": "Es estable, no se mueve aunque teclees." },
+    { "id": "durable", "word": "Duradera",   "detail": "Hecha para durar muchos años",   "voice": "Y es duradera, hecha para durar muchos años." }
   ],
-  "voz": {
-    "apertura": "Brasa. Calor para tus noches de trabajo.",
-    "cierre": "Brasa.",
-    "motor": "kokoro",
-    "nombre": "em_alex"
+  "voice": {
+    "opening": "Brasa. Calor para tus noches de trabajo.",
+    "closing": "Brasa.",
+    "engine": "kokoro",
+    "name": "em_alex"
   },
-  "paleta": {
-    "fondo": "#0d1a17",
-    "fondo2": "#15292a",
-    "texto": "#eef3ec",
-    "acento": "#ff7a59",
-    "acento_etiqueta": "#ff9a7e",
-    "laton": "#c98f5a",
+  "palette": {
+    "background": "#0d1a17",
+    "background2": "#15292a",
+    "text": "#eef3ec",
+    "accent": "#ff7a59",
+    "accent_label": "#ff9a7e",
+    "brass": "#c98f5a",
     "metal": "#1f2a2b",
-    "suelo": "#142120",
-    "luz_neutra": "#ffe9d6",
-    "halo_bombilla": "#ffb38a"
+    "floor": "#142120",
+    "neutral_light": "#ffe9d6",
+    "bulb_halo": "#ffb38a"
   },
-  "musica": { "bpm": 64, "semilla": 11 },
-  "video": { "duracion": 20 }
+  "music": { "bpm": 64, "seed": 11 },
+  "video": { "duration": 20 }
 }

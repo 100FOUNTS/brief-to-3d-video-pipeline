@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WebGL2 · gradient</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0f1115; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; object-fit: contain; }
+  #errors { position: fixed; left: 12px; bottom: 12px; right: 12px; margin: 0; padding: 12px; background: #3a1216; color: #ffd6d6; font: 13px/1.4 ui-monospace, Menlo, monospace; white-space: pre-wrap; display: none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<pre id="errors"></pre>
+<script>
+  // Phase 3b, part A: the minimal WebGL2 pipeline, with no libraries.
+  // One triangle that covers the whole screen + a fragment shader that paints every pixel as a function of u_time.
+  window.DURATION = 10;
+
+  const VERTEX = `#version 300 es
+  // Giant triangle generated only from gl_VertexID (0, 1, 2): no buffer needed.
+  void main() {
+    vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));   // (0,0) (2,0) (0,2)
+    gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);                            // (-1,-1) (3,-1) (-1,3)
+  }`;
+
+  const FRAGMENT = `#version 300 es
+  precision highp float;
+  uniform float u_time;
+  uniform vec2 u_resolution;
+  out vec4 outColor;
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution;                 // 0..1, origin at the bottom left
+    vec3 bottom = vec3(0.110, 0.145, 0.255);                  // #1c2541
+    vec3 top = vec3(0.043, 0.075, 0.169);                     // #0b132b
+    vec3 color = mix(bottom, top, uv.y);                      // vertical gradient
+    float pulse = 0.5 + 0.5 * sin(u_time * 0.9);              // 0..1 that goes back and forth over time
+    color += vec3(0.30, 0.16, 0.0) * pulse * pow(1.0 - uv.y, 2.0);   // warm light rising from the bottom
+    outColor = vec4(color, 1.0);
+  }`;
+
+  const canvas = document.getElementById('c');
+  const errorPanel = document.getElementById('errors');
+  const gl = canvas.getContext('webgl2', { preserveDrawingBuffer: true });   // preserveDrawingBuffer: screenshots do not come out black
+  const fail = (msg) => { console.error(msg); errorPanel.textContent += msg + '\n'; errorPanel.style.display = 'block'; };
+  if (!gl) { fail('This browser does not have WebGL2.'); throw new Error('no WebGL2'); }
+
+  // Compile a shader and show its error log if it fails (getShaderInfoLog).
+  function compile(type, source) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, source);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      const name = type === gl.VERTEX_SHADER ? 'vertex' : 'fragment';
+      throw new Error(`Error in the ${name} shader:\n${gl.getShaderInfoLog(s)}`);
+    }
+    return s;
+  }
+  window.__compile = (type, source) => compile(type === 'vertex' ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER, source);
+
+  let program;
+  try {
+    program = gl.createProgram();
+    gl.attachShader(program, compile(gl.VERTEX_SHADER, VERTEX));
+    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, FRAGMENT));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Error linking the program:\n' + gl.getProgramInfoLog(program));
+  } catch (e) { fail(e.message); throw e; }
+
+  gl.useProgram(program);
+  gl.bindVertexArray(gl.createVertexArray());                 // WebGL2 requires a VAO, even if it is empty
+  const uTime = gl.getUniformLocation(program, 'u_time');
+  const uRes = gl.getUniformLocation(program, 'u_resolution');
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.uniform2f(uRes, canvas.width, canvas.height);
+
+  // The frame at second t depends only on t (same as in Phase 1).
+  window.seek = (t) => {
+    gl.uniform1f(uTime, t);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+  window.seek(0);
+
+  // In the browser (without #render) it animates by itself; the renderer loads the page with #render and calls seek(t) itself.
+  if (location.hash !== '#render') {
+    const t0 = performance.now();
+    (function loop(now) { window.seek(((now - t0) / 1000) % window.DURATION); requestAnimationFrame(loop); })(t0);
+  }
+</script>
+</body>
+</html>

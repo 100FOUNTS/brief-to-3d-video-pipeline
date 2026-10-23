@@ -1,0 +1,30 @@
+[
+  {
+    "participant": "qwen-local",
+    "model": "Qwen3.6 27B (Ollama, 64K) via Claude Code",
+    "passed": 15,
+    "total": 16,
+    "requirements": "14/14",
+    "quality": "1/2",
+    "seconds": 494.0,
+    "turns": 8,
+    "cost_usd": 0.0,
+    "api_equivalent_cost_usd": null,
+    "output_tokens": 2803,
+    "notes": "Requirements 14/14. Fails yuvj420p. The golden line strikes through the text and it did not notice. The 0.84 USD that Claude Code reports is a meaningless theoretical figure for a local model."
+  },
+  {
+    "participant": "sonnet-5-5",
+    "model": "Claude Sonnet 5.5 (cloud) via Claude Code",
+    "passed": 16,
+    "total": 16,
+    "requirements": "14/14",
+    "quality": "2/2",
+    "seconds": 78.0,
+    "turns": 25,
+    "cost_usd": 0.26,
+    "api_equivalent_cost_usd": 0.26,
+    "output_tokens": 6034,
+    "notes": "Requirements 14/14 and quality 2/2. More careful design (light text, line as an underline, smooth curve). Cost in USD = theoretical API equivalent; with Pro it consumes quota."
+  }
+]

@@ -1,44 +1,44 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Arco · visor 3D</title>
+    <title>Arco · 3D viewer</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M4 26 Q16 -6 28 26%27 fill=%27none%27 stroke=%27%23ffb703%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="/src/estilos.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <canvas id="escena" aria-label="Lámpara Arco en 3D. Arrastra para girar, rueda para acercar."></canvas>
+    <canvas id="scene" aria-label="Arco lamp in 3D. Drag to rotate, scroll to zoom."></canvas>
 
-    <header class="cabecera">
+    <header class="header">
       <h1>Arco</h1>
       <p>Lámpara de escritorio articulada</p>
     </header>
 
     <aside class="panel" aria-live="polite">
-      <p class="etiqueta">Piezas</p>
-      <ul id="lista-piezas" class="piezas"></ul>
+      <p class="label">Parts</p>
+      <ul id="part-list" class="parts"></ul>
       <div id="info" class="info">
-        <p class="etiqueta">Selecciona una pieza</p>
-        <p class="info-detalle">Pulsa sobre la lámpara o elige una de la lista.</p>
+        <p class="label">Select a part</p>
+        <p class="info-detail">Click on the lamp or pick one from the list.</p>
       </div>
     </aside>
 
-    <section class="controles" aria-label="Controles">
+    <section class="controls" aria-label="Controls">
       <label class="control">
-        <span class="etiqueta">Vista explosionada</span>
+        <span class="label">Exploded view</span>
         <input id="explosion" type="range" min="0" max="1" step="0.01" value="0" />
       </label>
       <div class="control">
-        <span class="etiqueta">Modelo 3D</span>
-        <div id="modelos" class="modelos" role="radiogroup" aria-label="Modelo 3D">
-          <button type="button" role="radio" data-modelo="glb" aria-checked="false">Blender (.glb)</button>
-          <button type="button" role="radio" data-modelo="primitivas" aria-checked="false">Primitivas (código)</button>
+        <span class="label">3D model</span>
+        <div id="models" class="models" role="radiogroup" aria-label="3D model">
+          <button type="button" role="radio" data-model="glb" aria-checked="false">Blender (.glb)</button>
+          <button type="button" role="radio" data-model="primitives" aria-checked="false">Primitives (code)</button>
         </div>
       </div>
       <div class="control">
-        <span class="etiqueta">Color de la pantalla</span>
-        <div id="colores" class="colores" role="radiogroup" aria-label="Color de la pantalla"></div>
+        <span class="label">Shade color</span>
+        <div id="colors" class="colors" role="radiogroup" aria-label="Shade color"></div>
       </div>
     </section>
 

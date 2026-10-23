@@ -1,7 +1,7 @@
 {
-  "name": "estudio-lampara",
+  "name": "brief-to-3d-video-pipeline",
   "version": "1.0.0",
-  "description": "Mini-estudio creativo local",
+  "description": "Local creative mini-studio: one brief.json produces a 3D lamp, a web viewer and a promo video with voice and music",
   "main": "index.js",
   "directories": {
     "doc": "docs"

@@ -7,6 +7,6 @@ __pycache__/
 hyperframes/promo/.hyperframes/
 .venv*
 .lentest/
-# Salidas de las sesiones de Claude Code del experimento: llevan identificadores de sesión y avisos de cuenta; los resultados están en experimento/fase7/resultados.json
-experimento-fase7/*/sesion.json
-experimento-fase7/*/errores.txt
+# Outputs of the experiment's Claude Code sessions: they carry session identifiers and account notices; the results are in experiment/phase7/results.json
+experiment-phase7/*/session.json
+experiment-phase7/*/errors.txt

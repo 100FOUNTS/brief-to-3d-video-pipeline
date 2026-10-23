@@ -1,31 +1,31 @@
-# Brief: lámpara "Arco"
+# Brief: "Arco" lamp
 
-**Producto:** lámpara de escritorio articulada, original.
-**Piezas (7):** base, brazo inferior, articulación inferior, brazo superior, articulación superior, pantalla, bombilla.
-**Público:** personas que trabajan desde casa y valoran un diseño sencillo.
-**Tono:** tranquilo, cálido, directo.
+**Product:** original articulated desk lamp.
+**Parts (7):** base, lower arm, lower joint, upper arm, upper joint, shade, bulb.
+**Audience:** people who work from home and value a simple design.
+**Tone:** calm, warm, direct.
 
-## Estilo visual
+## Visual style
 
-| Elemento | Valor |
+| Element | Value |
 | --- | --- |
-| Fondo oscuro | `#0f1115` |
-| Fondo secundario | `#1a1d24` |
-| Acento (luz cálida) | `#ffb703` |
-| Texto | `#f4f1ea` |
-| Metal de la lámpara | negro mate; pantalla de latón |
-| Tipografía | sans-serif del sistema (sin descargar fuentes) |
+| Dark background | `#0f1115` |
+| Secondary background | `#1a1d24` |
+| Accent (warm light) | `#ffb703` |
+| Text | `#f4f1ea` |
+| Lamp metal | matte black; brass shade |
+| Typography | system sans-serif (no font downloads) |
 
-## Vídeo promocional (20 a 30 s, 1920x1080, 30 fps)
+## Promo video (20 to 30 s, 1920x1080, 30 fps)
 
-1. Título "Arco" y subtítulo "Luz que se pliega a tu escritorio".
-2. Tres beneficios, uno cada 5 s: ligera, articulada, luz cálida.
-3. Cierre con el nombre y una frase final.
+1. Title "Arco" and subtitle "Luz que se pliega a tu escritorio".
+2. Three benefits, one every 5 s: light, articulated, warm light.
+3. Closing with the name and a final sentence.
 
-## Guion de la voz (español, unos 45 palabras)
+## Voice script (Spanish, about 45 words)
 
 Arco. Una lámpara que se pliega a tu escritorio. Es ligera, así que la mueves con un dedo. Es articulada, así que la luz va justo donde la necesitas. Y su luz es cálida, para trabajar sin cansar los ojos. Arco.
 
-## Música
+## Music
 
-Ambiental, 70 bpm, tonalidad de Do mayor, sin melodía llamativa.
+Ambient, 70 bpm, key of C major, no flashy melody.

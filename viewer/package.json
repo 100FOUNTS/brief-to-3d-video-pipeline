@@ -1,14 +1,14 @@
 {
-  "name": "arco-visor",
+  "name": "arco-viewer",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Visor 3D de la lámpara Arco con vista explosionada",
+  "description": "3D viewer of the Arco lamp with an exploded view",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "test": "vitest run",
-    "capturas": "node scripts/capturas.mjs"
+    "captures": "node scripts/captures.mjs"
   },
   "dependencies": {
     "three": "^0.186.1",

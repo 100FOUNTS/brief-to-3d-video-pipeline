@@ -1,50 +1,50 @@
-# Componentes de terceros y sus licencias
+# Third-party components and their licenses
 
-Este repositorio es MIT (ver `LICENSE`). **No redistribuye modelos ni programas de terceros**, con una excepción: `dashboard/chart.umd.js` (Chart.js, MIT, con su aviso de licencia dentro del archivo). Todo lo demás se descarga o instala al preparar el entorno.
+This repository is MIT (see `LICENSE`). **It does not redistribute third-party models or programs**, with one exception: `dashboard/chart.umd.js` (Chart.js, MIT, with its license notice inside the file). Everything else is downloaded or installed when preparing the environment.
 
-**Fuente de cada dato:** `registro` = campo de licencia del registro oficial (npm o PyPI) consultado el 23 de octubre de 2026 · `ficha HF` = metadatos de la ficha del modelo en Hugging Face, misma fecha · `conocimiento general` = no lo verifiqué hoy; compruébalo antes de un uso comercial.
+**Source of each item:** `registry` = license field of the official registry (npm or PyPI) consulted on 23 October 2026 · `HF card` = metadata of the model's Hugging Face card, same date · `general knowledge` = I did not verify it today; check it before any commercial use.
 
-## Bibliotecas de JavaScript
-| Componente | Versión usada | Licencia | Fuente |
+## JavaScript libraries
+| Component | Version used | License | Source |
 | --- | --- | --- | --- |
-| three | 0.186.1 | MIT | registro |
-| vite | 8.3.x | MIT | registro |
-| vitest | 5.0.x | MIT | registro |
-| playwright-core | 1.64.1 | Apache-2.0 | registro |
-| chart.js (archivo incluido) | 4.5.1 | MIT | encabezado del propio archivo |
-| HyperFrames (CLI) | 0.8.161 | Apache-2.0 | registro |
-| GSAP (se carga desde jsDelivr, no se incluye) | 3.14.2 | «Standard "no charge" license» de GSAP: **no es una licencia de código abierto**; léela en gsap.com/standard-license antes de un uso comercial | registro |
+| three | 0.186.1 | MIT | registry |
+| vite | 8.3.x | MIT | registry |
+| vitest | 5.0.x | MIT | registry |
+| playwright-core | 1.64.1 | Apache-2.0 | registry |
+| chart.js (file included) | 4.5.1 | MIT | the file's own header |
+| HyperFrames (CLI) | 0.8.161 | Apache-2.0 | registry |
+| GSAP (loaded from jsDelivr, not included) | 3.14.2 | GSAP's "Standard 'no charge' license": **it is not an open-source license**; read it at gsap.com/standard-license before any commercial use | registry |
 
-## Bibliotecas de Python (`audio/requirements.txt`)
-| Componente | Versión | Licencia | Fuente |
+## Python libraries (`audio/requirements.txt`)
+| Component | Version | License | Source |
 | --- | --- | --- | --- |
-| mlx | 0.32.4 | MIT | registro |
-| mlx-audio | 0.5.9 | MIT | registro |
-| misaki | 0.9.4 | Apache | registro |
-| numpy | 2.5.4 | BSD-3-Clause (más componentes permisivos) | registro |
-| scipy | 1.18.1 | BSD (el campo del registro es confuso) | conocimiento general |
+| mlx | 0.32.4 | MIT | registry |
+| mlx-audio | 0.5.9 | MIT | registry |
+| misaki | 0.9.4 | Apache | registry |
+| numpy | 2.5.4 | BSD-3-Clause (plus permissive components) | registry |
+| scipy | 1.18.1 | BSD (the registry field is confusing) | general knowledge |
 
-## Modelos (se descargan la primera vez; no están en el repositorio)
-| Modelo | Uso | Licencia | Fuente |
+## Models (downloaded the first time; they are not in the repository)
+| Model | Use | License | Source |
 | --- | --- | --- | --- |
-| Kokoro-82M (`mlx-community/Kokoro-82M-bf16`) | Voz | Apache-2.0 | ficha HF |
-| Whisper large-v3 (`mlx-community/whisper-large-v3-asr-fp16`) | Comprobar que la voz se entiende | Apache-2.0 | ficha HF |
-| Qwen3.6 27B (vía Ollama) | Experimento de la Fase 7 | Apache-2.0 | ficha HF (`Qwen/Qwen3.6-27B`) |
-| Claude Sonnet 5.5 / Haiku 5.5 | Desarrollo (Claude Code) | Servicio de Anthropic | — |
+| Kokoro-82M (`mlx-community/Kokoro-82M-bf16`) | Voice | Apache-2.0 | HF card |
+| Whisper large-v3 (`mlx-community/whisper-large-v3-asr-fp16`) | Checking that the voice is intelligible | Apache-2.0 | HF card |
+| Qwen3.6 27B (through Ollama) | Phase 7 experiment | Apache-2.0 | HF card (`Qwen/Qwen3.6-27B`) |
+| Claude Sonnet 5.5 / Haiku 5.5 | Development (Claude Code) | Anthropic service | — |
 
-Qwen3-TTS (probado y descartado) figura como Apache-2.0 en su ficha, pero no se usa.
+Qwen3-TTS (tried and discarded) is listed as Apache-2.0 on its card, but it is not used.
 
-## Programas que se instalan aparte
-| Programa | Licencia | Fuente |
+## Programs installed separately
+| Program | License | Source |
 | --- | --- | --- |
-| Blender 5.2 | GPL; el repositorio solo incluye un script que se ejecuta dentro de Blender, no el programa | conocimiento general |
-| FFmpeg | LGPL o GPL según cómo se compile | conocimiento general |
-| Google Chrome | Software propietario gratuito | conocimiento general |
-| Ollama | MIT | conocimiento general |
-| espeak-ng (incluido en `espeakng-loader`) | GPL-3.0 | conocimiento general |
+| Blender 5.2 | GPL; the repository only includes a script that runs inside Blender, not the program | general knowledge |
+| FFmpeg | LGPL or GPL depending on how it is built | general knowledge |
+| Google Chrome | Free proprietary software | general knowledge |
+| Ollama | MIT | general knowledge |
+| espeak-ng (included in `espeakng-loader`) | GPL-3.0 | general knowledge |
 
-## Tipografías
-Montserrat e IBM Plex Mono se cargan desde Google Fonts al renderizar el vídeo (licencia SIL Open Font License) [conocimiento general]. No se incluyen en el repositorio.
+## Typefaces
+Montserrat and IBM Plex Mono are loaded from Google Fonts when rendering the video (SIL Open Font License) [general knowledge]. They are not included in the repository.
 
-## Contenido generado
-La lámpara (`viewer/public/lampara.glb`), los renders y el vídeo son obra de este proyecto. El producto «Arco» y la marca de ejemplo «Brasa» son inventados.
+## Generated content
+The lamp (`viewer/public/lamp.glb`), the renders and the video are the work of this project. The product "Arco" and the sample brand "Brasa" are invented.

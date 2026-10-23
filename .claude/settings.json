@@ -4,7 +4,7 @@
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guardia-ruta.py\"" }
+          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.py\"" }
         ]
       }
     ],
@@ -12,7 +12,7 @@
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/despues-de-editar.py\"", "timeout": 90 }
+          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/after-edit.py\"", "timeout": 90 }
         ]
       }
     ]

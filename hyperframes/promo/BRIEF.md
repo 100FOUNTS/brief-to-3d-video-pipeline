@@ -12,11 +12,11 @@ angle: concept
 
 ## Intent
 
-Vídeo promocional de 20 s de la lámpara de escritorio original "Arco", sin voz ni música (llegan en la Fase 5 del ejercicio). Tranquilo, cálido y directo. Sirve para comparar HyperFrames con el script propio de `video/`.
+20 s promo video for the original desk lamp "Arco", without voice or music (they arrive in Phase 5 of the exercise). Calm, warm and direct. It serves to compare HyperFrames with the own script in `video/`.
 
 ## Notes
 
-- Paleta y tipografía salen de `../../brief.md`: fondo `#0f1115`, acento `#ffb703`, texto `#f4f1ea`.
-- Concepto: la luz es la narradora. Un arco (el nombre y el brazo de la lámpara) se dibuja y la luz viaja por él mientras aparece cada beneficio.
-- Estructura: título (0-5 s), Ligera (5-9), Articulada (9-13), Luz cálida (13-17), cierre (17-20).
-- Sin copias de marcas ni música existente.
+- Palette and typography come from `../../brief.md`: background `#0f1115`, accent `#ffb703`, text `#f4f1ea`.
+- Concept: the light is the narrator. An arc (the name and the lamp's arm) is drawn and the light travels along it while each benefit appears.
+- Structure: title (0-5 s), Ligera (5-9), Articulada (9-13), Luz cálida (13-17), closing (17-20).
+- No copies of brands or existing music.

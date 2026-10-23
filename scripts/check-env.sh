@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Comprueba que el entorno de la Fase 0 está listo.
+# Checks that the environment is ready.
 ok=0
 check() {
   local name="$1"; shift
-  if out=$("$@" 2>&1 | head -1); then printf "  OK   %-10s %s\n" "$name" "$out"; else printf "  FALTA %-9s\n" "$name"; ok=1; fi
+  if out=$("$@" 2>&1 | head -1); then printf "  OK   %-10s %s\n" "$name" "$out"; else printf "  MISSING %-7s\n" "$name"; ok=1; fi
 }
-echo "Herramientas:"
+echo "Tools:"
 check node node --version
 check npm npm --version
 check ffmpeg bash -c 'ffmpeg -version | head -1'
@@ -15,11 +15,11 @@ check claude claude --version
 check git git --version
 if [ -x /Applications/Blender.app/Contents/MacOS/Blender ]; then
   printf "  OK   %-10s %s\n" blender "$(/Applications/Blender.app/Contents/MacOS/Blender --version 2>/dev/null | head -1)"
-else printf "  FALTA blender\n"; ok=1; fi
-[ -d "/Applications/Google Chrome.app" ] && echo "  OK   chrome" || { echo "  FALTA chrome"; ok=1; }
-echo "Opcional (solo para el experimento con un modelo local, Fase 7):"
-if ! command -v ollama >/dev/null; then echo "  --   ollama no instalado"
+else printf "  MISSING blender\n"; ok=1; fi
+[ -d "/Applications/Google Chrome.app" ] && echo "  OK   chrome" || { echo "  MISSING chrome"; ok=1; }
+echo "Optional (only for the local-model experiment, Phase 7):"
+if ! command -v ollama >/dev/null; then echo "  --   ollama not installed"
 elif ollama list >/dev/null 2>&1; then
-  ollama list | grep -E "qwen3.6|gemma4" >/dev/null && echo "  OK   ollama con qwen3.6/gemma4" || echo "  --   ollama sin qwen3.6 ni gemma4"
-else echo "  --   ollama instalado pero no está en marcha"; fi
+  ollama list | grep -E "qwen3.6|gemma4" >/dev/null && echo "  OK   ollama with qwen3.6/gemma4" || echo "  --   ollama without qwen3.6 or gemma4"
+else echo "  --   ollama installed but not running"; fi
 exit $ok

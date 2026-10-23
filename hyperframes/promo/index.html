@@ -6,183 +6,183 @@
     <title>Arco · promo</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      /* Paleta (brief.md): fondo #0f1115 · texto #f4f1ea · acento #ffb703 · latón #b8893a */
+      /* Palette (brief.md): background #0f1115 · text #f4f1ea · accent #ffb703 · brass #b8893a */
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0f1115; }
       #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0f1115; color: #f4f1ea; }
 
-      /* Capa de fondo */
+      /* Background layer */
       #halo { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 50% 58%, #1a1d24 0%, #0f1115 70%); }
 
-      /* Arco (la curva) + luz: un solo grupo para que giren juntos */
-      #arcgrupo { position: absolute; inset: 0; }
-      #arco { position: absolute; inset: 0; width: 1920px; height: 1080px; }
-      #luz { position: absolute; left: 0; top: 0; width: 0; height: 0; }
-      .brillo { position: absolute; left: 0; top: 0; width: 1500px; height: 1500px; border-radius: 50%; }
-      #brillo-frio { background: radial-gradient(circle, rgba(255,243,214,0.30) 0%, rgba(255,243,214,0.10) 30%, rgba(255,243,214,0) 62%); }
-      #brillo-calido { background: radial-gradient(circle, rgba(255,183,3,0.42) 0%, rgba(255,183,3,0.13) 30%, rgba(255,183,3,0) 62%); opacity: 0; }
-      #bombilla { position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: #fff3d6; box-shadow: 0 0 40px 14px rgba(255,214,120,0.7); }
+      /* Arc (the curve) + light: a single group so they rotate together */
+      #arc-group { position: absolute; inset: 0; }
+      #arc { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      #light { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .glow { position: absolute; left: 0; top: 0; width: 1500px; height: 1500px; border-radius: 50%; }
+      #glow-cool { background: radial-gradient(circle, rgba(255,243,214,0.30) 0%, rgba(255,243,214,0.10) 30%, rgba(255,243,214,0) 62%); }
+      #glow-warm { background: radial-gradient(circle, rgba(255,183,3,0.42) 0%, rgba(255,183,3,0.13) 30%, rgba(255,183,3,0) 62%); opacity: 0; }
+      #bulb { position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: #fff3d6; box-shadow: 0 0 40px 14px rgba(255,214,120,0.7); }
 
-      /* Escenas de texto */
-      .escena { position: absolute; inset: 0; }
-      .interior {
+      /* Text scenes */
+      .scene { position: absolute; inset: 0; }
+      .inner {
         position: absolute; inset: 0; padding-top: 290px;
         display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
       }
-      .palabra { font-family: Montserrat, sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; line-height: 1; color: #f4f1ea; }
-      .titulo { font-size: 280px; }
-      .beneficio { font-size: 190px; }
+      .word { font-family: Montserrat, sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; line-height: 1; color: #f4f1ea; }
+      .title { font-size: 280px; }
+      .benefit { font-size: 190px; }
       .mono { font-family: "IBM Plex Mono", monospace; font-weight: 400; }
-      .etiqueta { font-size: 34px; letter-spacing: 0.18em; color: #ffc532; margin-bottom: 26px; }
-      .detalle { font-size: 40px; letter-spacing: 0.04em; color: #f4f1ea; opacity: 0.8; margin-top: 34px; }
-      .subtitulo { font-size: 34px; letter-spacing: 0.22em; text-transform: uppercase; color: #f4f1ea; margin-top: 40px; }
-      .fantasma { position: absolute; right: 90px; bottom: 60px; font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 520px; line-height: 1; color: #f4f1ea; opacity: 0.035; }
-      #linea-cierre { width: 560px; height: 6px; margin-top: 36px; background: #ffb703; border-radius: 3px; transform-origin: 0% 50%; }
+      .label { font-size: 34px; letter-spacing: 0.18em; color: #ffc532; margin-bottom: 26px; }
+      .detail { font-size: 40px; letter-spacing: 0.04em; color: #f4f1ea; opacity: 0.8; margin-top: 34px; }
+      .subtitle { font-size: 34px; letter-spacing: 0.22em; text-transform: uppercase; color: #f4f1ea; margin-top: 40px; }
+      .ghost { position: absolute; right: 90px; bottom: 60px; font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 520px; line-height: 1; color: #f4f1ea; opacity: 0.035; }
+      #closing-line { width: 560px; height: 6px; margin-top: 36px; background: #ffb703; border-radius: 3px; transform-origin: 0% 50%; }
 
-      #entrada, #salida { position: absolute; inset: 0; background: #0f1115; pointer-events: none; }
+      #fade-in, #fade-out { position: absolute; inset: 0; background: #0f1115; pointer-events: none; }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
       <div id="halo"></div>
 
-      <div id="arcgrupo">
-        <svg id="arco" viewBox="0 0 1920 1080" fill="none">
-          <path id="arco-trazo" d="M 160 860 Q 960 60 1760 860" stroke="#f4f1ea" stroke-width="4" stroke-linecap="round" opacity="0.85" />
-          <circle id="junta1" cx="560" cy="560" r="22" stroke="#b8893a" stroke-width="5" opacity="0" />
-          <circle id="junta2" cx="1360" cy="560" r="22" stroke="#b8893a" stroke-width="5" opacity="0" />
+      <div id="arc-group">
+        <svg id="arc" viewBox="0 0 1920 1080" fill="none">
+          <path id="arc-stroke" d="M 160 860 Q 960 60 1760 860" stroke="#f4f1ea" stroke-width="4" stroke-linecap="round" opacity="0.85" />
+          <circle id="joint1" cx="560" cy="560" r="22" stroke="#b8893a" stroke-width="5" opacity="0" />
+          <circle id="joint2" cx="1360" cy="560" r="22" stroke="#b8893a" stroke-width="5" opacity="0" />
         </svg>
-        <div id="luz">
-          <div id="brillo-frio" class="brillo"></div>
-          <div id="brillo-calido" class="brillo"></div>
-          <div id="bombilla"></div>
+        <div id="light">
+          <div id="glow-cool" class="glow"></div>
+          <div id="glow-warm" class="glow"></div>
+          <div id="bulb"></div>
         </div>
       </div>
 
-      <section id="e1" class="escena clip" data-start="0" data-duration="5" data-track-index="1">
-        <div class="interior">
-          <div id="e1-titulo" class="palabra titulo">Arco</div>
-          <div id="e1-sub" class="mono subtitulo">Luz que se pliega a tu escritorio</div>
+      <section id="s1" class="scene clip" data-start="0" data-duration="5" data-track-index="1">
+        <div class="inner">
+          <div id="s1-title" class="word title">Arco</div>
+          <div id="s1-sub" class="mono subtitle">Luz que se pliega a tu escritorio</div>
         </div>
       </section>
 
-      <section id="e2" class="escena clip" data-start="5" data-duration="4" data-track-index="1">
-        <div class="fantasma" id="e2-fan">01</div>
-        <div class="interior" id="e2-int">
-          <div id="e2-et" class="mono etiqueta">01 / 03</div>
-          <div id="e2-pal" class="palabra beneficio">Ligera</div>
-          <div id="e2-det" class="mono detalle">Se mueve con un dedo</div>
+      <section id="s2" class="scene clip" data-start="5" data-duration="4" data-track-index="1">
+        <div class="ghost" id="s2-ghost">01</div>
+        <div class="inner" id="s2-inner">
+          <div id="s2-label" class="mono label">01 / 03</div>
+          <div id="s2-word" class="word benefit">Ligera</div>
+          <div id="s2-detail" class="mono detail">Se mueve con un dedo</div>
         </div>
       </section>
 
-      <section id="e3" class="escena clip" data-start="9" data-duration="4" data-track-index="1">
-        <div class="fantasma" id="e3-fan">02</div>
-        <div class="interior" id="e3-int">
-          <div id="e3-et" class="mono etiqueta">02 / 03</div>
-          <div id="e3-pal" class="palabra beneficio">Articulada</div>
-          <div id="e3-det" class="mono detalle">La luz va justo donde la necesitas</div>
+      <section id="s3" class="scene clip" data-start="9" data-duration="4" data-track-index="1">
+        <div class="ghost" id="s3-ghost">02</div>
+        <div class="inner" id="s3-inner">
+          <div id="s3-label" class="mono label">02 / 03</div>
+          <div id="s3-word" class="word benefit">Articulada</div>
+          <div id="s3-detail" class="mono detail">La luz va justo donde la necesitas</div>
         </div>
       </section>
 
-      <section id="e4" class="escena clip" data-start="13" data-duration="4" data-track-index="1">
-        <div class="fantasma" id="e4-fan">03</div>
-        <div class="interior" id="e4-int">
-          <div id="e4-et" class="mono etiqueta">03 / 03</div>
-          <div id="e4-pal" class="palabra beneficio">Luz cálida</div>
-          <div id="e4-det" class="mono detalle">Para trabajar sin cansar los ojos</div>
+      <section id="s4" class="scene clip" data-start="13" data-duration="4" data-track-index="1">
+        <div class="ghost" id="s4-ghost">03</div>
+        <div class="inner" id="s4-inner">
+          <div id="s4-label" class="mono label">03 / 03</div>
+          <div id="s4-word" class="word benefit">Luz cálida</div>
+          <div id="s4-detail" class="mono detail">Para trabajar sin cansar los ojos</div>
         </div>
       </section>
 
-      <section id="e5" class="escena clip" data-start="17" data-duration="3" data-track-index="1">
-        <div class="interior" id="e5-int">
-          <div id="e5-titulo" class="palabra titulo">Arco</div>
-          <div id="linea-cierre"></div>
-          <div id="e5-sub" class="mono subtitulo">Luz que se pliega a tu escritorio</div>
+      <section id="s5" class="scene clip" data-start="17" data-duration="3" data-track-index="1">
+        <div class="inner" id="s5-inner">
+          <div id="s5-title" class="word title">Arco</div>
+          <div id="closing-line"></div>
+          <div id="s5-sub" class="mono subtitle">Luz que se pliega a tu escritorio</div>
         </div>
       </section>
 
-      <div id="entrada"></div>
-      <div id="salida"></div>
+      <div id="fade-in"></div>
+      <div id="fade-out"></div>
     </div>
 
     <script>
-      // Punto del arco para u en [0,1] (misma curva que el trazo: Q con control en (960,60)).
+      // Point on the arc for u in [0,1] (same curve as the stroke: Q with control point at (960,60)).
       const A = (u) => ({ x: 160 + 1600 * u, y: 860 - 1600 * u * (1 - u) });
-      // Desplazamiento de la luz a lo largo del arco: una polilínea de fotogramas clave con aceleración suave,
-      // para que siga la curva y no la cuerda recta.
-      const sube = (k) => k * k * (3 - 2 * k);
-      function recorrido(u0, u1, dur, n = 16) {
+      // Movement of the light along the arc: a polyline of keyframes with smooth easing,
+      // so it follows the curve and not the straight chord.
+      const rise = (k) => k * k * (3 - 2 * k);
+      function travel(u0, u1, dur, n = 16) {
         return Array.from({ length: n }, (_, i) => {
-          const p = A(u0 + (u1 - u0) * sube((i + 1) / n));
+          const p = A(u0 + (u1 - u0) * rise((i + 1) / n));
           return { x: p.x, y: p.y, duration: dur / n, ease: "none" };
         });
       }
 
       const tl = gsap.timeline({ paused: true });
 
-      // Estado inicial de la luz: en la cima del arco, apagada
-      const cima = A(0.5);
-      gsap.set("#luz", { x: cima.x, y: cima.y });
-      gsap.set(".brillo", { xPercent: -50, yPercent: -50 });
-      gsap.set("#bombilla", { xPercent: -50, yPercent: -50 });
-      gsap.set("#luz", { opacity: 0, scale: 0.6 });
-      const largo = document.getElementById("arco-trazo").getTotalLength();
-      gsap.set("#arco-trazo", { strokeDasharray: largo, strokeDashoffset: largo });
-      gsap.set("#arcgrupo", { transformOrigin: "960px 860px" });
+      // Initial state of the light: at the top of the arc, switched off
+      const apex = A(0.5);
+      gsap.set("#light", { x: apex.x, y: apex.y });
+      gsap.set(".glow", { xPercent: -50, yPercent: -50 });
+      gsap.set("#bulb", { xPercent: -50, yPercent: -50 });
+      gsap.set("#light", { opacity: 0, scale: 0.6 });
+      const length = document.getElementById("arc-stroke").getTotalLength();
+      gsap.set("#arc-stroke", { strokeDasharray: length, strokeDashoffset: length });
+      gsap.set("#arc-group", { transformOrigin: "960px 860px" });
 
-      // Entrada desde negro
-      tl.fromTo("#entrada", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power1.out" }, 0);
+      // Fade in from black
+      tl.fromTo("#fade-in", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power1.out" }, 0);
 
-      // Escena 1 (0-5 s): el arco se dibuja, la luz se enciende, aparece el título
-      tl.to("#arco-trazo", { strokeDashoffset: 0, duration: 2.1, ease: "power2.inOut" }, 0.3);
-      tl.to("#luz", { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 2.1);
-      // El arco pasa a segundo plano para que no cruce el texto con tanto contraste
-      tl.to("#arco-trazo", { opacity: 0.32, duration: 0.8, ease: "power2.inOut" }, 2.6);
-      tl.fromTo("#e1-titulo", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, 2.3);
-      tl.fromTo("#e1-sub", { y: 24, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.7, ease: "power2.out" }, 3.1);
-      tl.to("#e1-titulo, #e1-sub", { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 4.4);
+      // Scene 1 (0-5 s): the arc is drawn, the light turns on, the title appears
+      tl.to("#arc-stroke", { strokeDashoffset: 0, duration: 2.1, ease: "power2.inOut" }, 0.3);
+      tl.to("#light", { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 2.1);
+      // The arc steps back so it does not cross the text at full contrast
+      tl.to("#arc-stroke", { opacity: 0.32, duration: 0.8, ease: "power2.inOut" }, 2.6);
+      tl.fromTo("#s1-title", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, 2.3);
+      tl.fromTo("#s1-sub", { y: 24, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.7, ease: "power2.out" }, 3.1);
+      tl.to("#s1-title, #s1-sub", { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 4.4);
 
-      // Escena 2 (5-9 s): beneficio 1 — la luz baja al lado izquierdo
-      tl.to("#luz", { keyframes: recorrido(0.5, 0.2, 1.1) }, 5.0);
-      tl.fromTo("#e2-fan", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 5.0);
-      tl.fromTo("#e2-et", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 5.3);
-      tl.fromTo("#e2-pal", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 5.4);
-      tl.fromTo("#e2-det", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 5.9);
-      tl.to("#e2-int, #e2-fan", { opacity: 0, duration: 0.45, ease: "power2.in" }, 8.5);
+      // Scene 2 (5-9 s): benefit 1 — the light moves down to the left side
+      tl.to("#light", { keyframes: travel(0.5, 0.2, 1.1) }, 5.0);
+      tl.fromTo("#s2-ghost", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 5.0);
+      tl.fromTo("#s2-label", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 5.3);
+      tl.fromTo("#s2-word", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 5.4);
+      tl.fromTo("#s2-detail", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 5.9);
+      tl.to("#s2-inner, #s2-ghost", { opacity: 0, duration: 0.45, ease: "power2.in" }, 8.5);
 
-      // Escena 3 (9-13 s): beneficio 2 — la luz cruza al lado derecho y el arco se balancea
-      tl.to("#luz", { keyframes: recorrido(0.2, 0.8, 1.5) }, 9.0);
-      tl.fromTo("#junta1, #junta2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 9.6);
-      tl.to("#arcgrupo", { rotation: -3, duration: 0.9, ease: "sine.inOut" }, 10.3);
-      tl.to("#arcgrupo", { rotation: 3, duration: 1.2, ease: "sine.inOut" }, 11.2);
-      tl.to("#arcgrupo", { rotation: 0, duration: 0.8, ease: "sine.inOut" }, 12.4);
-      tl.fromTo("#e3-fan", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 9.0);
-      tl.fromTo("#e3-et", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 9.3);
-      tl.fromTo("#e3-pal", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 9.4);
-      tl.fromTo("#e3-det", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 9.9);
-      tl.to("#e3-int, #e3-fan", { opacity: 0, duration: 0.45, ease: "power2.in" }, 12.5);
+      // Scene 3 (9-13 s): benefit 2 — the light crosses to the right side and the arc sways
+      tl.to("#light", { keyframes: travel(0.2, 0.8, 1.5) }, 9.0);
+      tl.fromTo("#joint1, #joint2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 9.6);
+      tl.to("#arc-group", { rotation: -3, duration: 0.9, ease: "sine.inOut" }, 10.3);
+      tl.to("#arc-group", { rotation: 3, duration: 1.2, ease: "sine.inOut" }, 11.2);
+      tl.to("#arc-group", { rotation: 0, duration: 0.8, ease: "sine.inOut" }, 12.4);
+      tl.fromTo("#s3-ghost", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 9.0);
+      tl.fromTo("#s3-label", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 9.3);
+      tl.fromTo("#s3-word", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 9.4);
+      tl.fromTo("#s3-detail", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 9.9);
+      tl.to("#s3-inner, #s3-ghost", { opacity: 0, duration: 0.45, ease: "power2.in" }, 12.5);
 
-      // Escena 4 (13-17 s): beneficio 3 — la luz vuelve a la cima y vira al dorado
-      tl.to("#luz", { keyframes: recorrido(0.8, 0.5, 1.1) }, 13.0);
-      tl.to("#junta1, #junta2", { opacity: 0, duration: 0.4, ease: "power2.in" }, 13.0);
-      tl.to("#brillo-frio", { opacity: 0, duration: 1.2, ease: "sine.inOut" }, 13.3);
-      tl.to("#brillo-calido", { opacity: 1, duration: 1.2, ease: "sine.inOut" }, 13.3);
-      tl.to("#bombilla", { backgroundColor: "#ffb703", boxShadow: "0 0 56px 22px rgba(255,183,3,0.75)", duration: 1.2, ease: "sine.inOut" }, 13.3);
-      tl.to("#luz", { scale: 1.25, duration: 1.4, ease: "sine.inOut" }, 13.3);
-      tl.fromTo("#e4-fan", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 13.0);
-      tl.fromTo("#e4-et", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 13.3);
-      tl.fromTo("#e4-pal", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 13.4);
-      tl.fromTo("#e4-det", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 13.9);
-      tl.to("#e4-int, #e4-fan", { opacity: 0, duration: 0.45, ease: "power2.in" }, 16.5);
+      // Scene 4 (13-17 s): benefit 3 — the light returns to the top and turns golden
+      tl.to("#light", { keyframes: travel(0.8, 0.5, 1.1) }, 13.0);
+      tl.to("#joint1, #joint2", { opacity: 0, duration: 0.4, ease: "power2.in" }, 13.0);
+      tl.to("#glow-cool", { opacity: 0, duration: 1.2, ease: "sine.inOut" }, 13.3);
+      tl.to("#glow-warm", { opacity: 1, duration: 1.2, ease: "sine.inOut" }, 13.3);
+      tl.to("#bulb", { backgroundColor: "#ffb703", boxShadow: "0 0 56px 22px rgba(255,183,3,0.75)", duration: 1.2, ease: "sine.inOut" }, 13.3);
+      tl.to("#light", { scale: 1.25, duration: 1.4, ease: "sine.inOut" }, 13.3);
+      tl.fromTo("#s4-ghost", { opacity: 0, y: 40 }, { opacity: 0.035, y: 0, duration: 1.2, ease: "power2.out" }, 13.0);
+      tl.fromTo("#s4-label", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 13.3);
+      tl.fromTo("#s4-word", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 13.4);
+      tl.fromTo("#s4-detail", { y: 24, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.6, ease: "power2.out" }, 13.9);
+      tl.to("#s4-inner, #s4-ghost", { opacity: 0, duration: 0.45, ease: "power2.in" }, 16.5);
 
-      // Escena 5 (17-20 s): cierre y fundido a negro
-      tl.fromTo("#e5-titulo", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, 17.2);
-      tl.fromTo("#linea-cierre", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, 17.9);
-      tl.fromTo("#e5-sub", { y: 24, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.7, ease: "power2.out" }, 18.3);
-      tl.fromTo("#salida", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power1.in" }, 19.3);
+      // Scene 5 (17-20 s): closing and fade to black
+      tl.fromTo("#s5-title", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, 17.2);
+      tl.fromTo("#closing-line", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, 17.9);
+      tl.fromTo("#s5-sub", { y: 24, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.7, ease: "power2.out" }, 18.3);
+      tl.fromTo("#fade-out", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power1.in" }, 19.3);
 
-      // Respiración del brillo (ambiental, finita): se repite un número entero de veces dentro de los 20 s
-      tl.to("#brillo-frio, #brillo-calido", { scale: 1.06, duration: 2, ease: "sine.inOut", yoyo: true, repeat: 8 }, 2.1);
+      // Glow breathing (ambient, finite): repeats a whole number of times within the 20 s
+      tl.to("#glow-cool, #glow-warm", { scale: 1.06, duration: 2, ease: "sine.inOut", yoyo: true, repeat: 8 }, 2.1);
 
       window.__timelines["main"] = tl;
       tl.seek(0);

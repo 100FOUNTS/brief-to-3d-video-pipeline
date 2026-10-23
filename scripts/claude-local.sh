@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Abre Claude Code contra el modelo local (contexto de 64K). No cambia tu configuración global.
-# Uso: ./scripts/claude-local.sh [argumentos de claude]
+# Opens Claude Code against the local model (64K context). Does not change your global configuration.
+# Usage: ./scripts/claude-local.sh [claude arguments]
 set -e
 cd "$(dirname "$0")/.."
 ollama list | grep -q '^qwen3.6-64k' || ollama create qwen3.6-64k -f ollama/Modelfile.qwen3.6-64k

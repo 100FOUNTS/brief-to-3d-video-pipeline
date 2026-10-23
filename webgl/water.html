@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WebGL2 · water</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0f1115; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; object-fit: contain; }
+  #errors { position: fixed; left: 12px; bottom: 12px; right: 12px; margin: 0; padding: 12px; background: #3a1216; color: #ffd6d6; font: 13px/1.4 ui-monospace, Menlo, monospace; white-space: pre-wrap; display: none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<pre id="errors"></pre>
+<script>
+  // Phase 3b, part B: water with a sky reflection, a Fresnel effect and a 20 s day-night cycle. Pure WebGL2, no libraries.
+  // Cycle: t=0 dawn · t=5 noon · t=10 sunset · t=15 night · t=20 back to dawn.
+  window.DURATION = 20;
+
+  const VERTEX = `#version 300 es
+  void main() {
+    vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+    gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+  }`;
+
+  const FRAGMENT = `#version 300 es
+  precision highp float;
+  uniform float u_time;
+  uniform vec2 u_resolution;
+  out vec4 outColor;
+
+  const float CYCLE = 20.0;
+  const float PI2 = 6.2831853;
+
+  // ---- deterministic noise (no textures) ----
+  float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+  float noise(vec2 p) {
+    vec2 i = floor(p), f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+  }
+  float fbm(vec2 p) {
+    float a = 0.5, s = 0.0;
+    for (int i = 0; i < 4; i++) { s += a * noise(p); p = p * 2.03 + vec2(11.7, 3.1); a *= 0.5; }
+    return s;
+  }
+
+  // ---- wave height: three sines in different directions + fine noise ----
+  float height(vec2 p, float t) {
+    p += 0.45 * vec2(fbm(p * 0.35 + vec2(0.0, t * 0.05)), fbm(p * 0.35 + vec2(7.3, -t * 0.04))) - 0.22;   // breaks up the regular bands
+    float h = 0.0;
+    h += 0.10  * sin(dot(p, vec2( 0.70,  0.40)) * 1.6 + t * 1.1);
+    h += 0.06  * sin(dot(p, vec2(-0.30,  0.90)) * 2.7 + t * 1.5);
+    h += 0.035 * sin(dot(p, vec2( 0.95, -0.20)) * 4.3 - t * 1.9);
+    h += 0.020 * sin(dot(p, vec2(-0.80, -0.55)) * 7.1 + t * 2.4);
+    h += 0.05  * (fbm(p * 1.7 + vec2(t * 0.15, -t * 0.10)) - 0.5);
+    return h;
+  }
+  // The normal comes from the slope of the height (finite differences).
+  vec3 waveNormal(vec2 p, float t, float smoothing) {
+    float e = 0.02;
+    float h0 = height(p, t);
+    float dx = height(p + vec2(e, 0.0), t) - h0;
+    float dz = height(p + vec2(0.0, e), t) - h0;
+    vec3 n = normalize(vec3(-dx / e, 1.0, -dz / e));
+    return normalize(mix(n, vec3(0.0, 1.0, 0.0), smoothing));   // far away the waves flatten out (avoids flickering)
+  }
+
+  // ---- sky ----
+  vec3 sunColor(float sunHeight) { return mix(vec3(1.0, 0.62, 0.20), vec3(1.0, 0.95, 0.85), smoothstep(0.0, 0.5, sunHeight)); }
+
+  // disc: 1 = draw the sun disc (direct view), 0 = do not (in the water reflection the sun shows up as glints, not as a disc)
+  vec3 sky(vec3 d, vec3 sun, float day, float disc) {
+    float h = clamp(d.y, 0.0, 1.0);
+    float k = pow(1.0 - h, 3.0);                                       // 1 at the horizon, 0 overhead
+    vec3 nightTop     = vec3(0.043, 0.075, 0.169);                     // #0b132b
+    vec3 nightHorizon = vec3(0.110, 0.145, 0.255);                     // #1c2541
+    vec3 dayTop       = vec3(0.14, 0.38, 0.74);
+    vec3 dayHorizon   = vec3(0.62, 0.78, 0.92);
+    vec3 top = mix(nightTop, dayTop, day);
+    vec3 horizon = mix(nightHorizon, dayHorizon, day);
+    vec3 c = mix(top, horizon, k);
+
+    float towardSun = max(dot(d, sun), 0.0);
+    float twilight = (1.0 - abs(clamp(sun.y * 3.0, -1.0, 1.0)));       // maximum when the sun is on the horizon
+    c += vec3(1.0, 0.72, 0.20) * pow(towardSun, 4.0) * twilight * 0.55 * k; // golden glow on the horizon
+    vec3 cs = sunColor(sun.y);
+    float visible = smoothstep(-0.12, 0.02, sun.y);
+    c += cs * (pow(towardSun, 96.0) * 0.8 + pow(towardSun, 8.0) * 0.18) * visible; // halo
+    c += cs * smoothstep(0.99955, 0.99985, towardSun) * 6.0 * visible * disc;       // sun disc
+
+    if (d.y > 0.0) {
+      // clouds: noise that drifts slowly; white by day, sun-colored at sunset, almost gone at night
+      vec2 cp = d.xz / (d.y + 0.18) * 1.3 + vec2(u_time * 0.025, 0.0);
+      float cloud = smoothstep(0.50, 0.82, fbm(cp)) * smoothstep(0.0, 0.18, d.y);
+      vec3 cloudColor = mix(vec3(0.10, 0.12, 0.20), vec3(0.98, 0.97, 0.95), day) + cs * twilight * 0.35;
+      c = mix(c, cloudColor, cloud * 0.75);
+      // stars: only with the sun well below the horizon
+      vec2 sp = d.xz / (d.y + 0.35) * 70.0;
+      float star = step(0.9965, hash(floor(sp)));
+      c += vec3(0.9, 0.95, 1.0) * star * (1.0 - smoothstep(-0.20, 0.0, sun.y)) * (1.0 - cloud) * smoothstep(0.02, 0.25, d.y) * 0.9;
+    }
+    return c;
+  }
+
+  void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+    float t = u_time;
+
+    // Sun: rises and sets once every CYCLE seconds.
+    float elev = 0.80 * sin(PI2 * t / CYCLE);
+    vec3 sun = normalize(vec3(0.38 * cos(PI2 * t / CYCLE), sin(elev), cos(elev) * 0.96));   // rises on the right and sets on the left
+    float day = smoothstep(-0.12, 0.38, sun.y);
+
+    // Fixed camera looking at the horizon, with a slight drift.
+    vec3 ro = vec3(0.0, 1.5, t * 0.25);
+    vec3 rd = normalize(vec3(uv.x, uv.y - 0.10, 1.45));
+
+    vec3 color;
+    if (rd.y >= -0.002) {
+      color = sky(rd, sun, day, 1.0);
+    } else {
+      float dist = -ro.y / rd.y;
+      vec3 p = ro + rd * dist;
+      vec3 n = waveNormal(p.xz, t, 1.0 - exp(-dist * 0.035));
+
+      vec3 refl = reflect(rd, n);
+      refl.y = abs(refl.y);                                            // do not reflect "downwards"
+      vec3 skyReflection = sky(refl, sun, day, 0.0);
+
+      float cosV = max(dot(n, -rd), 0.0);
+      float fresnel = 0.02 + 0.98 * pow(1.0 - cosV, 5.0);              // Fresnel (Schlick approximation)
+
+      vec3 deep = mix(vec3(0.012, 0.035, 0.065), vec3(0.02, 0.15, 0.24), day);
+      vec3 water = deep + sunColor(sun.y) * day * 0.05 * max(n.y, 0.0);
+
+      color = mix(water, skyReflection, fresnel);
+
+      // specular glint of the sun on the waves
+      float glint = pow(max(dot(reflect(rd, n), sun), 0.0), 520.0);
+      color += sunColor(sun.y) * min(glint, 1.0) * 1.8 * smoothstep(-0.04, 0.06, sun.y);   // glints: capped so they do not look like foam
+
+      // far away the water blends into the horizon
+      vec3 horizonColor = sky(normalize(vec3(rd.x, 0.0, rd.z)), sun, day, 0.0);
+      color = mix(color, horizonColor, 1.0 - exp(-dist * 0.028));
+    }
+
+    color = 1.0 - exp(-color * 1.05);                                  // tone mapping (highlight compression)
+    color = pow(color, vec3(1.0 / 2.2));                               // gamma
+    float vig = 1.0 - 0.35 * dot(uv, uv);
+    color *= vig;
+    color += (hash(gl_FragCoord.xy) - 0.5) / 255.0;                    // minimal noise against gradient "banding"
+    outColor = vec4(color, 1.0);
+  }`;
+
+  const canvas = document.getElementById('c');
+  const errorPanel = document.getElementById('errors');
+  const gl = canvas.getContext('webgl2', { preserveDrawingBuffer: true });
+  const fail = (msg) => { console.error(msg); errorPanel.textContent += msg + '\n'; errorPanel.style.display = 'block'; };
+  if (!gl) { fail('This browser does not have WebGL2.'); throw new Error('no WebGL2'); }
+
+  function compile(type, source) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, source);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      throw new Error(`Error in the ${type === gl.VERTEX_SHADER ? 'vertex' : 'fragment'} shader:\n${gl.getShaderInfoLog(s)}`);
+    }
+    return s;
+  }
+
+  let program;
+  try {
+    program = gl.createProgram();
+    gl.attachShader(program, compile(gl.VERTEX_SHADER, VERTEX));
+    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, FRAGMENT));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Error linking the program:\n' + gl.getProgramInfoLog(program));
+  } catch (e) { fail(e.message); throw e; }
+
+  gl.useProgram(program);
+  gl.bindVertexArray(gl.createVertexArray());
+  const uTime = gl.getUniformLocation(program, 'u_time');
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), canvas.width, canvas.height);
+
+  window.seek = (t) => { gl.uniform1f(uTime, t); gl.drawArrays(gl.TRIANGLES, 0, 3); };
+  window.seek(0);
+
+  if (location.hash !== '#render') {
+    const t0 = performance.now();
+    (function loop(now) { window.seek(((now - t0) / 1000) % window.DURATION); requestAnimationFrame(loop); })(t0);
+  }
+</script>
+</body>
+</html>

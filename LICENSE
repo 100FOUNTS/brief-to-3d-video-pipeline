@@ -20,5 +20,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Esta licencia cubre el código y la documentación de este repositorio. Las herramientas,
-bibliotecas y modelos de terceros que usa el proyecto tienen sus propias licencias: ver THIRD_PARTY.md.
+This license covers the code and the documentation of this repository. The third-party tools,
+libraries and models used by the project have their own licenses: see THIRD_PARTY.md.

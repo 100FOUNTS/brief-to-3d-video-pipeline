@@ -1,4 +1,4 @@
-# Entorno completo (uv pip freeze) con el que se desarrolló el proyecto. Más pesado que requirements.txt (trae torch, spacy…).
+# Full environment (uv pip freeze) the project was developed with. Heavier than requirements.txt (brings torch, spacy…).
 addict==2.4.0
 annotated-doc==0.0.5
 annotated-types==0.8.0

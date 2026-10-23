@@ -1,0 +1,108 @@
+{
+  "folder": "mutant-no-line",
+  "passed": 15,
+  "total": 16,
+  "requirements_ok": 13,
+  "requirements_total": 14,
+  "quality_ok": 2,
+  "quality_total": 2,
+  "checks": [
+    {
+      "name": "video/scene.html exists",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "video/render.mjs exists",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "defines window.DURATION = 8",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "defines window.seek as a function",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "contains the text «Lámpara Arco»",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "does not use a clock, randomness or CSS animations",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "`node video/render.mjs` finishes fine and creates out/titulo.mp4",
+      "ok": true,
+      "detail": "6.9 s",
+      "category": "requirement"
+    },
+    {
+      "name": "H.264 video, 1920x1080, 30 fps",
+      "ok": true,
+      "detail": "h264 1920x1080 30/1",
+      "category": "requirement"
+    },
+    {
+      "name": "240 frames (8 s)",
+      "ok": true,
+      "detail": "240 frames, 8.00 s",
+      "category": "requirement"
+    },
+    {
+      "name": "standard color format yuv420p (not yuvj420p)",
+      "ok": true,
+      "detail": "yuv420p",
+      "category": "quality"
+    },
+    {
+      "name": "all sample frames can be extracted",
+      "ok": true,
+      "detail": "",
+      "category": "requirement"
+    },
+    {
+      "name": "t = 0 s: only the #0f1115 background (≥ 99 % of the pixels)",
+      "ok": true,
+      "detail": "100.00 % background",
+      "category": "requirement"
+    },
+    {
+      "name": "the text fades in (nothing at 0.4 s; partial at 1.0 s; complete at 2.4 s)",
+      "ok": true,
+      "detail": "text-colored pixels: 0.4 s→0 · 1.0 s→0 · 2.4 s→13066",
+      "category": "requirement"
+    },
+    {
+      "name": "the accent line grows from 1 s to 3 s (nothing at 1.0 s and more and more afterwards)",
+      "ok": false,
+      "detail": "accent pixels: 1.0 s→0 · 1.8→0 · 2.4→0 · 3.2→0 · 4.0→0",
+      "category": "requirement"
+    },
+    {
+      "name": "the line ends complete and the scene stays stable (t = 4 s ≈ t = 7.9 s)",
+      "ok": true,
+      "detail": "mean difference 4 s vs 7.9 s: 0.00",
+      "category": "requirement"
+    },
+    {
+      "name": "two renders give the same frames (deterministic)",
+      "ok": true,
+      "detail": "240/240 frames identical",
+      "category": "quality"
+    }
+  ],
+  "render_seconds": 7.7
+}

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Lámpara Arco · promo 2D</title>
+<title>Lámpara Arco · 2D promo</title>
 <style>
   html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0f1115; }
   canvas { display: block; }
@@ -11,69 +11,69 @@
 <body>
 <canvas id="c" width="1920" height="1080"></canvas>
 <script>
-  // Escena 100% determinista: todo es función de t (segundos). Sin Date, rAF, setTimeout ni CSS animations.
+  // 100% deterministic scene: everything is a function of t (seconds). No Date, rAF, setTimeout or CSS animations.
   window.DURATION = 15;
 
   const W = 1920, H = 1080, DESK = 900;
-  const FONDO = '#0f1115', FONDO2 = '#1a1d24', ACENTO = [255, 183, 3], NEUTRO = [255, 243, 214], TEXTO = '#f4f1ea';
+  const BG = '#0f1115', BG2 = '#1a1d24', ACCENT = [255, 183, 3], NEUTRAL = [255, 243, 214], TEXT_COLOR = '#f4f1ea';
   const BASE = { x: 520, y: DESK };
   const L1 = 330, L2 = 320, SPREAD = 28 * Math.PI / 180;
   const ctx = document.getElementById('c').getContext('2d');
 
-  // ---------- utilidades ----------
+  // ---------- utilities ----------
   const clamp01 = (x) => Math.min(1, Math.max(0, x));
-  const suave = (x) => x * x * (3 - 2 * x);
-  const tramo = (t, a, b) => suave(clamp01((t - a) / (b - a)));
+  const smooth = (x) => x * x * (3 - 2 * x);
+  const span = (t, a, b) => smooth(clamp01((t - a) / (b - a)));
   const outBack = (x) => { const c1 = 1.5, c3 = c1 + 1; x = clamp01(x); return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
   const lerp = (a, b, k) => a + (b - a) * k;
   const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
   const rad = (d) => d * Math.PI / 180;
-  const mezcla = (c1, c2, k) => c1.map((v, i) => Math.round(lerp(v, c2[i], k)));
+  const mixColors = (c1, c2, k) => c1.map((v, i) => Math.round(lerp(v, c2[i], k)));
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
-  const dir = (aDeg) => ({ x: Math.sin(rad(aDeg)), y: -Math.cos(rad(aDeg)) });  // 0° = arriba, positivo = giro a la derecha
+  const dir = (deg) => ({ x: Math.sin(rad(deg)), y: -Math.cos(rad(deg)) });  // 0° = up, positive = turn to the right
 
-  // ---------- poses de la lámpara (grados) ----------
-  const PLEGADA = { a1: -4, a2: 104, a3: 172 };
+  // ---------- lamp poses (degrees) ----------
+  const FOLDED = { a1: -4, a2: 104, a3: 172 };
   const POSE_A = { a1: -30, a2: 58, a3: 162 };
   const POSE_B = { a1: -12, a2: 34, a3: 150 };
-  const mezclaPose = (p, q, k) => ({ a1: lerp(p.a1, q.a1, k), a2: lerp(p.a2, q.a2, k), a3: lerp(p.a3, q.a3, k) });
+  const mixPose = (p, q, k) => ({ a1: lerp(p.a1, q.a1, k), a2: lerp(p.a2, q.a2, k), a3: lerp(p.a3, q.a3, k) });
 
   function pose(t) {
-    let p = PLEGADA;
-    p = mezclaPose(PLEGADA, POSE_A, outBack((t - 1.5) / 2.0));         // se despliega con rebote
-    if (t > 9) p = mezclaPose(POSE_A, POSE_B, tramo(t, 9, 10.8));      // "articulada": gira a otra postura
-    if (t > 12.8) p = mezclaPose(POSE_B, POSE_A, tramo(t, 12.8, 13.8));
-    const respira = tramo(t, 3.5, 4.5);                                 // balanceo mínimo, solo con la lámpara encendida
-    return { a1: p.a1 + 0.8 * Math.sin(t * 1.1) * respira, a2: p.a2 + 1.2 * Math.sin(t * 1.3 + 1) * respira, a3: p.a3 };
+    let p = FOLDED;
+    p = mixPose(FOLDED, POSE_A, outBack((t - 1.5) / 2.0));         // unfolds with a bounce
+    if (t > 9) p = mixPose(POSE_A, POSE_B, span(t, 9, 10.8));      // "articulated": turns to another pose
+    if (t > 12.8) p = mixPose(POSE_B, POSE_A, span(t, 12.8, 13.8));
+    const breathe = span(t, 3.5, 4.5);                              // minimal sway, only once the lamp is on
+    return { a1: p.a1 + 0.8 * Math.sin(t * 1.1) * breathe, a2: p.a2 + 1.2 * Math.sin(t * 1.3 + 1) * breathe, a3: p.a3 };
   }
 
-  function geometria(p) {
+  function geometry(p) {
     const j1 = { x: BASE.x + dir(p.a1).x * L1, y: BASE.y - 28 + dir(p.a1).y * L1 };
     const j2 = { x: j1.x + dir(p.a2).x * L2, y: j1.y + dir(p.a2).y * L2 };
     const d = dir(p.a3);
-    const P = { x: j2.x + d.x * 135, y: j2.y + d.y * 135 };               // apertura de la pantalla
+    const P = { x: j2.x + d.x * 135, y: j2.y + d.y * 135 };               // shade opening
     return { j1, j2, d, P };
   }
 
-  // ---------- luz ----------
-  function luz(t) {
-    const encendido = tramo(t, 3.4, 4.4);
-    const parpadeo = t < 4.4 ? 0.55 + 0.45 * hash(Math.floor(t * 24)) : 1; // determinista: depende del fotograma
-    return encendido * parpadeo;
+  // ---------- light ----------
+  function lightLevel(t) {
+    const on = span(t, 3.4, 4.4);
+    const flicker = t < 4.4 ? 0.55 + 0.45 * hash(Math.floor(t * 24)) : 1; // deterministic: depends on the frame
+    return on * flicker;
   }
-  const colorLuz = (t) => mezcla(NEUTRO, ACENTO, tramo(t, 11, 12.2));      // "luz cálida": vira al dorado
+  const lightColor = (t) => mixColors(NEUTRAL, ACCENT, span(t, 11, 12.2));      // "warm light": turns golden
 
-  // ---------- dibujo ----------
-  function fondo(t, L, col) {
-    ctx.fillStyle = FONDO; ctx.fillRect(0, 0, W, H);
-    // escritorio
+  // ---------- drawing ----------
+  function drawBackground(t, L, col) {
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+    // desk
     const g = ctx.createLinearGradient(0, DESK, 0, H);
     g.addColorStop(0, '#1b1e25'); g.addColorStop(1, '#101216');
     ctx.fillStyle = g; ctx.fillRect(0, DESK, W, H - DESK);
     ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fillRect(0, DESK, W, 2);
   }
 
-  function resplandor(G, L, col) {
+  function glow(G, L, col) {
     if (L <= 0.001) return;
     const b = { x: G.P.x - G.d.x * 20, y: G.P.y - G.d.y * 20 };
     ctx.save(); ctx.globalCompositeOperation = 'screen';
@@ -83,16 +83,16 @@
     ctx.restore();
   }
 
-  function cono(G, L, col) {
+  function cone(G, L, col) {
     const { P, d } = G; const perp = { x: -d.y, y: d.x };
-    const rayo = (lado) => {
-      const e = { x: d.x * Math.cos(SPREAD) + lado * perp.x * Math.sin(SPREAD), y: d.y * Math.cos(SPREAD) + lado * perp.y * Math.sin(SPREAD) };
-      const o = { x: P.x + lado * perp.x * 55, y: P.y + lado * perp.y * 55 };
+    const ray = (side) => {
+      const e = { x: d.x * Math.cos(SPREAD) + side * perp.x * Math.sin(SPREAD), y: d.y * Math.cos(SPREAD) + side * perp.y * Math.sin(SPREAD) };
+      const o = { x: P.x + side * perp.x * 55, y: P.y + side * perp.y * 55 };
       const s = (DESK - o.y) / e.y;
       return { o, f: { x: o.x + e.x * s, y: o.y + e.y * s } };
     };
     if (d.y < 0.2) return null;
-    const A = rayo(1), B = rayo(-1);
+    const A = ray(1), B = ray(-1);
     const path = new Path2D();
     path.moveTo(A.o.x, A.o.y); path.lineTo(A.f.x, A.f.y); path.lineTo(B.f.x, B.f.y); path.lineTo(B.o.x, B.o.y); path.closePath();
     const mid = { x: (A.f.x + B.f.x) / 2, y: (A.f.y + B.f.y) / 2 };
@@ -101,7 +101,7 @@
       const g = ctx.createLinearGradient(P.x, P.y, mid.x, mid.y);
       g.addColorStop(0, rgba(col, 0.46 * L)); g.addColorStop(1, rgba(col, 0.06 * L));
       ctx.fillStyle = g; ctx.fill(path);
-      // charco de luz sobre el escritorio
+      // pool of light on the desk
       const rx = Math.abs(B.f.x - A.f.x) / 2;
       ctx.translate(mid.x, DESK + 6); ctx.scale(1, 0.12);
       const pool = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
@@ -112,7 +112,7 @@
     return { path, A, B, lenD: (DESK - P.y) / d.y };
   }
 
-  function polvo(G, C, t, L, col) {
+  function dust(G, C, t, L, col) {
     if (!C || L <= 0.001) return;
     const { P, d } = G; const perp = { x: -d.y, y: d.x };
     ctx.save(); ctx.clip(C.path); ctx.globalCompositeOperation = 'screen';
@@ -129,106 +129,106 @@
     ctx.restore();
   }
 
-  function brazo(a, b, ancho) {
+  function arm(a, b, width) {
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#242933'; ctx.lineWidth = ancho;
+    ctx.strokeStyle = '#242933'; ctx.lineWidth = width;
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 3;           // brillo del metal
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 3;           // metal highlight
     const n = { x: -(b.y - a.y), y: b.x - a.x }; const m = Math.hypot(n.x, n.y); n.x /= m; n.y /= m;
-    const o = ancho * 0.28;
+    const o = width * 0.28;
     ctx.beginPath(); ctx.moveTo(a.x + n.x * -o, a.y + n.y * -o); ctx.lineTo(b.x + n.x * -o, b.y + n.y * -o); ctx.stroke();
   }
 
-  function articulacion(p) {
+  function joint(p) {
     ctx.fillStyle = '#2d333f'; ctx.beginPath(); ctx.arc(p.x, p.y, 22, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = '#b8893a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(p.x, p.y, 22, 0, Math.PI * 2); ctx.stroke();
     ctx.fillStyle = '#b8893a'; ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fill();
   }
 
-  function lampara(p, G, L, col, t) {
-    // sombra en el escritorio y base
+  function lamp(p, G, L, col, t) {
+    // shadow on the desk and base
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
     ctx.beginPath(); ctx.ellipse(BASE.x, DESK + 8, 170, 14, 0, 0, Math.PI * 2); ctx.fill();
-    const base = ctx.createLinearGradient(0, DESK - 30, 0, DESK);
-    base.addColorStop(0, '#2d333f'); base.addColorStop(1, '#1a1e26');
-    ctx.fillStyle = base; ctx.beginPath(); ctx.roundRect(BASE.x - 130, DESK - 30, 260, 30, [16, 16, 6, 6]); ctx.fill();
+    const baseGradient = ctx.createLinearGradient(0, DESK - 30, 0, DESK);
+    baseGradient.addColorStop(0, '#2d333f'); baseGradient.addColorStop(1, '#1a1e26');
+    ctx.fillStyle = baseGradient; ctx.beginPath(); ctx.roundRect(BASE.x - 130, DESK - 30, 260, 30, [16, 16, 6, 6]); ctx.fill();
     ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(BASE.x - 118, DESK - 28, 236, 2);
-    const inicio = { x: BASE.x, y: DESK - 28 };
-    brazo(inicio, G.j1, 22); articulacion(G.j1);
-    brazo(G.j1, G.j2, 20); articulacion(G.j2);
-    // pantalla (trapecio de latón) con el eje a lo largo de la dirección a3
+    const start = { x: BASE.x, y: DESK - 28 };
+    arm(start, G.j1, 22); joint(G.j1);
+    arm(G.j1, G.j2, 20); joint(G.j2);
+    // shade (brass trapezoid) with its axis along the a3 direction
     ctx.save();
     ctx.translate(G.j2.x, G.j2.y); ctx.rotate(rad(p.a3) + Math.PI);
-    const br = ctx.createLinearGradient(-75, 0, 75, 0);
-    br.addColorStop(0, '#7a5a22'); br.addColorStop(0.45, '#d9a64e'); br.addColorStop(1, '#6b4d1c');
-    ctx.fillStyle = br; ctx.beginPath(); ctx.moveTo(-24, 6); ctx.lineTo(24, 6); ctx.lineTo(75, 138); ctx.lineTo(-75, 138); ctx.closePath(); ctx.fill();
-    // interior iluminado
+    const brass = ctx.createLinearGradient(-75, 0, 75, 0);
+    brass.addColorStop(0, '#7a5a22'); brass.addColorStop(0.45, '#d9a64e'); brass.addColorStop(1, '#6b4d1c');
+    ctx.fillStyle = brass; ctx.beginPath(); ctx.moveTo(-24, 6); ctx.lineTo(24, 6); ctx.lineTo(75, 138); ctx.lineTo(-75, 138); ctx.closePath(); ctx.fill();
+    // lit inside
     ctx.fillStyle = rgba(col, 0.15 + 0.85 * L); ctx.beginPath(); ctx.ellipse(0, 138, 75, 9, 0, 0, Math.PI * 2); ctx.fill();
-    // bombilla
+    // bulb
     ctx.save(); ctx.shadowColor = rgba(col, L); ctx.shadowBlur = 50 * L;
-    ctx.fillStyle = rgba(mezcla([90, 80, 60], col, L), 1); ctx.beginPath(); ctx.arc(0, 124, 24, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = rgba(mixColors([90, 80, 60], col, L), 1); ctx.beginPath(); ctx.arc(0, 124, 24, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
     ctx.restore();
   }
 
-  // ---------- texto ----------
-  function texto(str, x, y, size, alpha, o = {}) {
+  // ---------- text ----------
+  function drawText(str, x, y, size, alpha, o = {}) {
     if (alpha <= 0.002) return;
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.font = `${o.peso || 600} ${size}px -apple-system, "Helvetica Neue", Arial, sans-serif`;
-    ctx.letterSpacing = (o.espacio || 0) + 'px';
-    ctx.fillStyle = o.color || TEXTO; ctx.textBaseline = 'alphabetic';
+    ctx.font = `${o.weight || 600} ${size}px -apple-system, "Helvetica Neue", Arial, sans-serif`;
+    ctx.letterSpacing = (o.spacing || 0) + 'px';
+    ctx.fillStyle = o.color || TEXT_COLOR; ctx.textBaseline = 'alphabetic';
     ctx.fillText(str, x, y + (o.dy || 0));
     ctx.restore();
   }
-  // ventana de visibilidad con entrada y salida suaves
-  const ventana = (t, a, b, f = 0.5) => Math.min(tramo(t, a, a + f), 1 - tramo(t, b - f, b));
+  // visibility window with soft entry and exit
+  const windowed = (t, a, b, f = 0.5) => Math.min(span(t, a, a + f), 1 - span(t, b - f, b));
 
   const X = 1010;
-  function textos(t) {
-    // Título
-    let w = ventana(t, 4.4, 6.9);
-    texto('Arco', X, 520, 230, w, { espacio: 6, dy: (1 - w) * 30 });
-    w = ventana(t, 5.4, 6.9);
-    texto('Luz que se pliega a tu escritorio', X + 4, 600, 50, w * 0.85, { peso: 400, dy: (1 - w) * 20 });
-    // Beneficios
+  function texts(t) {
+    // Title
+    let w = windowed(t, 4.4, 6.9);
+    drawText('Arco', X, 520, 230, w, { spacing: 6, dy: (1 - w) * 30 });
+    w = windowed(t, 5.4, 6.9);
+    drawText('Luz que se pliega a tu escritorio', X + 4, 600, 50, w * 0.85, { weight: 400, dy: (1 - w) * 20 });
+    // Benefits
     const items = [
       { n: '01', p: 'Ligera', c: 'Se mueve con un dedo', a: 7.1, b: 9.0 },
       { n: '02', p: 'Articulada', c: 'La luz va justo donde la necesitas', a: 9.0, b: 11.0 },
       { n: '03', p: 'Luz cálida', c: 'Para trabajar sin cansar los ojos', a: 11.0, b: 13.2 },
     ];
     for (const it of items) {
-      const k = ventana(t, it.a, it.b, 0.45);
-      texto(`${it.n} / 03`, X + 4, 408, 34, k, { peso: 500, color: rgba(ACENTO, 1), espacio: 4, dy: (1 - k) * 20 });
-      texto(it.p, X, 540, 140, k, { espacio: 2, dy: (1 - k) * 30 });
-      texto(it.c, X + 4, 616, 46, k * 0.85, { peso: 400, dy: (1 - k) * 20 });
+      const k = windowed(t, it.a, it.b, 0.45);
+      drawText(`${it.n} / 03`, X + 4, 408, 34, k, { weight: 500, color: rgba(ACCENT, 1), spacing: 4, dy: (1 - k) * 20 });
+      drawText(it.p, X, 540, 140, k, { spacing: 2, dy: (1 - k) * 30 });
+      drawText(it.c, X + 4, 616, 46, k * 0.85, { weight: 400, dy: (1 - k) * 20 });
     }
-    // Cierre
-    w = ventana(t, 13.3, 15.5, 0.6);
-    texto('Arco', X, 520, 230, w, { espacio: 6, dy: (1 - w) * 30 });
-    ctx.save(); ctx.fillStyle = rgba(ACENTO, 1); ctx.globalAlpha = w;
-    ctx.fillRect(X + 6, 560, 560 * tramo(t, 13.5, 14.5), 6); ctx.restore();
+    // Closing
+    w = windowed(t, 13.3, 15.5, 0.6);
+    drawText('Arco', X, 520, 230, w, { spacing: 6, dy: (1 - w) * 30 });
+    ctx.save(); ctx.fillStyle = rgba(ACCENT, 1); ctx.globalAlpha = w;
+    ctx.fillRect(X + 6, 560, 560 * span(t, 13.5, 14.5), 6); ctx.restore();
   }
 
-  function viñeta() {
+  function vignette() {
     const v = ctx.createRadialGradient(W / 2, H / 2, 380, W / 2, H / 2, 1150);
     v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.5)');
     ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
   }
 
   window.seek = function (t) {
-    const L = luz(t), col = colorLuz(t), p = pose(t), G = geometria(p);
+    const L = lightLevel(t), col = lightColor(t), p = pose(t), G = geometry(p);
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-    fondo(t, L, col);
-    resplandor(G, L, col);
-    const C = cono(G, L, col);
-    lampara(p, G, L, col, t);
-    polvo(G, C, t, L, col);
-    textos(t);
-    viñeta();
-    // entrada y salida en negro
-    const f = Math.max(1 - tramo(t, 0, 1.2), tramo(t, 14.4, 15));
+    drawBackground(t, L, col);
+    glow(G, L, col);
+    const C = cone(G, L, col);
+    lamp(p, G, L, col, t);
+    dust(G, C, t, L, col);
+    texts(t);
+    vignette();
+    // fade in from and out to black
+    const f = Math.max(1 - span(t, 0, 1.2), span(t, 14.4, 15));
     if (f > 0) { ctx.fillStyle = `rgba(15,17,21,${f.toFixed(3)})`; ctx.fillRect(0, 0, W, H); }
   };
   window.seek(0);

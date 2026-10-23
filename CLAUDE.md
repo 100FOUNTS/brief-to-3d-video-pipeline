@@ -1,37 +1,38 @@
-# Estudio creativo de la lámpara
+# Lamp studio
 
-Mini-estudio local: desde UN archivo (`brief.json`) produce un modelo 3D de lámpara, un visor web, un vídeo promocional de 20 s con voz y música, y comprueba el resultado.
-El plan y la investigación están en `docs/` (`plan-ejercicio.md`, `nivel-profesional.md`, `linea-pro.md`). El historial de lo que salió bien y mal, en `docs/diario.md` y `docs/metricas.csv`.
+Local mini-studio: from ONE file (`brief.json`) it produces a 3D lamp model, a web viewer and a 20 s promo video with voice and music, and checks the result.
+The plan and the research are in `docs/` (`exercise-plan.md`, `professional-level.md`, `pro-pipeline.md`). The history of what went well and badly is in `docs/journal.md` and `docs/metrics.csv`.
 
-## Cómo se usa
+## How to use it
 
-- `make setup` (una vez): entorno de Python y dependencias de Node. La ruta del proyecto debe ser corta (< ~90 caracteres): espeak-ng falla con rutas largas.
-- `make studio` (o `make -j4 studio`): TODO desde `brief.json`; termina con `make verificar` (21 comprobaciones). `BRIEF=otro.json` usa otro brief.
-- `make variante N=frio B=brief.frio.json`: lo mismo en un `git worktree` aparte (`../estudio-lampara-frio`), sin pisar este.
-- Piezas sueltas: `make blender | viewer | hyperframes | audio`. Ayuda: `make help`.
+- `make setup` (once): Python environment and Node dependencies. The project path must be short (< ~90 characters): espeak-ng fails with long paths.
+- `make studio` (or `make -j4 studio`): EVERYTHING from `brief.json`; it ends with `make verify` (21 checks). `BRIEF=other.json` uses another brief.
+- `make variant N=cool B=brief.cool.json`: the same in a separate `git worktree` (`../<project-folder>-cool`), without overwriting this one.
+- Single pieces: `make blender | viewer | hyperframes | audio`. Help: `make help`.
 
-## Reglas
+## Rules
 
-- **`brief.json` es la única fuente** de nombre, lema, beneficios, guion de la voz, paleta, música y voz. Tras editarlo: `make generar`.
-- **Archivos GENERADOS (no se editan a mano):** `hyperframes/promo/index.html`, `docs/guion.json`, `viewer/src/brief.generated.js`.
-  La plantilla del vídeo es `plantillas/hyperframes-promo.template.html` (fuera de `hyperframes/promo/`: si no, `hyperframes check` falla por dos composiciones raíz).
-- **Lo que el brief NO puede cambiar:** la geometría de la lámpara, las 5 escenas y los 20 s de duración. Otro producto distinto de una lámpara exige código nuevo.
-- Nunca digas "listo" sin MIRAR el resultado (hoja de contactos, `ffprobe`, `make verificar`). Usa la skill `render-check`.
-- Todo lo que dependa del tiempo (vídeo, shaders) debe ser función de `t`: sin `Date`, `requestAnimationFrame`, `setTimeout` ni `Math.random` en lo que se renderiza.
-- Cambios pequeños; si una tarea toca más de 5 archivos, primero un plan. Registra fallos no obvios en `docs/diario.md` y una fila por intento en `docs/metricas.csv`.
-- Solo se escribe dentro de esta carpeta (lo exige un hook).
+- **`brief.json` is the only source** of name, tagline, benefits, voice script, palette, music and voice. After editing it: `make generate`.
+  Its keys are in English; the VALUES (product text, voice script) are Spanish on purpose: they are the language of the video and the voice.
+- **GENERATED files (not edited by hand):** `hyperframes/promo/index.html`, `docs/script.json`, `viewer/src/brief.generated.js`.
+  The video template is `templates/hyperframes-promo.template.html` (outside `hyperframes/promo/`: otherwise `hyperframes check` fails because of two root compositions).
+- **What the brief CANNOT change:** the lamp geometry, the 5 scenes and the 20 s duration. A product other than a lamp requires new code.
+- Never say "done" without LOOKING at the result (contact sheet, `ffprobe`, `make verify`). Use the `render-check` skill.
+- Anything that depends on time (video, shaders) must be a function of `t`: no `Date`, `requestAnimationFrame`, `setTimeout` or `Math.random` in what gets rendered.
+- Small changes; if a task touches more than 5 files, a plan first. Log non-obvious failures in `docs/journal.md` and one row per attempt in `docs/metrics.csv`.
+- Writing happens only inside this folder (a hook enforces it).
 
-## Herramientas
+## Tools
 
-Node 22, ffmpeg, Blender 5.2.2 (`/Applications/Blender.app`), Chrome, Ollama; Python del proyecto en `audio/.venv` (Kokoro, Whisper large-v3). Sin instalaciones globales ni de pago sin avisar.
+Node 22, ffmpeg, Blender 5.2.2 (`/Applications/Blender.app`), Chrome, Ollama; the project's Python in `audio/.venv` (Kokoro, Whisper large-v3). No global or paid installs without notice.
 
-## Piezas de Claude Code de este proyecto (`.claude/`)
+## Claude Code pieces of this project (`.claude/`)
 
-- Skill `render-check`: cómo verificar una salida.
-- Subagentes: `modelador` (Blender), `web3d` (visor Three.js), `video` (HyperFrames), `audio` (voz, música, mezcla). Cada uno lleva lo aprendido en su área.
-- Hooks (`.claude/settings.json`): `guardia-ruta.py` bloquea escribir fuera del proyecto y editar archivos generados; `despues-de-editar.py` regenera/valida tras editar el brief o la plantilla.
-  Son barandillas, NO seguridad: solo vigilan las herramientas Write y Edit; un comando de Bash puede saltárselas.
+- Skill `render-check`: how to verify an output.
+- Subagents: `modeler` (Blender), `web3d` (Three.js viewer), `video` (HyperFrames), `audio` (voice, music, mix). Each one carries what was learned in its area.
+- Hooks (`.claude/settings.json`): `path-guard.py` blocks writing outside the project and editing generated files; `after-edit.py` regenerates/validates after editing the brief or the template.
+  They are guard rails, NOT security: they only watch the Write and Edit tools; a Bash command can bypass them.
 
-## Estructura
+## Structure
 
-`brief.json` · `plantillas/` · `scripts/` (generador, verificador, variantes, capturas) · `video/` (Fases 1) · `hyperframes/promo/` (Fase 2) · `viewer/` (Fase 3) · `webgl/` (Fase 3b) · `blender/` (Fase 4) · `audio/` (Fase 5) · `out/` (resultados, no se versiona)
+`brief.json` · `templates/` · `scripts/` (generator, verifier, variants, captures) · `video/` (Phase 1) · `hyperframes/promo/` (Phase 2) · `viewer/` (Phase 3) · `webgl/` (Phase 3b) · `blender/` (Phase 4) · `audio/` (Phase 5) · `experiment/` and `experiment-phase7/` (Phase 7) · `dashboard/` · `out/` (results, not versioned)
