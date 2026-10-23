@@ -6,6 +6,21 @@
 
 A learning project and portfolio piece, written to be used as a **worked example and guide**: a creative mini-studio that automates a product piece end to end (an articulated desk lamp called *Arco*) with **Claude Code** as the working environment, open tools and local AI models. It is documented honestly: what worked, what failed, what was not tested and what it costs (spoiler: 0 USD beyond the Claude subscription).
 
+**Try it without installing anything:** [live 3D viewer](https://100founts.github.io/brief-to-3d-video-pipeline/) (drag to rotate, move the slider to explode the lamp) · [20 s promo video](https://github.com/100FOUNTS/brief-to-3d-video-pipeline/releases/download/v1.0.0/arco-promo-demo.mp4) (Spanish narration, made entirely by `make studio`).
+
+## Choose your path
+
+| I want to… | Start here | Takes |
+| --- | --- | --- |
+| **See what it does** | The live viewer and the video above | 1 minute |
+| **Run it on my machine** | [Getting started](#getting-started) | ~10 minutes, plus ~3.5 GB of model downloads the first time |
+| **Do the exercise** (build it myself, step by step) | [`docs/exercise-plan.md`](docs/exercise-plan.md) — it gives the prompts, the reason for each phase and a success criterion. To avoid spoilers, follow it in an empty folder and use this repository only to compare your result | 18–30 hours |
+| **Adapt it to my own project** | [Use it as a template](#use-it-as-a-template) | an afternoon |
+| **Learn from the mistakes** | [`docs/journal.md`](docs/journal.md) (what failed, in order) and [`docs/retrospective.md`](docs/retrospective.md) | 30 minutes |
+| **See which pro tool replaces each stage** | [`docs/pro-pipeline.md`](docs/pro-pipeline.md) | 15 minutes |
+
+All the documentation is indexed in [`docs/README.md`](docs/README.md).
+
 | Web viewer (Three.js): Blender model versus primitives | Video frame (HyperFrames) |
 | --- | --- |
 | ![Viewer](docs/img/viewer-glb-vs-primitives.jpg) | ![Video frame](docs/img/video-frame.jpg) |
